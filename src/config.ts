@@ -1,8 +1,8 @@
 // VayuShield Configuration
 // Centralized Gemini Model configuration and constants
 
-export const GEMINI_MODEL = "gemini-2.5-flash";
-export const GEMINI_FALLBACK_MODEL = "gemini-2.0-flash";
+export const GEMINI_MODEL = "gemini-3.8-flash";
+export const GEMINI_FALLBACK_MODEL = "gemini-2.5-flash";
 
 export const APP_CONFIG = {
   appName: "VayuShield",
