@@ -46,15 +46,32 @@ export const ActionPlanView: React.FC<ActionPlanViewProps> = ({
   // Skeleton Loader State
   if (isLoading) {
     return (
-      <div className="space-y-6 animate-pulse" aria-busy="true" aria-label="Loading family action plan">
-        <div className="bg-white rounded-3xl p-6 border border-slate-200">
-          <div className="h-6 bg-slate-200 rounded w-1/3 mb-3" />
-          <div className="h-4 bg-slate-100 rounded w-full mb-2" />
-          <div className="h-4 bg-slate-100 rounded w-5/6" />
+      <div className="space-y-6" aria-busy="true" aria-label="Loading family action plan">
+        <div className="bg-white rounded-3xl p-6 border border-slate-200 flex items-center justify-between shadow-xs">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 rounded-full border-3 border-sky-600 border-t-transparent animate-spin shrink-0" />
+            <div>
+              <h4 className="font-bold text-sm text-slate-900">
+                {t.loadingPlan || 'Generating personalized action plan...'}
+              </h4>
+              <p className="text-xs text-slate-500">
+                Calculating atmospheric inversion layers, safe ventilation windows & family risks
+              </p>
+            </div>
+          </div>
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="bg-white rounded-3xl p-5 border border-slate-200 h-44" />
+            <div key={i} className="bg-white rounded-3xl p-5 border border-slate-200 h-44 animate-pulse flex flex-col justify-between">
+              <div>
+                <div className="h-3 bg-slate-200 rounded-md w-28 mb-3" />
+                <div className="h-5 bg-slate-200 rounded-md w-44 mb-3" />
+                <div className="h-3 bg-slate-100 rounded-md w-full mb-2" />
+                <div className="h-3 bg-slate-100 rounded-md w-5/6" />
+              </div>
+              <div className="h-3 bg-slate-100 rounded-md w-1/3" />
+            </div>
           ))}
         </div>
       </div>

@@ -162,7 +162,7 @@ REQUIRED OUTPUT INSTRUCTIONS:
       );
 
       const ai = new GoogleGenAI({ apiKey });
-      const response = await ai.models.generateContent({
+      const apiCall = ai.models.generateContent({
         model: currentModel,
         contents: prompt,
         config: {
@@ -172,6 +172,12 @@ REQUIRED OUTPUT INSTRUCTIONS:
           temperature: 0.2,
         },
       });
+
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('AI response timed out (7s). Switching to verified plan.')), 7000)
+      );
+
+      const response = await Promise.race([apiCall, timeoutPromise]);
 
       const responseText = response.text;
       if (!responseText) {
