@@ -1,9 +1,42 @@
 // VayuShield Air Quality & Geocoding Service
 // Powered by Open-Meteo (No API Key Required) + Instant Presets & GPS Location
 
+import { z } from 'zod';
 import type { AirQualityData, HourlyAqiPoint, GeocodingResult } from '../types';
 import { getAqiCategory, calculateWhoMultiplier, calculateBestAirWindow, validateCityInput } from '../utils/aqiCalculator';
 import { APP_CONFIG } from '../config';
+
+const GeocodingItemSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  latitude: z.number(),
+  longitude: z.number(),
+  country: z.string().optional().default(''),
+  admin1: z.string().optional(),
+});
+
+const GeocodingResponseSchema = z.object({
+  results: z.array(GeocodingItemSchema).optional().default([]),
+});
+
+const AirQualityResponseSchema = z.object({
+  timezone: z.string().optional().default('auto'),
+  current: z
+    .object({
+      us_aqi: z.number().nullable().optional(),
+      pm2_5: z.number().nullable().optional(),
+      pm10: z.number().nullable().optional(),
+    })
+    .optional(),
+  hourly: z
+    .object({
+      time: z.array(z.string()).optional().default([]),
+      us_aqi: z.array(z.number().nullable()).optional().default([]),
+      pm2_5: z.array(z.number().nullable()).optional().default([]),
+      pm10: z.array(z.number().nullable()).optional().default([]),
+    })
+    .optional(),
+});
 
 const delhiHourly: HourlyAqiPoint[] = [
   { time: '05:00', hour: 5, aqi: 410, pm2_5: 350, pm10: 510 },
@@ -99,15 +132,6 @@ export const AIR_PRESETS: Record<string, AirQualityData> = {
   },
 };
 
-interface RawGeocodingResult {
-  id: number;
-  name: string;
-  latitude: number;
-  longitude: number;
-  country?: string;
-  admin1?: string;
-}
-
 /**
  * Search cities using Open-Meteo Geocoding API
  */
@@ -124,17 +148,18 @@ export async function searchCities(query: string, signal?: AbortSignal): Promise
     throw new Error(`Location search failed (${response.status}). Check network connection.`);
   }
 
-  const data = await response.json();
-  if (!data.results || !Array.isArray(data.results) || data.results.length === 0) {
+  const rawJson: unknown = await response.json();
+  const parsed = GeocodingResponseSchema.safeParse(rawJson);
+  if (!parsed.success || !parsed.data.results || parsed.data.results.length === 0) {
     return [];
   }
 
-  return (data.results as RawGeocodingResult[]).map((r) => ({
+  return parsed.data.results.map((r) => ({
     id: r.id,
     name: r.name,
     latitude: r.latitude,
     longitude: r.longitude,
-    country: r.country || '',
+    country: r.country,
     admin1: r.admin1,
   }));
 }
@@ -146,26 +171,34 @@ export async function fetchLiveAirQuality(
   cityName: string,
   latitude: number,
   longitude: number,
-  country?: string
+  country?: string,
+  signal?: AbortSignal
 ): Promise<AirQualityData> {
   const url = `${APP_CONFIG.openMeteoAirQualityUrl}?latitude=${latitude}&longitude=${longitude}&current=us_aqi,pm2_5,pm10&hourly=us_aqi,pm2_5,pm10&timezone=auto&forecast_days=2`;
 
-  const response = await fetch(url);
+  const response = await fetch(url, { signal });
   if (!response.ok) {
     throw new Error(`Air quality feed unreachable (${response.status}).`);
   }
 
-  const data = await response.json();
+  const rawJson: unknown = await response.json();
+  const parsed = AirQualityResponseSchema.safeParse(rawJson);
+  const defaultAirQuality = {
+    timezone: 'auto',
+    current: undefined,
+    hourly: { time: [], us_aqi: [], pm2_5: [], pm10: [] },
+  };
+  const data = parsed.success ? parsed.data : defaultAirQuality;
 
   const currentAqi = Math.round(data.current?.us_aqi ?? 100);
   const currentPm25 = Math.round((data.current?.pm2_5 ?? 35) * 10) / 10;
   const currentPm10 = Math.round((data.current?.pm10 ?? 60) * 10) / 10;
 
   // Process hourly forecast (next 24 hours)
-  const hourlyTimes: string[] = data.hourly?.time || [];
-  const hourlyAqi: number[] = data.hourly?.us_aqi || [];
-  const hourlyPm25: number[] = data.hourly?.pm2_5 || [];
-  const hourlyPm10: number[] = data.hourly?.pm10 || [];
+  const hourlyTimes: string[] = data.hourly?.time ?? [];
+  const hourlyAqi = data.hourly?.us_aqi ?? [];
+  const hourlyPm25 = data.hourly?.pm2_5 ?? [];
+  const hourlyPm10 = data.hourly?.pm10 ?? [];
 
   const hourly: HourlyAqiPoint[] = [];
   const now = new Date();
