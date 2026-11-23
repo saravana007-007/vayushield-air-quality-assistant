@@ -77,6 +77,29 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
     window.open(`https://wa.me/?text=${encoded}`, '_blank');
   };
 
+  /**
+   * Sanitize text for jsPDF: replace non-Latin characters (Hindi, Bengali, Tamil, Telugu, Marathi, Urdu)
+   * with ASCII-safe equivalents since jsPDF's default helvetica font only supports Latin-1.
+   * This ensures PDF generation never crashes on multilingual content.
+   */
+  const sanitizeForPdf = (text: string): string => {
+    if (!text) return '';
+    // Replace common Unicode characters that break jsPDF
+    return text
+      // Strip characters outside Latin-1 range (keep ASCII + Latin-1 Supplement)
+      .replace(/[^\x00-\xFF]/g, (char) => {
+        // Map common Unicode punctuation to ASCII equivalents
+        const map: Record<string, string> = {
+          '\u2018': "'", '\u2019': "'", '\u201C': '"', '\u201D': '"',
+          '\u2013': '-', '\u2014': '-', '\u2026': '...',
+          '\u00B7': '.', '\u2022': '*', '\u2192': '->', '\u2190': '<-',
+          '\u2714': '[done]', '\u2716': '[x]', '\u2605': '*',
+          '\u00B0': 'deg', '\u00B5': 'u', '\u03BC': 'u',
+        };
+        return map[char] || '?';
+      });
+  };
+
   const handleDownloadPdf = () => {
     setIsGeneratingPdf(true);
     try {
@@ -85,6 +108,9 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
         unit: 'mm',
         format: 'a4',
       });
+
+      // Shorthand for safe text
+      const s = sanitizeForPdf;
 
       // Background header banner
       doc.setFillColor(15, 23, 42); // slate-900
@@ -100,7 +126,7 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(148, 163, 184); // slate-400
       doc.text('Personalized Family Smog Protection Action Plan', 15, 26);
-      doc.text(`Generated: ${new Date().toLocaleDateString()} | ${airData.cityName}`, 15, 32);
+      doc.text(s(`Generated: ${new Date().toLocaleDateString()} | ${airData.cityName}`), 15, 32);
 
       // Section 1: AQI & Protection Overview Box
       doc.setFillColor(248, 250, 252); // slate-50
@@ -110,13 +136,13 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
       doc.setTextColor(15, 23, 42);
       doc.setFontSize(13);
       doc.setFont('helvetica', 'bold');
-      doc.text(`AIR QUALITY INDEX: ${airData.currentAqi} (${airData.category.label})`, 22, 55);
+      doc.text(s(`AIR QUALITY INDEX: ${airData.currentAqi} (${airData.category.label})`), 22, 55);
 
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(71, 85, 105);
-      doc.text(`PM2.5: ${airData.currentPm25} ug/m3 (${airData.whoMultiplier}x WHO Clean Air Limit) | PM10: ${airData.currentPm10} ug/m3`, 22, 62);
-      doc.text(`Family Protection Score: ${score}% | Recommended Mask: ${airData.currentAqi > 150 ? 'N95 / FFP2 Respirator' : 'Surgical / KN95'}`, 22, 69);
+      doc.text(s(`PM2.5: ${airData.currentPm25} ug/m3 (${airData.whoMultiplier}x WHO Clean Air Limit) | PM10: ${airData.currentPm10} ug/m3`), 22, 62);
+      doc.text(s(`Family Protection Score: ${score}% | Recommended Mask: ${airData.currentAqi > 150 ? 'N95 / FFP2 Respirator' : 'Surgical / KN95'}`), 22, 69);
 
       // Section 2: The #1 Most Important Action Today
       doc.setFillColor(245, 158, 11); // amber-500
@@ -128,7 +154,9 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
       doc.text('THE #1 MOST IMPORTANT ACTION TODAY:', 22, 91);
 
       doc.setFontSize(12);
-      doc.text(`"${plan.oneThingToDo}"`, 22, 99, { maxWidth: 165 });
+      const oneThingText = s(plan.oneThingToDo);
+      const oneThingLines = doc.splitTextToSize(oneThingText, 165);
+      doc.text(oneThingLines, 22, 99);
 
       // Section 3: Safe Ventilation & Inversion Timing
       doc.setTextColor(15, 23, 42);
@@ -139,10 +167,12 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(22, 101, 52); // emerald-800
-      doc.text(`* SAFEST TIME TO GO OUT / AERATE: ${airData.bestWindow.startTime} to ${airData.bestWindow.endTime}`, 15, 126);
+      doc.text(s(`* SAFEST TIME TO GO OUT / AERATE: ${airData.bestWindow.startTime} to ${airData.bestWindow.endTime}`), 15, 126);
 
       doc.setTextColor(153, 27, 27); // red-800
       doc.text('* CRITICAL DANGER INVERSION HOURS (STAY INDOORS): 5:00 AM - 9:00 AM & 5:00 PM - 9:00 PM', 15, 133);
+
+      let yPos = 146;
 
       // Helper for page break management
       const checkPageBreak = (neededMm: number) => {
@@ -153,7 +183,7 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
           doc.setTextColor(255, 255, 255);
           doc.setFontSize(10);
           doc.setFont('helvetica', 'bold');
-          doc.text(`VAYUSHIELD — ${airData.cityName} Action Plan (Continued)`, 15, 10);
+          doc.text(s(`VAYUSHIELD - ${airData.cityName} Action Plan (Continued)`), 15, 10);
           yPos = 25;
         }
       };
@@ -163,19 +193,20 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
       doc.setTextColor(15, 23, 42);
       doc.setFontSize(13);
       doc.setFont('helvetica', 'bold');
-      doc.text('DAILY 4-BLOCK ROUTINE & WINDOW RULES', 15, 146);
+      doc.text('DAILY 4-BLOCK ROUTINE & WINDOW RULES', 15, yPos);
+      yPos += 8;
 
-      let yPos = 154;
       plan.dailyRoutine.forEach((b) => {
-        const windowLines = doc.splitTextToSize(`• Window: ${b.windowRule}`, 172);
-        const guidanceLines = doc.splitTextToSize(`• Guidance: ${b.memberGuidance}`, 172);
+        const titleText = s(`${b.title} [${b.badge}]`);
+        const windowLines = doc.splitTextToSize(s(`Window: ${b.windowRule}`), 170);
+        const guidanceLines = doc.splitTextToSize(s(`Guidance: ${b.memberGuidance}`), 170);
         const needed = 8 + (windowLines.length * 4.5) + (guidanceLines.length * 4.5) + 4;
         checkPageBreak(needed);
 
         doc.setFontSize(10);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(30, 41, 59);
-        doc.text(`${b.title} [${b.badge}]`, 15, yPos);
+        doc.text(titleText, 15, yPos);
         yPos += 5;
 
         doc.setFont('helvetica', 'normal');
@@ -196,15 +227,16 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
       yPos += 12;
 
       plan.indoorHacks.forEach((h, idx) => {
-        const stepLines = doc.splitTextToSize(`• Steps: ${h.steps.join('  |  ')}`, 170);
-        const reductionLines = doc.splitTextToSize(`• Benefit: ${h.estimatedReduction}`, 170);
+        const hackTitle = s(`${idx + 1}. ${h.title} (${h.difficulty})`);
+        const stepLines = doc.splitTextToSize(s(`Steps: ${h.steps.join('  |  ')}`), 170);
+        const reductionLines = doc.splitTextToSize(s(`Benefit: ${h.estimatedReduction}`), 170);
         const needed = 6 + (stepLines.length * 4.5) + (reductionLines.length * 4.5) + 5;
         checkPageBreak(needed);
 
         doc.setFontSize(10);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(30, 41, 59);
-        doc.text(`${idx + 1}. ${h.title} (${h.difficulty})`, 15, yPos);
+        doc.text(hackTitle, 15, yPos);
         yPos += 5;
 
         doc.setFont('helvetica', 'normal');
@@ -226,10 +258,10 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
         doc.text('RECOMMENDED CLEAN AIR SWAPS', 15, yPos + 4);
         yPos += 10;
 
-        plan.swaps.forEach((s) => {
-          const swapItem = getSwapById(s.catalogId);
-          const title = swapItem ? swapItem.title : s.catalogId;
-          const reasonLines = doc.splitTextToSize(`• ${title}: ${s.customReason}`, 172);
+        plan.swaps.forEach((sw) => {
+          const swapItem = getSwapById(sw.catalogId);
+          const title = swapItem ? swapItem.title : sw.catalogId;
+          const reasonLines = doc.splitTextToSize(s(`${title}: ${sw.customReason}`), 172);
           checkPageBreak(reasonLines.length * 4.5 + 4);
 
           doc.setFontSize(9.5);
@@ -252,7 +284,18 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
       doc.save(`VayuShield-${airData.cityName.replace(/\s+/g, '-')}-ActionPlan.pdf`);
     } catch (err) {
       console.error('PDF generation error:', err);
-      alert('Could not generate PDF. Please try again.');
+      // User-friendly fallback: download as plain text if PDF fails
+      try {
+        const blob = new Blob([shareText.replace(/[*_]/g, '')], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `VayuShield-${airData.cityName.replace(/\s+/g, '-')}-ActionPlan.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+      } catch {
+        alert('Could not generate PDF. Please try the Plain Text or WhatsApp format instead.');
+      }
     } finally {
       setIsGeneratingPdf(false);
     }
