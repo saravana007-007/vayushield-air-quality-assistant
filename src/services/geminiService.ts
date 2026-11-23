@@ -40,14 +40,7 @@ export function setSessionApiKey(key: string | null): void {
 }
 
 export function getSessionApiKey(): string | null {
-  if (memoryApiKey) {
-    return memoryApiKey;
-  }
-  const envKey = import.meta.env.VITE_GEMINI_API_KEY;
-  if (typeof envKey === 'string' && envKey.trim().length > 0) {
-    return envKey.trim();
-  }
-  return null;
+  return memoryApiKey;
 }
 
 export function hasApiKey(): boolean {
@@ -92,8 +85,42 @@ export async function generateActionPlan(
 ): Promise<{ plan: ActionPlan; isDemo: boolean; error?: string }> {
   const apiKey = getSessionApiKey();
 
-  // If no API key configured, seamlessly return the bundled demo plan
+  // If no in-memory key, check if serverless proxy is available
   if (!apiKey) {
+    if (typeof window !== 'undefined' && typeof window.fetch === 'function') {
+      try {
+        onStatusUpdate?.('Connecting to secure VayuShield proxy...');
+        const customCondition = profile.customTagDetails ? profile.customTagDetails.slice(0, 200) : undefined;
+        const proxyRes = await fetch('/api/gemini', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'generatePlan',
+            prompt: `LOCATION: ${airData.cityName} (${airData.country || ''})\nAQI: ${airData.currentAqi}\nHousehold Tags: ${profile.tags.join(', ')}`,
+            customCondition,
+            systemInstruction: getSystemInstruction(lang),
+          }),
+        });
+
+        if (proxyRes.ok) {
+          const data = (await proxyRes.json()) as { plan?: unknown };
+          if (data && data.plan) {
+            const validatedPlan = ActionPlanSchema.parse(data.plan);
+            const fullPlan: ActionPlan = {
+              ...validatedPlan,
+              isDemo: false,
+              generatedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              language: lang,
+            };
+            saveCachedPlan(fullPlan, airData);
+            return { plan: fullPlan, isDemo: false };
+          }
+        }
+      } catch {
+        // Fall back to verified demo plan on network/proxy failure
+      }
+    }
+
     onStatusUpdate?.('No API key provided; loading verified Demo Plan.');
     const demoPlan = getDemoPlanForAqi(airData.currentAqi, airData.cityName, lang);
     return { plan: demoPlan, isDemo: true };
@@ -225,13 +252,37 @@ export async function askVayu(
   plan: ActionPlan,
   lang: SupportedLanguage = 'en'
 ): Promise<string> {
+  const sanitizedQuestion = question.trim().slice(0, 500);
   const apiKey = getSessionApiKey();
 
   if (!apiKey) {
-    return generateOfflineChatAnswer(question, airData, profile, lang);
+    if (typeof window !== 'undefined' && typeof window.fetch === 'function') {
+      try {
+        const proxyRes = await fetch('/api/gemini', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'askVayu',
+            question: sanitizedQuestion,
+            prompt: `USER QUESTION: "${sanitizedQuestion}"\nCity: ${airData.cityName}\nAQI: ${airData.currentAqi}`,
+            systemInstruction: getSystemInstruction(lang),
+          }),
+        });
+
+        if (proxyRes.ok) {
+          const data = (await proxyRes.json()) as { reply?: string };
+          if (data?.reply && data.reply.trim()) {
+            return data.reply.trim();
+          }
+        }
+      } catch {
+        // Fall back to local reasoning
+      }
+    }
+    return generateOfflineChatAnswer(sanitizedQuestion, airData, profile, lang);
   }
 
-  const prompt = `USER QUESTION: "${question}"
+  const prompt = `USER QUESTION: "${sanitizedQuestion}"
 
 CURRENT CONTEXT:
 - City: ${airData.cityName}
