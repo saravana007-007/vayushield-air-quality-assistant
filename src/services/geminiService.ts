@@ -162,11 +162,27 @@ REQUIRED OUTPUT INSTRUCTIONS:
         },
       });
 
-      const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error(`AI response timed out (${TIMEOUTS.geminiRequestMs / 1000}s). Switching to verified plan.`)), TIMEOUTS.geminiRequestMs)
-      );
+      let timeoutHandle: ReturnType<typeof setTimeout> | undefined;
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        timeoutHandle = setTimeout(
+          () =>
+            reject(
+              new Error(
+                `AI response timed out (${TIMEOUTS.geminiRequestMs / 1000}s). Switching to verified plan.`
+              )
+            ),
+          TIMEOUTS.geminiRequestMs
+        );
+      });
 
-      const response = await Promise.race([apiCall, timeoutPromise]);
+      let response;
+      try {
+        response = await Promise.race([apiCall, timeoutPromise]);
+      } finally {
+        if (timeoutHandle !== undefined) {
+          clearTimeout(timeoutHandle);
+        }
+      }
 
       const responseText = response.text;
       if (!responseText) {

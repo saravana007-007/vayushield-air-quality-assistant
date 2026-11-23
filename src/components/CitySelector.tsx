@@ -34,10 +34,11 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const listboxId = useId();
 
-  // Close dropdown on outside click
+  // Close dropdown on outside click & cleanup timers/aborts on unmount
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -45,10 +46,18 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
       }
     };
     document.addEventListener('mousedown', handleOutsideClick);
-    return () => document.removeEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
   }, []);
 
-  // Debounced search handler
+  // Debounced search handler with AbortController
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -57,6 +66,9 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
 
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
+    }
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
     }
 
     if (!value.trim() || value.trim().length < 2) {
@@ -70,14 +82,21 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
     setIsOpen(true);
 
     searchTimeoutRef.current = setTimeout(async () => {
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+
       try {
-        const hits = await searchCities(value);
+        const hits = await searchCities(value, controller.signal);
         setResults(hits);
         if (hits.length === 0) {
           setSearchError(`No cities matching "${value}" were found.`);
         }
-      } catch (err: any) {
-        setSearchError(err?.message || 'Location lookup failed. Check connection.');
+      } catch (err: unknown) {
+        if (err instanceof DOMException && err.name === 'AbortError') {
+          return;
+        }
+        const message = err instanceof Error ? err.message : 'Location lookup failed. Check connection.';
+        setSearchError(message);
         setResults([]);
       } finally {
         setIsSearching(false);

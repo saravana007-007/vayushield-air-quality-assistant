@@ -102,7 +102,7 @@ export const AIR_PRESETS: Record<string, AirQualityData> = {
 /**
  * Search cities using Open-Meteo Geocoding API
  */
-export async function searchCities(query: string): Promise<GeocodingResult[]> {
+export async function searchCities(query: string, signal?: AbortSignal): Promise<GeocodingResult[]> {
   const validation = validateCityInput(query);
   if (!validation.isValid) {
     throw new Error(validation.error || 'Invalid city name.');
@@ -110,7 +110,7 @@ export async function searchCities(query: string): Promise<GeocodingResult[]> {
 
   const url = `${APP_CONFIG.openMeteoGeocodingUrl}?name=${encodeURIComponent(validation.sanitized)}&count=5&language=en&format=json`;
   
-  const response = await fetch(url);
+  const response = await fetch(url, { signal });
   if (!response.ok) {
     throw new Error(`Location search failed (${response.status}). Check network connection.`);
   }
