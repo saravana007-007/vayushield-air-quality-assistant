@@ -4,13 +4,56 @@
 import type { SupportedLanguage } from '../i18n';
 import { SUPPORTED_LANGUAGES } from '../i18n';
 import { logger } from './logger';
+import { getErrorMessage } from './errors';
+
+interface SpeechRecognitionResultItem {
+  transcript: string;
+}
+
+interface SpeechRecognitionResultList {
+  [index: number]: {
+    [index: number]: SpeechRecognitionResultItem;
+  };
+}
+
+interface SpeechRecognitionEvent {
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionErrorEvent {
+  error: string;
+  message?: string;
+}
+
+interface SpeechRecognitionInstance {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+}
+
+interface SpeechRecognitionConstructor {
+  new (): SpeechRecognitionInstance;
+}
+
+interface WindowWithSpeechRecognition extends Window {
+  SpeechRecognition?: SpeechRecognitionConstructor;
+  webkitSpeechRecognition?: SpeechRecognitionConstructor;
+}
 
 export function isSpeechSynthesisSupported(): boolean {
   return typeof window !== 'undefined' && 'speechSynthesis' in window;
 }
 
 export function isSpeechRecognitionSupported(): boolean {
-  return typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
+  return (
+    typeof window !== 'undefined' &&
+    ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)
+  );
 }
 
 /**
@@ -20,7 +63,7 @@ export function speakText(
   text: string,
   lang: SupportedLanguage = 'en',
   onEnd?: () => void,
-  onError?: (err: any) => void
+  onError?: (err: unknown) => void
 ): () => void {
   if (!isSpeechSynthesisSupported()) {
     onError?.('Speech synthesis not supported in this browser.');
@@ -32,14 +75,14 @@ export function speakText(
   const cleanText = text.replace(/[#*_`]/g, '').trim();
   const utterance = new SpeechSynthesisUtterance(cleanText);
 
-  const langMeta = SUPPORTED_LANGUAGES.find(l => l.code === lang);
+  const langMeta = SUPPORTED_LANGUAGES.find((l) => l.code === lang);
   utterance.lang = langMeta ? langMeta.speechLang : 'en-US';
   utterance.rate = 0.95; // Slightly slower for clarity
   utterance.pitch = 1.0;
 
   // Try finding matching voice
   const voices = window.speechSynthesis.getVoices();
-  const matchVoice = voices.find(v => v.lang.startsWith(langMeta?.speechLang || 'en'));
+  const matchVoice = voices.find((v) => v.lang.startsWith(langMeta?.speechLang ?? 'en'));
   if (matchVoice) {
     utterance.voice = matchVoice;
   }
@@ -73,7 +116,7 @@ export function stopSpeech(): void {
 export function startVoiceRecognition(
   lang: SupportedLanguage,
   onResult: (transcript: string) => void,
-  onError?: (err: any) => void,
+  onError?: (err: unknown) => void,
   onEnd?: () => void
 ): () => void {
   if (!isSpeechRecognitionSupported()) {
@@ -81,21 +124,27 @@ export function startVoiceRecognition(
     return () => {};
   }
 
-  const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-  const recognition = new SpeechRecognition();
+  const win = window as unknown as WindowWithSpeechRecognition;
+  const SpeechRecognitionClass = win.SpeechRecognition ?? win.webkitSpeechRecognition;
+  if (!SpeechRecognitionClass) {
+    onError?.('Speech recognition constructor not available.');
+    return () => {};
+  }
 
-  const langMeta = SUPPORTED_LANGUAGES.find(l => l.code === lang);
+  const recognition = new SpeechRecognitionClass();
+
+  const langMeta = SUPPORTED_LANGUAGES.find((l) => l.code === lang);
   recognition.lang = langMeta ? langMeta.speechLang : 'en-US';
   recognition.continuous = false;
   recognition.interimResults = false;
 
-  recognition.onresult = (event: any) => {
-    const transcript = event.results[0]?.[0]?.transcript || '';
+  recognition.onresult = (event: SpeechRecognitionEvent) => {
+    const transcript = event.results[0]?.[0]?.transcript ?? '';
     onResult(transcript);
   };
 
-  recognition.onerror = (event: any) => {
-    logger.warn('Speech recognition error:', event);
+  recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+    logger.warn('Speech recognition error:', event.error);
     onError?.(event.error);
   };
 
@@ -105,15 +154,15 @@ export function startVoiceRecognition(
 
   try {
     recognition.start();
-  } catch (err) {
+  } catch (err: unknown) {
     onError?.(err);
   }
 
   return () => {
     try {
       recognition.stop();
-    } catch (e) {
-      // ignore
+    } catch (err: unknown) {
+      logger.warn('Recognition stop error:', getErrorMessage(err));
     }
   };
 }

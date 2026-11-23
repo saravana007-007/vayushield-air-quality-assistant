@@ -1,38 +1,37 @@
-// VayuShield Zod Schemas & Gemini JSON Schema Definitions
 import { z } from 'zod';
+import type { Schema } from '@google/genai';
+import { Type } from '@google/genai';
 
-export const RoutineBadgeSchema = z.enum([
-  'Stay Indoors',
-  'Mask Required',
-  'Safe Ventilation Window'
-]);
-
+// Routine Block Zod Schema
 export const RoutineBlockSchema = z.object({
   id: z.enum(['morning', 'midday', 'evening', 'night']),
   title: z.string().min(1),
   timeRange: z.string().min(1),
-  badge: RoutineBadgeSchema,
-  windowRule: z.string().min(5),
-  memberGuidance: z.string().min(5),
+  badge: z.enum(['Stay Indoors', 'Mask Required', 'Safe Ventilation Window']),
+  windowRule: z.string().min(1),
+  memberGuidance: z.string().min(1),
 });
 
+// Indoor Hack Zod Schema
 export const IndoorHackSchema = z.object({
   id: z.string().min(1),
-  title: z.string().min(3),
-  targetArea: z.string().min(2),
-  steps: z.array(z.string().min(3)).min(1),
-  difficulty: z.enum(['Quick (5 min)', 'Moderate (15 min)']),
-  estimatedReduction: z.string().min(3),
+  title: z.string().min(1),
+  targetArea: z.string().min(1),
+  steps: z.array(z.string().min(1)).min(1),
+  difficulty: z.string().min(1),
+  estimatedReduction: z.string().min(1),
 });
 
+// Swap Plan Item Zod Schema
 export const SwapPlanItemSchema = z.object({
   catalogId: z.string().min(1),
-  customReason: z.string().min(10),
+  customReason: z.string().min(1),
 });
 
+// Action Plan Zod Schema
 export const ActionPlanSchema = z.object({
   oneThingToDo: z.string().min(5),
-  familyRiskBriefing: z.string().min(15),
+  familyRiskBriefing: z.string().min(10),
   dailyRoutine: z.array(RoutineBlockSchema).length(4),
   indoorHacks: z.array(IndoorHackSchema).length(4),
   swaps: z.array(SwapPlanItemSchema).length(4),
@@ -43,85 +42,90 @@ export const ActionPlanSchema = z.object({
 export type ValidatedActionPlan = z.infer<typeof ActionPlanSchema>;
 
 // Strict JSON Schema object for Gemini SDK responseSchema
-export const GEMINI_RESPONSE_SCHEMA = {
-  type: 'object',
+export const GEMINI_RESPONSE_SCHEMA: Schema = {
+  type: Type.OBJECT,
   properties: {
     oneThingToDo: {
-      type: 'string',
+      type: Type.STRING,
       description: 'The single most important action for today in one bold short sentence.',
     },
     familyRiskBriefing: {
-      type: 'string',
-      description: 'Calm plain-language guidance tailored to this household, with zero medical diagnoses or medication names, written in the requested language.',
+      type: Type.STRING,
+      description:
+        'Calm plain-language guidance tailored to this household, with zero medical diagnoses or medication names, written in the requested language.',
     },
     dailyRoutine: {
-      type: 'array',
-      description: 'Exactly 4 chronological daily routine blocks: morning (5-9), midday (12-3), evening (5-9), night.',
+      type: Type.ARRAY,
+      description:
+        'Exactly 4 chronological daily routine blocks: morning (5-9), midday (12-3), evening (5-9), night.',
       items: {
-        type: 'object',
+        type: Type.OBJECT,
         properties: {
           id: {
-            type: 'string',
+            type: Type.STRING,
             enum: ['morning', 'midday', 'evening', 'night'],
           },
           title: {
-            type: 'string',
+            type: Type.STRING,
             description: 'Block title e.g. Morning Smog Peak (5:00 - 9:00 AM)',
           },
           timeRange: {
-            type: 'string',
+            type: Type.STRING,
             description: 'Time string e.g. 05:00 - 09:00',
           },
           badge: {
-            type: 'string',
+            type: Type.STRING,
             enum: ['Stay Indoors', 'Mask Required', 'Safe Ventilation Window'],
           },
           windowRule: {
-            type: 'string',
+            type: Type.STRING,
             description: 'Specific window and airing rule.',
           },
           memberGuidance: {
-            type: 'string',
-            description: 'Actionable guidance for specific household members in very simple short sentences.',
+            type: Type.STRING,
+            description:
+              'Actionable guidance for specific household members in very simple short sentences.',
           },
         },
         required: ['id', 'title', 'timeRange', 'badge', 'windowRule', 'memberGuidance'],
       },
     },
     indoorHacks: {
-      type: 'array',
-      description: 'Exactly 4 low-cost actionable indoor hacks adapted to purifier/stove/home setup.',
+      type: Type.ARRAY,
+      description:
+        'Exactly 4 low-cost actionable indoor hacks adapted to purifier/stove/home setup.',
       items: {
-        type: 'object',
+        type: Type.OBJECT,
         properties: {
-          id: { type: 'string' },
-          title: { type: 'string' },
-          targetArea: { type: 'string' },
+          id: { type: Type.STRING },
+          title: { type: Type.STRING },
+          targetArea: { type: Type.STRING },
           steps: {
-            type: 'array',
-            items: { type: 'string' },
+            type: Type.ARRAY,
+            items: { type: Type.STRING },
           },
           difficulty: {
-            type: 'string',
+            type: Type.STRING,
             enum: ['Quick (5 min)', 'Moderate (15 min)'],
           },
-          estimatedReduction: { type: 'string' },
+          estimatedReduction: { type: Type.STRING },
         },
         required: ['id', 'title', 'targetArea', 'steps', 'difficulty', 'estimatedReduction'],
       },
     },
     swaps: {
-      type: 'array',
-      description: 'Exactly 4 community and personal swaps chosen strictly from available catalog IDs.',
+      type: Type.ARRAY,
+      description:
+        'Exactly 4 community and personal swaps chosen strictly from available catalog IDs.',
       items: {
-        type: 'object',
+        type: Type.OBJECT,
         properties: {
           catalogId: {
-            type: 'string',
+            type: Type.STRING,
             description: 'Catalog ID chosen strictly from valid catalog ID list.',
           },
           customReason: {
-            type: 'string',
+            type: Type.STRING,
             description: 'Personalized explanation why this swap protects this specific household today.',
           },
         },
@@ -129,15 +133,15 @@ export const GEMINI_RESPONSE_SCHEMA = {
       },
     },
     dos: {
-      type: 'array',
+      type: Type.ARRAY,
       description: '3 short clear bullet actions to do today.',
-      items: { type: 'string' },
+      items: { type: Type.STRING },
     },
     donts: {
-      type: 'array',
+      type: Type.ARRAY,
       description: '3 short clear bullet mistakes to avoid today.',
-      items: { type: 'string' },
+      items: { type: Type.STRING },
     },
   },
-  required: ['oneThingToDo', 'familyRiskBriefing', 'dailyRoutine', 'indoorHacks', 'swaps'],
+  required: ['oneThingToDo', 'familyRiskBriefing', 'dailyRoutine', 'indoorHacks', 'swaps', 'dos', 'donts'],
 };

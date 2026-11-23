@@ -14,7 +14,7 @@ import {
 import { ActionPlanSchema } from '../../services/schemas';
 import type { HouseholdProfile, HourlyAqiPoint } from '../../types';
 import { DEMO_PLANS } from '../../data/demoPlans';
-import { getTranslation, TRANSLATIONS } from '../../i18n';
+import { getTranslation } from '../../i18n';
 
 describe('AQI Category Classification Boundaries & Visual Identifiers', () => {
   it('classifies 0-50 as Good with safe emoji 😊', () => {
@@ -269,7 +269,7 @@ describe('Zod Schema Validation for Gemini Output', () => {
 
   it('fails validation when oneThingToDo is missing', () => {
     const validPlan = DEMO_PLANS['delhi-severe'];
-    const { oneThingToDo, ...invalidPlan } = validPlan as any;
+    const { oneThingToDo: _removed, ...invalidPlan } = validPlan as unknown as Record<string, unknown>;
     const result = ActionPlanSchema.safeParse(invalidPlan);
     expect(result.success).toBe(false);
   });

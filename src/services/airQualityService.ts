@@ -99,6 +99,15 @@ export const AIR_PRESETS: Record<string, AirQualityData> = {
   },
 };
 
+interface RawGeocodingResult {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  country?: string;
+  admin1?: string;
+}
+
 /**
  * Search cities using Open-Meteo Geocoding API
  */
@@ -120,7 +129,7 @@ export async function searchCities(query: string, signal?: AbortSignal): Promise
     return [];
   }
 
-  return data.results.map((r: any) => ({
+  return (data.results as RawGeocodingResult[]).map((r) => ({
     id: r.id,
     name: r.name,
     latitude: r.latitude,

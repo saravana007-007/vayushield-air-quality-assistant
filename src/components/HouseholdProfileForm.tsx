@@ -31,7 +31,10 @@ export const HouseholdProfileForm: React.FC<HouseholdProfileFormProps> = ({
     });
   };
 
-  const updateSetup = (key: keyof HouseholdProfile['setup'], value: any) => {
+  const updateSetup = <K extends keyof HouseholdProfile['setup']>(
+    key: K,
+    value: HouseholdProfile['setup'][K]
+  ) => {
     onChangeProfile({
       ...profile,
       setup: {

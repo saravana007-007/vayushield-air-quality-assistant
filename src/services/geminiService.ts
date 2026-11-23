@@ -157,7 +157,7 @@ REQUIRED OUTPUT INSTRUCTIONS:
         config: {
           systemInstruction: getSystemInstruction(lang),
           responseMimeType: 'application/json',
-          responseSchema: GEMINI_RESPONSE_SCHEMA as any,
+          responseSchema: GEMINI_RESPONSE_SCHEMA,
           temperature: GEMINI_TEMPERATURES.planGeneration,
         },
       });

@@ -4,6 +4,7 @@ import type { ActionPlan, AirQualityData, ChatMessage, HouseholdProfile } from '
 import type { UiTranslations, SupportedLanguage } from '../i18n';
 import { askVayu } from '../services/geminiService';
 import { logger } from '../utils/logger';
+import { getErrorMessage } from '../utils/errors';
 import { startVoiceRecognition, isSpeechRecognitionSupported, speakText } from '../utils/speech';
 
 interface AskVayuDrawerProps {
@@ -86,7 +87,8 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages((prev) => [...prev, botMsg]);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      logger.warn('Ask Vayu submit error:', getErrorMessage(err));
       const errorMsg: ChatMessage = {
         id: `err-${Date.now()}`,
         role: 'model',
