@@ -47,9 +47,9 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
               <div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-xl font-bold font-display tracking-tight text-slate-900">
+                  <h1 className="text-xl font-bold font-display tracking-tight text-slate-900 inline-block">
                     Vayu<span className="text-sky-600">Shield</span>
-                  </span>
+                  </h1>
                   {isDemo && (
                     <span
                       className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300"
