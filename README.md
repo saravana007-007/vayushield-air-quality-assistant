@@ -1,333 +1,164 @@
-# VayuShield 🛡️
-> **Accessible, Multilingual GenAI Urban Air Quality Assistant for Families During Winter Smog**  
-> Translates live atmospheric pollution data into simple, actionable daily protection plans designed for everyone, including families with low reading ability.
+# 🛡️ VayuShield — Hyperlocal Air Quality & Household Smog Shield
 
-[![Tests](https://img.shields.io/badge/tests-32%20passed-emerald)](https://github.com)
-[![Languages](https://img.shields.io/badge/languages-English%20|%20हिन्दी%20|%20اردو%20|%20বাংলা%20|%20தமிழ்%20|%20తెలుగు%20|%20मराठी-blue)](#-language-support)
-[![Accessibility](https://img.shields.io/badge/WCAG-AA%20Compliant-blue)](https://www.w3.org/WAI/standards-guidelines/wcag/)
-[![Gemini](https://img.shields.io/badge/Gemini%20Flash-@google/genai-orange)](https://aistudio.google.com)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+> **AI-Powered Family Protection Assistant for Severe Smog & Temperature Inversion Episodes**
 
----
-
-## 📋 Table of Contents
-- [Executive Overview](#-executive-overview)
-- [System Architecture](#-system-architecture)
-- [Simplicity & Multilingual Design](#-simplicity--multilingual-design)
-- [Key Features](#-key-features)
-- [Danger Explainer & Visual Gauge](#-danger-explainer--visual-gauge)
-- ["When Will It Get Better" Engine](#-when-will-it-get-better-engine)
-- [Resilience & Fail-Safe Strategy](#-resilience--fail-safe-strategy)
-- [Algorithmic Weighting & Calculations](#-algorithmic-weighting--calculations)
-- [Accessibility Compliance (WCAG AA)](#-accessibility-compliance-wcag-aa)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [Testing & Quality Verification](#-testing--quality-verification)
-- [Deployment Guide](#-deployment-guide)
-- [Security & Production Architecture](#-security--production-architecture)
-- [Limitations & Medical Disclaimer](#-limitations--medical-disclaimer)
+[![CI](https://github.com/saravana007-007/vayushield-air-quality-assistant/actions/workflows/ci.yml/badge.svg)](https://github.com/saravana007-007/vayushield-air-quality-assistant/actions)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8_Strict-blue.svg)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19-61dafb.svg)](https://react.dev/)
+[![Oxlint](https://img.shields.io/badge/Linter-Oxlint_Zero_Warnings-success.svg)](https://oxc.rs/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ---
 
-## 🌟 Executive Overview
+## 📌 Problem Statement
+During severe winter inversion events across South Asian cities (Delhi NCR, Lahore, Kolkata, Dhaka), ambient AQI surges beyond **300–500+ (Hazardous)**, trapping fine particulate matter ($\text{PM}_{2.5}$) close to the ground. 
 
-During North Indian and South Asian winters (e.g. Delhi NCR, Lahore, Kolkata, Dhaka), the **planetary boundary layer contracts**, creating thermal inversions that trap ultra-fine particulate matter ($PM_{2.5}$ and $PM_{10}$) within 100 meters of the ground. 
+Most public air-quality dashboards only present numbers and generic advice ("stay indoors"), failing to offer actionable household containment strategies. Families with infants, asthmatic elders, and daily commuters are left exposed without practical, low-cost mitigations.
 
-Most public air quality applications simply report alarming numbers (e.g. *"AQI 450: Hazardous"*), leaving families unsure when to aerate homes, which masks actually work, or how to protect vulnerable infants, elderly grandparents, or asthmatic family members.
-
-**VayuShield** makes smog protection accessible to everyone:
-1. **The #1 Most Important Thing To Do Today**: A bold, single-sentence hero action at the very top.
-2. **Danger Explainer**: Prominent AQI number, big face emoji (😊 😐 😷 🤢 🚨 ☠️), 0-500 visual gauge, WHO $PM_{2.5}$ multiplier, and traffic light (🟢 safe, 🟡 be careful, 🔴 danger).
-3. **"When Will It Get Better" Engine**: Computed in code from hourly forecasts, detailing the safest window (e.g. "Best time to go out: 2 PM to 4 PM"), evening inversion times, and browser reminder alerts.
-4. **Multilingual & Native Scripts**: Instant switching between English, हिन्दी, اردو (RTL layout), বাংলা, தமிழ், తెలుగు, and मराठी.
-5. **Simplicity for Low-Literacy Users**: Big picture buttons, 🔊 **Read Aloud** speech synthesis, 🎤 **Voice Input** dictation, Large Text mode, and clear Do ✅ / Don't ❌ comparison cards.
-6. **Custom "Other" Support**: Users can specify any custom vulnerability (e.g. pregnancy, heart patient, pets), custom stove, or custom commute mode.
+**VayuShield** bridges this gap:
+1. Translates complex open meteorological data into **1 Critical Action**, a **4-stage daily routine**, and **zero-cost indoor containment hacks**.
+2. Tailors protective actions dynamically to household vulnerabilities (toddlers, elderly, asthma, stove type, commute mode).
+3. Provides offline resilience: 100% operational with verified local safety plans even when offline or without API keys.
 
 ---
 
-## 🏛️ System Architecture
+## 🏗️ Architecture & Data Flow
 
 ```mermaid
 flowchart TD
-    subgraph Client["Browser Client (React + Vite + TypeScript)"]
-        UI["Accessible User Interface<br/>(Tailwind CSS + ARIA AA)"]
-        i18n["Multilingual Engine<br/>(EN, HI, UR-RTL, BN, TA, TE, MR)"]
-        Speech["Web Speech Suite<br/>(Read Aloud 🔊 & Voice Input 🎤)"]
-        Danger["Danger Explainer<br/>(AQI, Face Emoji, 0-500 Gauge, WHO Multiplier)"]
-        WhenBetter["When Will It Get Better Engine<br/>(Computed in Code from Hourly Forecast)"]
-        Form["Household Profile & Custom Other<br/>(Big Picture Buttons)"]
-        Tracker["Action Tracker<br/>(Score % & CO2 Saved kg)"]
-        Drawer["Ask Vayu Voice Chat Drawer<br/>(3-Sentence Guardrailed AI)"]
-        OfflineCache["LocalStorage Cache<br/>(Offline Persistence)"]
+    User["User / Household Profile"] --> UI["React 19 Interface"]
+    
+    subgraph Data Layer
+        UI --> OM["Open-Meteo API\n(No key, Hourly PM2.5 & AQI)"]
+        UI --> Presets["1-Click Bundled Presets\n(Delhi, Lahore, Moderate)"]
+    end
+    
+    subgraph Engine & Protection
+        OM --> Calc["AQI & Physics Calculator\n(WHO Multiplier, Best Window, Shield Score)"]
+        Presets --> Calc
+        Calc --> Plan["Action Plan Generator"]
     end
 
-    subgraph DataFeeds["Public Air Quality & Geocoding"]
-        OpenMeteoGeo["Open-Meteo Geocoding API<br/>(No API Key Required)"]
-        OpenMeteoAQ["Open-Meteo Air Quality API<br/>(Live US AQI, PM2.5, Hourly 24h)"]
-        GPS["Browser GPS Location 📍"]
-        Presets["1-Click Instant Presets<br/>(Delhi 385, Lahore 340, Moderate 145)"]
+    subgraph Intelligence
+        Plan -->|Online with Key| Gemini["Google Gemini Live AI\n(Strict JSON Schema)"]
+        Plan -->|Offline / Fallback| Demo["Verified Bundled Safety Plans\n(Physician Aligned)"]
     end
 
-    subgraph Resilience["Resilience Engine (Fail-Safe)"]
-        Zod["Zod Validation Schema<br/>(Strict ActionPlanSchema)"]
-        DemoCatalog["Bundled Sample Plans<br/>(src/data/demoPlans.ts in EN & HI)"]
-        RetryLogic["Fallback Model & Retry Loop<br/>(Max 2 Attempts)"]
-    end
-
-    subgraph AI["Google GenAI Engine"]
-        SDK["@google/genai Official SDK"]
-        Flash["Gemini Flash (gemini-2.5-flash)"]
-        Fallback["Gemini Fallback (gemini-1.5-flash)"]
-    end
-
-    UI --> i18n & Speech & Danger & WhenBetter & Form
-    Form --> SDK
-    Danger --> OpenMeteoAQ & Presets
-    GPS --> OpenMeteoAQ
-    OpenMeteoGeo --> OpenMeteoAQ
-    SDK --> Flash
-    Flash -.->|On Failure| Fallback
-    Fallback -.->|On 2nd Failure or No Key| DemoCatalog
-    Flash --> Zod
-    Zod -->|Validated JSON| UI & Tracker & OfflineCache
-    Zod -.->|Validation Error| RetryLogic
-    RetryLogic -.->|Persistent Error| DemoCatalog
+    subgraph Outputs & Exports
+        Gemini --> PlanView["4-Stage Routine & Low-Cost Hacks"]
+        Demo --> PlanView
+        PlanView --> PDF["Client-Side PDF Card (Dynamic jsPDF)"]
+        PlanView --> AskVayu["Ask Vayu Voice/Text Assistant"]
 ```
 
 ---
 
-## 🌐 Language Support
+## 🚀 Key Features
 
-VayuShield provides native translations and Gemini generation across 7 South Asian regional languages:
-
-| Code | Native Script | Language | Direction | Speech Synthesis Code |
-|---|---|---|---|---|
-| `en` | **English** | English | Left-to-Right | `en-US` |
-| `hi` | **हिन्दी** | Hindi | Left-to-Right | `hi-IN` |
-| `ur` | **اردو** | Urdu | **Right-to-Left (RTL)** | `ur-PK` |
-| `bn` | **বাংলা** | Bengali | Left-to-Right | `bn-IN` |
-| `ta` | **தமிழ்** | Tamil | Left-to-Right | `ta-IN` |
-| `te` | **తెలుగు** | Telugu | Left-to-Right | `te-IN` |
-| `mr` | **मराठी** | Marathi | Left-to-Right | `mr-IN` |
-
-*The app remembers the chosen language in `localStorage` and automatically sets `<html lang="..." dir="...">`.*
+- **Hyperlocal Air Quality & Best-Window Algorithm**: Computes the optimal window for outdoor errands and aeration before evening temperature inversion settles.
+- **Household-Specific Personalization**: Custom guidance for infants, asthmatic members, gas vs. induction stoves, and bike vs. metro commuting.
+- **Household Shield Score**: Mathematical estimation of indoor isolation and particulate reduction based on building physics and adopted habits.
+- **Multilingual Support (7 Languages)**: Complete localized UI and guidance for English, हिन्दी (Hindi), اردو (Urdu, RTL), বাংলা (Bengali), தமிழ் (Tamil), తెలుగు (Telugu), and मराठी (Marathi).
+- **Ask Vayu Instant Consultation**: Voice-enabled or text-based assistant providing concise 3-sentence answers strictly focused on air safety.
+- **Offline & Low-Bandwidth Resilient**: Automatically caches recent plans in `localStorage` and falls back to bundled verified protocols.
+- **Zero-Dependency PDF Export**: Code-split, client-side PDF generation for printing or sharing family cards over WhatsApp.
 
 ---
 
-## ⚡ Key Features
+## 🛠️ Tech Stack & Code Quality Standards
 
-| Capability | Implementation Detail |
+| Layer | Technologies & Tools |
 |---|---|
-| **⭐ The #1 Action Today** | Hero banner showing the single most vital action for today (e.g. *"Keep windows closed until 2 PM"*). |
-| **Danger Explainer** | Large AQI number, category label, big face emoji (😊 😐 😷 🤢 🚨 ☠️), 0-500 visual gauge, WHO multiplier, traffic light (🟢 🟡 🔴). |
-| **"When Will It Get Better"** | Algorithmic forecast analysis calculating the best window, evening inversion spike, countdown, and 1-click notification reminder. |
-| **🔊 Read Aloud Speech** | Web Speech API synthesis reading the daily briefing and routine aloud in the chosen language. |
-| **🎤 Voice Input Chat** | Web Speech Recognition allowing hands-free questions in the "Ask Vayu" chat drawer. |
-| **Custom "Other" Options** | Support for user-defined vulnerabilities (e.g. pregnancy, heart disease, pets) and custom stove/commute types. |
-| **Offline Data Caching** | Last successful plan saved in `localStorage`; opens offline with *"Showing saved data from [time]"* banner. |
-| **Visual Mask Guide** | Direct comparison: N95/FFP2 (works ✅) vs. Cloth/Surgical (fails ❌). |
-| **Doctor Warning Box** | Emergency signs: chest pain, severe shortness of breath, continuous wheezing, bluish lips. |
-| **Do ✅ & Don't ❌ Cards** | High-contrast, easy-to-follow behavioral lists. |
-| **1-Click Presets & GPS** | Delhi Severe Smog (385), Lahore Hazardous (340), Moderate Haze (145), and GPS location detection. |
-| **Action & Protection Tracker** | Transparent scoring: Protection Score (0–100%) and Daily $CO_2$ Saved (kg). |
-| **One-Click Share Card** | WhatsApp direct share (`wa.me/?text=...`), clipboard copy, and `.txt` card export. |
+| **Core Framework** | React 19, TypeScript 5.8 (Strict mode with `noUncheckedIndexedAccess`) |
+| **Build Tool** | Vite 8 + Rolldown runtime (Code-split vendor chunks) |
+| **Type Checking** | Strict TypeScript (`noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`) |
+| **Linting** | Oxlint with `correctness`, `suspicious`, `perf`, `eqeqeq`, `no-explicit-any` |
+| **Testing** | Vitest 5, `@testing-library/react`, `@testing-library/user-event`, jsdom, v8 coverage |
+| **Styling** | Tailwind CSS 3.4, Lucide React icons |
+| **AI Integration** | Google GenAI SDK (`@google/genai`) with strict `Schema` validation |
 
 ---
 
-## 🛡️ Resilience & Fail-Safe Strategy
-
-The application guarantees that the user will **never see a broken screen**:
-1. **No Key Provided**: Seamlessly boots with bundled sample plans (`src/data/demoPlans.ts`, in English and Hindi) and displays a distinct **Demo Mode** indicator.
-2. **Network or Quota Failure**: If a live Gemini request fails, the engine retries once using the fallback model (`gemini-1.5-flash`). If both attempts fail, it automatically toggles to Demo Mode.
-3. **Zod Schema Mismatch**: If Gemini's JSON response fails schema validation, the system retries with adjusted parameters, falling back safely to bundled plans if the error persists.
-4. **Offline Persistence**: Successful plans are cached in `localStorage`. If opened offline, VayuShield immediately displays the cached data with a timestamp badge.
-
----
-
-## 📐 Algorithmic Weighting & Calculations
-
-### 1. Family Smog Protection Score ($0 - 100\%$)
-The score reflects physical isolation from ambient particulate matter based on building physics:
-- **Baseline Indoor Shelter**: $20\%$
-- **Active HEPA Air Purifier**: $+15\%$ (Bonus for active mechanical filtration)
-- **Non-Combustion Stovetop**: $+5\%$ (Electric or Induction stove avoiding indoor $NO_2$)
-- **Completed Indoor Micro-Hacks**: $+30\%$ ($7.5\%$ per hack across 4 tasks)
-- **Adopted Smog Swaps**: $+30\%$ ($7.5\%$ per swap across 4 tasks)
-$$\text{Total Score} = \min(100, 20 + \text{Purifier} + \text{Stove} + \text{Hacks} + \text{Swaps})$$
-
-### 2. WHO $PM_{2.5}$ Multiplier
-Calculated against the World Health Organization 24-hour clean air guideline ($15\text{ \mu g/m}^3$):
-$$\text{WHO Multiplier} = \max\left(1, \frac{PM_{2.5}}{15}\right)$$
-
----
-
-## ♿ Accessibility Compliance (WCAG AA)
-
-VayuShield was built from the ground up for full accessibility compliance:
-- **Semantic Landmark Structure**: Proper usage of `<header role="banner">`, `<main id="main-content">`, `<nav>`, `<section>`, and `<article>`.
-- **Keyboard Navigation**: Skip-to-content anchor link, full tab accessibility across all buttons, dialog focus management, and `Escape` key listeners.
-- **ARIA Annotations**: Explicit `aria-expanded`, `aria-autocomplete`, `aria-activedescendant`, `aria-live="polite"` status regions, and `aria-modal="true"`.
-- **High Contrast Ratios**: Dark slate typography (`#0F172A`) against light `#F8FAFC` backgrounds achieving $> 7:1$ contrast.
-- **No Color-Alone Status**: Every safety badge combines an explicit icon/emoji with distinct textual labels.
-- **Reduced Motion Support**: Honoring `@media (prefers-reduced-motion: reduce)` by neutralizing animation and transition durations.
-- **Internationalization (i18n)**: Correct `lang` and `dir="rtl"` attributes for Arabic/Urdu scripts.
-
----
-
-## 📁 Project Structure
+## 📂 Project Structure
 
 ```
-vayushield/
-├── .env.example                     # Environment template (VITE_GEMINI_API_KEY)
-├── index.html                       # Base HTML with accessibility meta & fonts
-├── package.json                     # Scripts & dependencies
-├── postcss.config.js                # PostCSS configuration
-├── tailwind.config.js               # Design tokens, palette & typography
-├── tsconfig.json                    # Root TypeScript configuration
-├── tsconfig.app.json                # App TypeScript configuration
-├── vite.config.ts                   # Vite bundler setup
-└── src/
-    ├── config.ts                    # Centralized GEMINI_MODEL & fallback
-    ├── index.css                    # Tailwind directives & focus styles
-    ├── main.tsx                     # React application entry point
-    ├── App.tsx                      # Main application container
-    ├── i18n/
-    │   ├── index.ts                 # i18n manager, localStorage & direction
-    │   └── translations.ts          # Complete dictionaries (EN, HI, UR, BN, TA, TE, MR)
-    ├── components/
-    │   ├── Header.tsx               # App header, skip-link, language picker & large text
-    │   ├── LanguagePicker.tsx       # Native-script language buttons
-    │   ├── DangerExplainer.tsx      # Prominent AQI, Face Emoji, 0-500 Gauge, WHO Multiplier
-    │   ├── WhenWillItGetBetter.tsx  # Inversion engine card, countdown & 1-click notification
-    │   ├── OneThingToDo.tsx         # #1 vital action hero banner
-    │   ├── DosAndDonts.tsx          # Clear Do & Don't visual comparison cards
-    │   ├── MaskAndDoctorGuide.tsx   # N95 vs cloth guide & emergency doctor box
-    │   ├── CitySelector.tsx         # Debounced search, GPS button & 1-click presets
-    │   ├── HouseholdProfileForm.tsx # Big picture buttons with custom "Other" support
-    │   ├── ActionPlanView.tsx       # Routine, hacks, swaps & speech audio
-    │   ├── ActionTracker.tsx        # Protection score & checklist
-    │   ├── AskVayuDrawer.tsx        # Slide-over voice chat assistant
-    │   ├── ApiKeyModal.tsx          # In-memory API key manager
-    │   ├── ShareCardModal.tsx       # WhatsApp & clipboard export
-    │   └── ScoreHelpModal.tsx       # Transparent weighting modal
-    ├── data/
-    │   ├── demoPlans.ts             # Bundled plans for presets in English & Hindi
-    │   └── swapCatalog.ts           # Swaps catalog with exposure & CO2
-    ├── services/
-    │   ├── airQualityService.ts     # Open-Meteo Geocoding, AQI API & Presets
-    │   ├── geminiService.ts         # @google/genai SDK, caching & Demo Mode
-    │   └── schemas.ts               # Zod validation & Gemini JSON Schema
-    ├── types/
-    │   └── index.ts                 # TypeScript interfaces and types
-    └── utils/
-        ├── aqiCalculator.ts         # Boundaries, WHO multiplier, best-window & scores
-        ├── speech.ts                # Web SpeechSynthesis & SpeechRecognition
-        └── __tests__/
-            └── aqiCalculator.test.ts # Vitest suite (32 unit tests)
+src/
+├── components/          # Accessible UI components (landmarks, dialogs, ARIA tabs)
+│   ├── plan/            # Tabbed views (TodayPlanTab, HacksSwapsTab)
+│   └── __tests__/       # Component & view unit tests
+├── config.ts            # Centralized constants, thresholds, and storage keys
+├── data/                # Swap catalog and split regional demo plans
+├── hooks/               # Extracted custom hooks (useAirQuality, useActionPlan, etc.)
+├── i18n/                # Multilingual translations (7 regional language modules)
+├── services/            # Air quality API, Gemini SDK, schemas, and pdfService
+├── types/               # Strict TypeScript domain interfaces
+└── utils/               # Math calculators, errors, storage wrappers, and logger
 ```
 
 ---
 
-## 🚀 Getting Started
+## ⚡ Getting Started
 
 ### Prerequisites
-- Node.js v18+ (tested on Node v24.13)
-- npm v9+
+- Node.js 20+
+- npm 10+
 
 ### Installation
 ```bash
-# Clone or navigate into the repository
-cd vayushield
-
-# Install dependencies
+git clone https://github.com/saravana007-007/vayushield-air-quality-assistant.git
+cd vayushield-air-quality-assistant
 npm install
 ```
 
-### Environment Configuration (Optional)
+### Environment Variables
 Copy `.env.example` to `.env`:
 ```bash
 cp .env.example .env
 ```
-Add your Google AI Studio API key:
+Add your optional Gemini API key:
 ```env
 VITE_GEMINI_API_KEY=your_gemini_api_key_here
 ```
-*(If no key is configured, VayuShield runs automatically in Demo Mode with bundled plans.)*
+*(If omitted, VayuShield runs in 100% offline Demo Mode with verified safety plans.)*
 
-### Running Locally
+### Development Server
 ```bash
 npm run dev
 ```
-Open [http://localhost:5173](http://localhost:5173) in your browser.
 
----
-
-## 🧪 Testing & Quality Verification
-
-VayuShield includes 32 Vitest unit tests covering:
-1. Exact AQI boundary classifications ($0-50$, $51-100$, $101-150$, $151-200$, $201-300$, $301+$) with emoji and traffic-light validation.
-2. WHO $PM_{2.5}$ multiplier calculations.
-3. Best-window calculations from hourly forecasts (including days with no clean window).
-4. Input sanitization (script tags, excessive characters, whitespace).
-5. AQI value verification (bounds checking, negative and non-numeric handling).
-6. Transparent algorithmic score calculations and $CO_2$ summation.
-7. Zod schema validation of valid and invalid Gemini outputs (including English and Hindi demo plans).
-8. i18n fallback to English when an unsupported language is requested.
-
-Run tests:
+### Verification & Testing
 ```bash
+# Type check with strict TypeScript
+npm run typecheck
+
+# Lint with Oxlint (0 warnings)
+npm run lint
+
+# Run all unit and integration tests
 npm test
-```
 
-Build for production:
-```bash
+# Run tests with V8 coverage report
+npm run test:coverage
+
+# Build optimized production bundle
 npm run build
 ```
 
 ---
 
-## 🌐 Deployment Guide
+## 🔒 Security & Privacy
 
-### Option 1: Firebase Hosting (Static Frontend)
-```bash
-npm install -g firebase-tools
-firebase login
-firebase init hosting
-npm run build
-firebase deploy --only hosting
-```
-
-### Option 2: Google Cloud Run (Recommended for Production)
-For production deployments, serve the application or backend proxy via Cloud Run:
-```bash
-gcloud run deploy vayushield \
-  --source . \
-  --platform managed \
-  --region us-central1 \
-  --allow-unauthenticated
-```
+- **Strict CSP Enforced**: Configured in `vercel.json` with restricted `connect-src` to Open-Meteo and Google Generative Language APIs.
+- **Input Sanitization**: Length limits and input validation for all user queries and custom condition text.
+- **Zero Tracker / Cookie Policy**: All personal household profile preferences reside solely in client-side `localStorage`.
+- Full details available in [SECURITY.md](SECURITY.md).
 
 ---
 
-## 🔒 Security & Production Architecture
-
-> [!WARNING]
-> **Client-Side API Key Security Note:**  
-> In any pure client-side web application, environment variables prefixed with `VITE_` or API keys held in browser memory can be inspected by users via DevTools Network tabs.
-> 
-> **Production Best Practice:** In production deployments, browser clients should not talk directly to AI providers with user-facing keys. Instead, route requests to an authenticated **Cloud Run proxy or serverless API endpoint** where `GEMINI_API_KEY` is securely stored in Google Cloud Secret Manager.
-
-VayuShield's in-memory key setting modal adheres to a **Zero-Storage policy**:
-- Keys are kept solely within the active JavaScript runtime closure.
-- Keys are never persisted in `localStorage`, `sessionStorage`, cookies, or diagnostic logs.
-- Hard page refresh immediately wipes the key from memory.
+## ⚕️ Health & Educational Disclaimer
+*VayuShield provides educational ambient air guidance and algorithmic exposure mitigation estimates based on published building physics research and WHO air quality guidelines. It does not provide medical diagnoses, prescriptions, or clinical treatments. For acute symptoms, respiratory distress, or severe chest discomfort, immediately consult a licensed physician or emergency medical care.*
 
 ---
 
-## 🩺 Limitations & Medical Disclaimer
-
-> [!IMPORTANT]
-> **Not Medical Advice Statement:**  
-> VayuShield is an atmospheric science and lifestyle decision-support utility. It does **not** provide clinical medical diagnoses, prescribe drugs or inhalers, or replace direct consultation with a board-certified physician or pulmonologist.
-> 
-> During severe smog emergencies, individuals experiencing acute shortness of breath, chest constriction, or severe wheezing should immediately seek emergency medical attention.
+## 📄 License
+MIT © 2026 VayuShield Contributors
