@@ -268,7 +268,7 @@ export const App: React.FC = () => {
         </div>
       </footer>
 
-      <AskVayuDrawer isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} airData={airData} profile={profile} plan={plan} currentLang={currentLang} t={t} />
+      <AskVayuDrawer key={`${currentLang}-${airData.cityName}`} isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} airData={airData} profile={profile} plan={plan} currentLang={currentLang} t={t} />
       <ShareCardModal isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} airData={airData} profile={profile} plan={plan} completedHackIds={completedHackIds} completedSwapIds={completedSwapIds} t={t} />
       <ScoreHelpModal isOpen={isScoreHelpOpen} onClose={() => setIsScoreHelpOpen(false)} />
     </div>

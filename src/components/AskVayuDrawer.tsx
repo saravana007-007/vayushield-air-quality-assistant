@@ -17,6 +17,19 @@ interface AskVayuDrawerProps {
   t: UiTranslations;
 }
 
+function createWelcomeMessage(lang: string, aqi: number, city: string): ChatMessage {
+  const welcome = lang === 'hi'
+    ? `हाँ, मैं आपके परिवार की मदद के लिए तैयार हूँ। वर्तमान AQI (${aqi}) को देखते हुए, खिड़कियां, बच्चों के खेलने या मास्क के बारे में कुछ भी पूछें।`
+    : `Yes, I am ready to advise your household. I have factored in your live ${city} AQI (${aqi}) and your home setup. Ask me any immediate question regarding windows, toddler play, or mask selection.`;
+
+  return {
+    id: 'welcome',
+    role: 'model',
+    content: welcome,
+    timestamp: 'Now',
+  };
+}
+
 export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
   isOpen,
   onClose,
@@ -26,7 +39,9 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
   currentLang,
   t,
 }) => {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [
+    createWelcomeMessage(currentLang, airData.currentAqi, airData.cityName),
+  ]);
   const [inputQuery, setInputQuery] = useState('');
   const [isAnswering, setIsAnswering] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -35,26 +50,10 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Initialize or reset welcome message when language changes
   useEffect(() => {
-    const welcome = currentLang === 'hi'
-      ? `हाँ, मैं आपके परिवार की मदद के लिए तैयार हूँ। वर्तमान AQI (${airData.currentAqi}) को देखते हुए, खिड़कियां, बच्चों के खेलने या मास्क के बारे में कुछ भी पूछें।`
-      : `Yes, I am ready to advise your household. I have factored in your live ${airData.cityName} AQI (${airData.currentAqi}) and your home setup. Ask me any immediate question regarding windows, toddler play, or mask selection.`;
-
-    setMessages([
-      {
-        id: 'welcome',
-        role: 'model',
-        content: welcome,
-        timestamp: 'Now',
-      },
-    ]);
-  }, [currentLang, airData.currentAqi, airData.cityName]);
-
-  useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 150);
-    }
+    if (!isOpen) return;
+    const timer = setTimeout(() => inputRef.current?.focus(), 150);
+    return () => clearTimeout(timer);
   }, [isOpen]);
 
   useEffect(() => {
