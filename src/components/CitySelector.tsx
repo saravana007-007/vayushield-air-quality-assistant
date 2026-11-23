@@ -146,7 +146,10 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
     } else if (e.key === 'Enter') {
       e.preventDefault();
       if (activeIndex >= 0 && activeIndex < results.length) {
-        handleSelectHit(results[activeIndex]);
+        const item = results[activeIndex];
+        if (item) {
+          handleSelectHit(item);
+        }
       }
     } else if (e.key === 'Escape') {
       setIsOpen(false);

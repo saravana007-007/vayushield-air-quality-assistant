@@ -166,8 +166,23 @@ export function calculateBestAirWindow(
     };
   }
 
+  const firstPoint = hourly[0];
+  if (!firstPoint) {
+    return {
+      startTime: '12:00 PM',
+      endTime: '3:00 PM',
+      lowestAqi: 150,
+      lowestPm25: 60,
+      worseAfterTime: '5:00 PM',
+      countdownHours: 0,
+      countdownText: 'Best window at midday',
+      stayIndoorsAllDay: false,
+      plainSentence: 'Best time to go out: 12 PM to 3 PM. Air gets worse again after 5 PM.',
+    };
+  }
+
   // Find minimum AQI / PM2.5 in hourly series
-  let minAqiPoint = hourly[0];
+  let minAqiPoint: HourlyAqiPoint = firstPoint;
   for (const point of hourly) {
     if (point.aqi < minAqiPoint.aqi) {
       minAqiPoint = point;

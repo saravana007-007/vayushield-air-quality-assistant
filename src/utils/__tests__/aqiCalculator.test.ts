@@ -14,7 +14,7 @@ import {
 import { ActionPlanSchema } from '../../services/schemas';
 import type { HouseholdProfile, HourlyAqiPoint } from '../../types';
 import { DEMO_PLANS } from '../../data/demoPlans';
-import { getTranslation } from '../../i18n';
+import { getTranslation, type SupportedLanguage } from '../../i18n';
 
 describe('AQI Category Classification Boundaries & Visual Identifiers', () => {
   it('classifies 0-50 as Good with safe emoji 😊', () => {
@@ -233,6 +233,7 @@ describe('Zod Schema Validation for Gemini Output', () => {
 
   it('fails validation when dailyRoutine does not have exactly 4 blocks', () => {
     const validPlan = DEMO_PLANS['delhi-severe'];
+    if (!validPlan) throw new Error('Plan not found');
     const invalidPlan = {
       ...validPlan,
       dailyRoutine: validPlan.dailyRoutine.slice(0, 3),
@@ -243,11 +244,14 @@ describe('Zod Schema Validation for Gemini Output', () => {
 
   it('fails validation when badge is not an allowed enum', () => {
     const validPlan = DEMO_PLANS['delhi-severe'];
+    if (!validPlan) throw new Error('Plan not found');
+    const firstRoutine = validPlan.dailyRoutine[0];
+    if (!firstRoutine) throw new Error('First routine not found');
     const invalidPlan = {
       ...validPlan,
       dailyRoutine: [
         {
-          ...validPlan.dailyRoutine[0],
+          ...firstRoutine,
           badge: 'Go Outside Jogging',
         },
         ...validPlan.dailyRoutine.slice(1),
@@ -259,9 +263,12 @@ describe('Zod Schema Validation for Gemini Output', () => {
 
   it('fails validation when indoorHacks count is not 4', () => {
     const validPlan = DEMO_PLANS['delhi-severe'];
+    if (!validPlan) throw new Error('Plan not found');
+    const firstHack = validPlan.indoorHacks[0];
+    if (!firstHack) throw new Error('First hack not found');
     const invalidPlan = {
       ...validPlan,
-      indoorHacks: [validPlan.indoorHacks[0]],
+      indoorHacks: [firstHack],
     };
     const result = ActionPlanSchema.safeParse(invalidPlan);
     expect(result.success).toBe(false);
@@ -269,6 +276,7 @@ describe('Zod Schema Validation for Gemini Output', () => {
 
   it('fails validation when oneThingToDo is missing', () => {
     const validPlan = DEMO_PLANS['delhi-severe'];
+    if (!validPlan) throw new Error('Plan not found');
     const { oneThingToDo: _removed, ...invalidPlan } = validPlan as unknown as Record<string, unknown>;
     const result = ActionPlanSchema.safeParse(invalidPlan);
     expect(result.success).toBe(false);
@@ -288,7 +296,7 @@ describe('i18n Language Fallback', () => {
   });
 
   it('safely falls back to English when an unsupported language code is passed', () => {
-    const fallback = getTranslation('fr' as any);
+    const fallback = getTranslation('fr' as unknown as SupportedLanguage);
     expect(fallback).toBeDefined();
     expect(fallback.appName).toBe('VayuShield');
     expect(fallback.selectLanguage).toBe('Choose Language');

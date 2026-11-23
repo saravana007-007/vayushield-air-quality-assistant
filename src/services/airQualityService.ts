@@ -205,6 +205,7 @@ export async function fetchLiveAirQuality(
   
   for (let i = 0; i < hourlyTimes.length && hourly.length < 24; i++) {
     const timeStr = hourlyTimes[i];
+    if (!timeStr) continue;
     const pointDate = new Date(timeStr);
     
     if (pointDate >= now || i >= hourlyTimes.length - 24) {

@@ -17,7 +17,13 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const activeLangMeta = SUPPORTED_LANGUAGES.find((l) => l.code === currentLang) || SUPPORTED_LANGUAGES[0];
+  const activeLangMeta = SUPPORTED_LANGUAGES.find((l) => l.code === currentLang) ?? SUPPORTED_LANGUAGES[0] ?? {
+    code: 'en' as const,
+    nativeName: 'English',
+    englishName: 'English',
+    dir: 'ltr' as const,
+    speechLang: 'en-US',
+  };
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {

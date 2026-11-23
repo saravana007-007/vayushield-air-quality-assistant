@@ -1,6 +1,6 @@
 import React from 'react';
 import type { UiTranslations } from '../i18n';
-import { Star, ShieldCheck } from 'lucide-react';
+import { Star } from 'lucide-react';
 
 interface OneThingToDoProps {
   oneThing: string;
