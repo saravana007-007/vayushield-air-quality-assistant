@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import { generateActionPlan, askVayu } from '../geminiService';
 import type { AirQualityData, HouseholdProfile } from '../../types';
 import { getAqiCategory, calculateWhoMultiplier, calculateBestAirWindow } from '../../utils/aqiCalculator';
@@ -35,15 +35,22 @@ const mockProfile: HouseholdProfile = {
 };
 
 describe('services/geminiService', () => {
+  const originalKey = import.meta.env.VITE_GEMINI_API_KEY;
+
   beforeEach(() => {
     vi.restoreAllMocks();
     localStorage.clear();
+    // Default tests to offline mode to avoid unmocked external network calls in CI
+    delete (import.meta.env as Record<string, unknown>).VITE_GEMINI_API_KEY;
+  });
+
+  afterAll(() => {
+    if (originalKey !== undefined) {
+      (import.meta.env as Record<string, unknown>).VITE_GEMINI_API_KEY = originalKey;
+    }
   });
 
   it('falls back to demo plan when no API key is available', async () => {
-    const originalKey = import.meta.env.VITE_GEMINI_API_KEY;
-    delete (import.meta.env as Record<string, unknown>).VITE_GEMINI_API_KEY;
-
     const statusUpdates: string[] = [];
     const result = await generateActionPlan(
       mockAirData,
@@ -55,8 +62,7 @@ describe('services/geminiService', () => {
     expect(result.isDemo).toBe(true);
     expect(result.plan).toBeDefined();
     expect(result.plan.dailyRoutine).toHaveLength(4);
-
-    (import.meta.env as Record<string, unknown>).VITE_GEMINI_API_KEY = originalKey;
+    expect(statusUpdates).toContain('No API key provided; loading verified Demo Plan.');
   });
 
   it('returns concise consultation response from askVayu using local reasoning fallback', async () => {
@@ -71,5 +77,7 @@ describe('services/geminiService', () => {
 
     expect(typeof answer).toBe('string');
     expect(answer.length).toBeGreaterThan(10);
+    // Offline local reasoning starts with YES, NO, or WAIT
+    expect(answer).toMatch(/^(Yes|No|Wait)/i);
   });
 });
