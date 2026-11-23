@@ -5,6 +5,7 @@ import type { ActionPlan, AirQualityData, HouseholdProfile } from '../types';
 import type { UiTranslations } from '../i18n';
 import { getSwapById } from '../data/swapCatalog';
 import { calculateProtectionScore } from '../utils/aqiCalculator';
+import { logger } from '../utils/logger';
 
 interface ShareCardModalProps {
   isOpen: boolean;
@@ -67,8 +68,8 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
       await navigator.clipboard.writeText(shareText);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.warn('Clipboard copy failed:', err);
+    } catch (err: unknown) {
+      logger.warn('Clipboard copy failed:', err);
     }
   };
 
@@ -282,8 +283,8 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
 
       // Save PDF
       doc.save(`VayuShield-${airData.cityName.replace(/\s+/g, '-')}-ActionPlan.pdf`);
-    } catch (err) {
-      console.error('PDF generation error:', err);
+    } catch (err: unknown) {
+      logger.error('PDF generation error:', err);
       // User-friendly fallback: download as plain text if PDF fails
       try {
         const blob = new Blob([shareText.replace(/[*_]/g, '')], { type: 'text/plain;charset=utf-8' });

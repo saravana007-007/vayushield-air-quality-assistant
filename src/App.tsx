@@ -9,7 +9,9 @@ import { ActionPlanView } from './components/ActionPlanView';
 import { AskVayuDrawer } from './components/AskVayuDrawer';
 import { ShareCardModal } from './components/ShareCardModal';
 import { ScoreHelpModal } from './components/ScoreHelpModal';
-import { Calendar, Lightbulb, Users, ShieldAlert, Sparkles, ArrowRight } from 'lucide-react';
+import { Calendar, Lightbulb, Users, ShieldAlert, ArrowRight } from 'lucide-react';
+import { STORAGE_KEYS } from './config';
+import { getStorageString, setStorageItem } from './utils/storage';
 
 import type { AirQualityData, HouseholdProfile, ActionPlan } from './types';
 import { AIR_PRESETS, fetchLiveAirQuality } from './services/airQualityService';
@@ -32,7 +34,7 @@ export const App: React.FC = () => {
 
   // Text Size State (Saved in localStorage: small, medium, large, xlarge)
   const [textSize, setTextSize] = useState<TextSize>(() => {
-    const saved = localStorage.getItem('vayushield_text_size');
+    const saved = getStorageString(STORAGE_KEYS.textSize, 'medium');
     if (saved === 'small' || saved === 'medium' || saved === 'large' || saved === 'xlarge') {
       return saved;
     }
@@ -41,7 +43,7 @@ export const App: React.FC = () => {
 
   const handleTextSizeChange = (newSize: TextSize) => {
     setTextSize(newSize);
-    localStorage.setItem('vayushield_text_size', newSize);
+    setStorageItem(STORAGE_KEYS.textSize, newSize);
   };
 
   // Active Tab State (Prevents page clutter and eliminates endless scrolling)

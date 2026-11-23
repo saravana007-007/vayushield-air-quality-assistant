@@ -4,13 +4,14 @@
 
 import { GoogleGenAI } from '@google/genai';
 import type { ActionPlan, AirQualityData, HouseholdProfile } from '../types';
-import { GEMINI_MODEL, GEMINI_FALLBACK_MODEL } from '../config';
+import { GEMINI_MODEL, GEMINI_FALLBACK_MODEL, STORAGE_KEYS, GEMINI_TEMPERATURES, TIMEOUTS } from '../config';
 import { ActionPlanSchema, GEMINI_RESPONSE_SCHEMA } from './schemas';
 import { getDemoPlanForAqi } from '../data/demoPlans';
 import { SWAP_CATALOG } from '../data/swapCatalog';
 import type { SupportedLanguage } from '../i18n';
-
-const CACHE_STORAGE_KEY = 'vayushield_cached_plan';
+import { getStorageItem, setStorageItem } from '../utils/storage';
+import { logger } from '../utils/logger';
+import { getErrorMessage } from '../utils/errors';
 
 export interface CachedPlanData {
   plan: ActionPlan;
@@ -19,28 +20,16 @@ export interface CachedPlanData {
 }
 
 export function saveCachedPlan(plan: ActionPlan, airData: AirQualityData): void {
-  try {
-    const data: CachedPlanData = {
-      plan,
-      airData,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
-    localStorage.setItem(CACHE_STORAGE_KEY, JSON.stringify(data));
-  } catch (e) {
-    // ignore
-  }
+  const data: CachedPlanData = {
+    plan,
+    airData,
+    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+  };
+  setStorageItem(STORAGE_KEYS.cachedPlan, data);
 }
 
 export function getCachedPlan(): CachedPlanData | null {
-  try {
-    const raw = localStorage.getItem(CACHE_STORAGE_KEY);
-    if (raw) {
-      return JSON.parse(raw);
-    }
-  } catch (e) {
-    // ignore
-  }
-  return null;
+  return getStorageItem<CachedPlanData | null>(STORAGE_KEYS.cachedPlan, null);
 }
 
 // Session-only in-memory API key storage (never logged, never saved to disk or localStorage)
@@ -169,12 +158,12 @@ REQUIRED OUTPUT INSTRUCTIONS:
           systemInstruction: getSystemInstruction(lang),
           responseMimeType: 'application/json',
           responseSchema: GEMINI_RESPONSE_SCHEMA as any,
-          temperature: 0.2,
+          temperature: GEMINI_TEMPERATURES.planGeneration,
         },
       });
 
       const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('AI response timed out (7s). Switching to verified plan.')), 7000)
+        setTimeout(() => reject(new Error(`AI response timed out (${TIMEOUTS.geminiRequestMs / 1000}s). Switching to verified plan.`)), TIMEOUTS.geminiRequestMs)
       );
 
       const response = await Promise.race([apiCall, timeoutPromise]);
@@ -201,9 +190,9 @@ REQUIRED OUTPUT INSTRUCTIONS:
         plan: fullPlan,
         isDemo: false,
       };
-    } catch (err: any) {
-      lastErrorMsg = err?.message || 'Error communicating with Gemini';
-      console.warn(`VayuShield Gemini attempt ${attempts} failed:`, err);
+    } catch (err: unknown) {
+      lastErrorMsg = getErrorMessage(err);
+      logger.warn(`VayuShield Gemini attempt ${attempts} failed:`, err);
     }
   }
 
@@ -257,7 +246,7 @@ STRICT FORMATTING REQUIREMENTS:
       contents: prompt,
       config: {
         systemInstruction: getSystemInstruction(lang),
-        temperature: 0.1,
+        temperature: GEMINI_TEMPERATURES.askVayu,
       },
     });
 
@@ -266,8 +255,8 @@ STRICT FORMATTING REQUIREMENTS:
       return reply;
     }
     return generateOfflineChatAnswer(question, airData, profile, lang);
-  } catch (err) {
-    console.warn('Ask Vayu online request failed, falling back to local reasoning:', err);
+  } catch (err: unknown) {
+    logger.warn('Ask Vayu online request failed, falling back to local reasoning:', err);
     return generateOfflineChatAnswer(question, airData, profile, lang);
   }
 }

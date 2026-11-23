@@ -3,6 +3,7 @@ import { X, Send, Sparkles, AlertCircle, Bot, User, Loader2, Mic, MicOff, Volume
 import type { ActionPlan, AirQualityData, ChatMessage, HouseholdProfile } from '../types';
 import type { UiTranslations, SupportedLanguage } from '../i18n';
 import { askVayu } from '../services/geminiService';
+import { logger } from '../utils/logger';
 import { startVoiceRecognition, isSpeechRecognitionSupported, speakText } from '../utils/speech';
 
 interface AskVayuDrawerProps {
@@ -113,7 +114,7 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
         },
         (err) => {
           setIsRecording(false);
-          console.warn('Voice recognition error:', err);
+          logger.warn('Voice recognition error:', err);
         },
         () => setIsRecording(false)
       );

@@ -3,6 +3,7 @@
 
 import type { SupportedLanguage } from '../i18n';
 import { SUPPORTED_LANGUAGES } from '../i18n';
+import { logger } from './logger';
 
 export function isSpeechSynthesisSupported(): boolean {
   return typeof window !== 'undefined' && 'speechSynthesis' in window;
@@ -48,7 +49,7 @@ export function speakText(
   };
 
   utterance.onerror = (e) => {
-    console.warn('Speech synthesis error:', e);
+    logger.warn('Speech synthesis error:', e);
     onError?.(e);
   };
 
@@ -94,7 +95,7 @@ export function startVoiceRecognition(
   };
 
   recognition.onerror = (event: any) => {
-    console.warn('Speech recognition error:', event);
+    logger.warn('Speech recognition error:', event);
     onError?.(event.error);
   };
 

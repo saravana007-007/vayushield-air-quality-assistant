@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { BestAirWindow } from '../types';
 import type { UiTranslations } from '../i18n';
 import { Sun, Clock, Bell, BellCheck, AlertTriangle } from 'lucide-react';
+import { logger } from '../utils/logger';
 
 interface WhenWillItGetBetterProps {
   bestWindow: BestAirWindow;
@@ -28,8 +29,8 @@ export const WhenWillItGetBetter: React.FC<WhenWillItGetBetterProps> = ({ bestWi
           });
         }
       }
-    } catch (e) {
-      console.warn('Notification permission error:', e);
+    } catch (e: unknown) {
+      logger.warn('Notification permission error:', e);
     }
   };
 

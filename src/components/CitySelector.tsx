@@ -3,6 +3,7 @@ import { Search, MapPin, Loader2, AlertCircle, X, Zap, Navigation } from 'lucide
 import type { GeocodingResult } from '../types';
 import type { UiTranslations } from '../i18n';
 import { searchCities } from '../services/airQualityService';
+import { logger } from '../utils/logger';
 
 interface CitySelectorProps {
   currentCityName: string;
@@ -107,7 +108,7 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
       },
       (err) => {
         setIsLocating(false);
-        console.warn('Geolocation error:', err);
+        logger.warn('Geolocation error:', err);
         alert('Could not access your location. Please check browser permissions or type your city.');
       },
       { timeout: 10000 }
