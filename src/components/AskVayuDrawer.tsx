@@ -56,10 +56,6 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
     return () => clearTimeout(timer);
   }, [isOpen]);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
   if (!isOpen) return null;
 
   const handleSend = async (queryText?: string) => {
@@ -76,6 +72,7 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
     setMessages((prev) => [...prev, userMsg]);
     setInputQuery('');
     setIsAnswering(true);
+    setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
 
     try {
       const reply = await askVayu(textToSend.trim(), airData, profile, plan, currentLang);
@@ -97,6 +94,7 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
       setMessages((prev) => [...prev, errorMsg]);
     } finally {
       setIsAnswering(false);
+      setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
     }
   };
 
@@ -236,9 +234,9 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
             Quick Questions:
           </span>
           <div className="flex flex-col gap-1.5">
-            {chips.map((chip, idx) => (
+            {chips.map((chip) => (
               <button
-                key={idx}
+                key={chip}
                 type="button"
                 onClick={() => handleSend(chip)}
                 disabled={isAnswering}

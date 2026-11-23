@@ -135,91 +135,84 @@ REQUIRED OUTPUT INSTRUCTIONS:
 6. dos: 3 short clear bullet actions to do today.
 7. donts: 3 short clear bullet mistakes to avoid today.`;
 
-  let attempts = 0;
-  const maxAttempts = 2;
-  let lastErrorMsg = '';
+  const attemptCall = async (model: string): Promise<ActionPlan> => {
+    const ai = new GoogleGenAI({ apiKey });
+    const apiCall = ai.models.generateContent({
+      model,
+      contents: prompt,
+      config: {
+        systemInstruction: getSystemInstruction(lang),
+        responseMimeType: 'application/json',
+        responseSchema: GEMINI_RESPONSE_SCHEMA,
+        temperature: GEMINI_TEMPERATURES.planGeneration,
+      },
+    });
 
-  while (attempts < maxAttempts) {
-    attempts++;
-    const currentModel = attempts === 1 ? GEMINI_MODEL : GEMINI_FALLBACK_MODEL;
+    let timeoutHandle: ReturnType<typeof setTimeout> | undefined;
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      timeoutHandle = setTimeout(
+        () =>
+          reject(
+            new Error(
+              `AI response timed out (${TIMEOUTS.geminiRequestMs / 1000}s). Switching to verified plan.`
+            )
+          ),
+        TIMEOUTS.geminiRequestMs
+      );
+    });
+
+    let response;
+    try {
+      response = await Promise.race([apiCall, timeoutPromise]);
+    } finally {
+      if (timeoutHandle !== undefined) {
+        clearTimeout(timeoutHandle);
+      }
+    }
+
+    const responseText = response.text;
+    if (!responseText) {
+      throw new Error('Empty response received from Gemini API.');
+    }
+
+    const parsedJson = JSON.parse(responseText);
+    const validatedPlan = ActionPlanSchema.parse(parsedJson);
+
+    return {
+      ...validatedPlan,
+      isDemo: false,
+      generatedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      language: lang,
+    };
+  };
+
+  try {
+    onStatusUpdate?.(`Consulting VayuShield Engine (${GEMINI_MODEL})...`);
+    const fullPlan = await attemptCall(GEMINI_MODEL);
+    saveCachedPlan(fullPlan, airData);
+    return { plan: fullPlan, isDemo: false };
+  } catch (err1: unknown) {
+    const error1 = getErrorMessage(err1);
+    logger.warn('VayuShield Gemini attempt 1 failed:', err1);
 
     try {
-      onStatusUpdate?.(
-        attempts === 1
-          ? `Consulting VayuShield Engine (${currentModel})...`
-          : `Retrying with fallback model (${currentModel})...`
-      );
-
-      const ai = new GoogleGenAI({ apiKey });
-      const apiCall = ai.models.generateContent({
-        model: currentModel,
-        contents: prompt,
-        config: {
-          systemInstruction: getSystemInstruction(lang),
-          responseMimeType: 'application/json',
-          responseSchema: GEMINI_RESPONSE_SCHEMA,
-          temperature: GEMINI_TEMPERATURES.planGeneration,
-        },
-      });
-
-      let timeoutHandle: ReturnType<typeof setTimeout> | undefined;
-      const timeoutPromise = new Promise<never>((_, reject) => {
-        timeoutHandle = setTimeout(
-          () =>
-            reject(
-              new Error(
-                `AI response timed out (${TIMEOUTS.geminiRequestMs / 1000}s). Switching to verified plan.`
-              )
-            ),
-          TIMEOUTS.geminiRequestMs
-        );
-      });
-
-      let response;
-      try {
-        response = await Promise.race([apiCall, timeoutPromise]);
-      } finally {
-        if (timeoutHandle !== undefined) {
-          clearTimeout(timeoutHandle);
-        }
-      }
-
-      const responseText = response.text;
-      if (!responseText) {
-        throw new Error('Empty response received from Gemini API.');
-      }
-
-      const parsedJson = JSON.parse(responseText);
-      const validatedPlan = ActionPlanSchema.parse(parsedJson);
-
-      const fullPlan: ActionPlan = {
-        ...validatedPlan,
-        isDemo: false,
-        generatedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        language: lang,
-      };
-
-      // Save successful plan to offline localStorage
+      onStatusUpdate?.(`Retrying with fallback model (${GEMINI_FALLBACK_MODEL})...`);
+      const fullPlan = await attemptCall(GEMINI_FALLBACK_MODEL);
       saveCachedPlan(fullPlan, airData);
+      return { plan: fullPlan, isDemo: false };
+    } catch (err2: unknown) {
+      const error2 = getErrorMessage(err2);
+      logger.warn('VayuShield Gemini attempt 2 failed:', err2);
 
+      onStatusUpdate?.('Gemini unavailable; displaying verified Demo Plan.');
+      const fallbackPlan = getDemoPlanForAqi(airData.currentAqi, airData.cityName, lang);
       return {
-        plan: fullPlan,
-        isDemo: false,
+        plan: fallbackPlan,
+        isDemo: true,
+        error: `Live AI generation failed (${error2 || error1}). Displaying verified plan.`,
       };
-    } catch (err: unknown) {
-      lastErrorMsg = getErrorMessage(err);
-      logger.warn(`VayuShield Gemini attempt ${attempts} failed:`, err);
     }
   }
-
-  // Graceful fallback to bundled Demo Plan on double failure
-  onStatusUpdate?.('Gemini unavailable; displaying verified Demo Plan.');
-  const fallbackPlan = getDemoPlanForAqi(airData.currentAqi, airData.cityName, lang);
-  return {
-    plan: fallbackPlan,
-    isDemo: true,
-    error: `Live AI generation failed (${lastErrorMsg}). Displaying verified plan.`,
-  };
 }
 
 /**

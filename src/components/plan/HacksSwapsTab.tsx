@@ -64,8 +64,8 @@ export const HacksSwapsTab: React.FC<HacksSwapsTabProps> = ({
                   </h4>
 
                   <ol className="list-decimal list-inside space-y-1.5 text-xs text-slate-600 mb-4">
-                    {hack.steps.map((step, idx) => (
-                      <li key={idx} className="leading-snug">
+                    {hack.steps.map((step) => (
+                      <li key={step} className="leading-snug">
                         <span>{step}</span>
                       </li>
                     ))}

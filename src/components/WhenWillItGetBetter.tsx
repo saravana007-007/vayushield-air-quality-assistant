@@ -23,10 +23,11 @@ export const WhenWillItGetBetter: React.FC<WhenWillItGetBetterProps> = ({ bestWi
       if (permission === 'granted') {
         setReminderSet(true);
         if (bestWindow.countdownHours <= 1) {
-          new Notification('VayuShield Safe Window Alert', {
+          const notification = new Notification('VayuShield Safe Window Alert', {
             body: `Now is the safest time to go out or aerate: ${bestWindow.startTime} to ${bestWindow.endTime}.`,
             icon: '/favicon.svg',
           });
+          void notification;
         }
       }
     } catch (e: unknown) {

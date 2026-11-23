@@ -76,8 +76,8 @@ export const MaskAndDoctorGuide: React.FC<MaskAndDoctorGuideProps> = ({ t }) => 
               {t.doctorWarningSymptoms}
             </p>
             <div className="pt-2 flex flex-wrap gap-2 text-xs font-bold text-amber-900">
-              {t.doctorSymptomsList?.map((symptom, idx) => (
-                <span key={idx} className="px-3 py-1.5 bg-white/90 rounded-xl border border-amber-300 shadow-2xs">
+              {t.doctorSymptomsList?.map((symptom) => (
+                <span key={symptom} className="px-3 py-1.5 bg-white/90 rounded-xl border border-amber-300 shadow-2xs">
                   {symptom}
                 </span>
               ))}
