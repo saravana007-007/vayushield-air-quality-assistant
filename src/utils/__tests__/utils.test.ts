@@ -84,8 +84,19 @@ describe('utils/storage', () => {
     const setItemSpy = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
       throw new Error('QuotaExceededError');
     });
+    const getItemSpy = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('StorageDeniedError');
+    });
+    const removeItemSpy = vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
+      throw new Error('RemoveFailedError');
+    });
 
-    expect(() => setStorageItem('fail_key', 'value')).not.toThrow();
+    expect(setStorageItem('fail_key', 'value')).toBe(false);
+    expect(getStorageString('fail_str', 'default_val')).toBe('default_val');
+    expect(removeStorageItem('fail_del')).toBe(false);
+
     setItemSpy.mockRestore();
+    getItemSpy.mockRestore();
+    removeItemSpy.mockRestore();
   });
 });

@@ -126,6 +126,7 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
         onSelectLocation('My Current Location', latitude, longitude, 'Local');
       },
       (err) => {
+        // Reset locating state and alert the user
         setIsLocating(false);
         logger.warn('Geolocation error:', err);
         alert('Could not access your location. Please check browser permissions or type your city.');

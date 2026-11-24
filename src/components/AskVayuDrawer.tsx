@@ -6,6 +6,7 @@ import { askVayu } from '../services/geminiService';
 import { logger } from '../utils/logger';
 import { getErrorMessage } from '../utils/errors';
 import { startVoiceRecognition, isSpeechRecognitionSupported, speakText } from '../utils/speech';
+import { useModalAccessibility } from '../hooks/useModalAccessibility';
 
 interface AskVayuDrawerProps {
   isOpen: boolean;
@@ -49,6 +50,8 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  useModalAccessibility(isOpen, onClose, containerRef);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -134,6 +137,7 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
 
   return (
     <div
+      ref={containerRef}
       className="fixed inset-0 z-50 overflow-hidden bg-slate-900/50 backdrop-blur-xs flex justify-end"
       role="dialog"
       aria-modal="true"

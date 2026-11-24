@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { X, HelpCircle } from 'lucide-react';
+import { useModalAccessibility } from '../hooks/useModalAccessibility';
 
 interface ScoreHelpModalProps {
   isOpen: boolean;
@@ -7,10 +8,14 @@ interface ScoreHelpModalProps {
 }
 
 export const ScoreHelpModal: React.FC<ScoreHelpModalProps> = ({ isOpen, onClose }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  useModalAccessibility(isOpen, onClose, containerRef);
+
   if (!isOpen) return null;
 
   return (
     <div
+      ref={containerRef}
       className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4"
       role="dialog"
       aria-modal="true"

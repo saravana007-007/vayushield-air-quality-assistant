@@ -6,6 +6,7 @@ import { getSwapById } from '../data/swapCatalog';
 import { calculateProtectionScore } from '../utils/aqiCalculator';
 import { logger } from '../utils/logger';
 import { generateActionPlanPdf } from '../services/pdfService';
+import { useModalAccessibility } from '../hooks/useModalAccessibility';
 
 interface ShareCardModalProps {
   isOpen: boolean;
@@ -32,6 +33,8 @@ export const ShareCardModal: React.FC<ShareCardModalProps> = ({
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<'pdf' | 'whatsapp' | 'text'>('pdf');
   const cardRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  useModalAccessibility(isOpen, onClose, containerRef);
 
   if (!isOpen) return null;
 
@@ -103,6 +106,7 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
 
   return (
     <div
+      ref={containerRef}
       className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4"
       role="dialog"
       aria-modal="true"

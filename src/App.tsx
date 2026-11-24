@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { Header } from './components/Header';
 import { CitySelector } from './components/CitySelector';
 import { DangerExplainer } from './components/DangerExplainer';
@@ -6,10 +6,11 @@ import { WhenWillItGetBetter } from './components/WhenWillItGetBetter';
 import { HouseholdProfileForm } from './components/HouseholdProfileForm';
 import { ActionTracker } from './components/ActionTracker';
 import { ActionPlanView } from './components/ActionPlanView';
-import { AskVayuDrawer } from './components/AskVayuDrawer';
-import { ShareCardModal } from './components/ShareCardModal';
-import { ScoreHelpModal } from './components/ScoreHelpModal';
 import { Calendar, Lightbulb, Users, ShieldAlert, ArrowRight } from 'lucide-react';
+
+const AskVayuDrawer = React.lazy(() => import('./components/AskVayuDrawer').then(m => ({ default: m.AskVayuDrawer })));
+const ShareCardModal = React.lazy(() => import('./components/ShareCardModal').then(m => ({ default: m.ShareCardModal })));
+const ScoreHelpModal = React.lazy(() => import('./components/ScoreHelpModal').then(m => ({ default: m.ScoreHelpModal })));
 
 import type { HouseholdProfile } from './types';
 import { DEMO_PLANS } from './data/demoPlans';
@@ -77,6 +78,45 @@ export const App: React.FC = () => {
     }
   };
 
+  const tabList: ActiveTab[] = ['plan', 'hacks', 'setup', 'safety'];
+
+  const handleTabKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const currentIndex = tabList.indexOf(activeTab);
+    if (currentIndex === -1) return;
+
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      const nextIndex = (currentIndex + 1) % tabList.length;
+      const nextTab = tabList[nextIndex];
+      if (nextTab) {
+        setActiveTab(nextTab);
+        document.getElementById(`tab-${nextTab}`)?.focus();
+      }
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const prevIndex = (currentIndex - 1 + tabList.length) % tabList.length;
+      const prevTab = tabList[prevIndex];
+      if (prevTab) {
+        setActiveTab(prevTab);
+        document.getElementById(`tab-${prevTab}`)?.focus();
+      }
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      const firstTab = tabList[0];
+      if (firstTab) {
+        setActiveTab(firstTab);
+        document.getElementById(`tab-${firstTab}`)?.focus();
+      }
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      const lastTab = tabList[tabList.length - 1];
+      if (lastTab) {
+        setActiveTab(lastTab);
+        document.getElementById(`tab-${lastTab}`)?.focus();
+      }
+    }
+  };
+
   return (
     <div className={`min-h-screen flex flex-col bg-[#F8FAFC] text-slate-800 antialiased selection:bg-sky-500 selection:text-white ${textSizeClass}`}>
       <Header
@@ -120,20 +160,28 @@ export const App: React.FC = () => {
           <WhenWillItGetBetter bestWindow={airData.bestWindow} t={t} />
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200 p-1.5 shadow-xs flex items-center justify-between gap-1 overflow-x-auto" role="tablist" aria-label="Action plan sections">
+        <div
+          className="bg-white rounded-2xl border border-slate-200 p-1.5 shadow-xs flex items-center justify-between gap-1 overflow-x-auto"
+          role="tablist"
+          aria-label="Action plan sections"
+          onKeyDown={handleTabKeyDown}
+        >
           {[
-            { id: 'plan', label: "Today's Plan", icon: Calendar },
-            { id: 'hacks', label: 'Hacks & Swaps', icon: Lightbulb },
-            { id: 'setup', label: 'Family & Setup', icon: Users },
-            { id: 'safety', label: 'Masks & Health', icon: ShieldAlert },
+            { id: 'plan' as const, label: "Today's Plan", icon: Calendar },
+            { id: 'hacks' as const, label: 'Hacks & Swaps', icon: Lightbulb },
+            { id: 'setup' as const, label: 'Family & Setup', icon: Users },
+            { id: 'safety' as const, label: 'Masks & Health', icon: ShieldAlert },
           ].map(({ id, label, icon: Icon }) => (
             <button
               key={id}
+              id={`tab-${id}`}
               type="button"
               role="tab"
               aria-selected={activeTab === id}
-              onClick={() => setActiveTab(id as ActiveTab)}
-              className={`flex-1 min-w-[120px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition-all ${
+              aria-controls={`panel-${id}`}
+              tabIndex={activeTab === id ? 0 : -1}
+              onClick={() => setActiveTab(id)}
+              className={`flex-1 min-w-[120px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500 ${
                 activeTab === id ? 'bg-sky-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
@@ -144,7 +192,7 @@ export const App: React.FC = () => {
         </div>
 
         {activeTab === 'plan' && (
-          <div id="panel-plan" role="tabpanel" className="space-y-6">
+          <div id="panel-plan" role="tabpanel" aria-labelledby="tab-plan" className="space-y-6">
             <ActionPlanView
               plan={plan}
               isLoading={isLoadingPlan}
@@ -180,7 +228,7 @@ export const App: React.FC = () => {
         )}
 
         {activeTab === 'hacks' && (
-          <div id="panel-hacks" role="tabpanel" className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
+          <div id="panel-hacks" role="tabpanel" aria-labelledby="tab-hacks" className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
             <div className="lg:col-span-2 space-y-6">
               <ActionPlanView
                 plan={plan}
@@ -225,7 +273,7 @@ export const App: React.FC = () => {
         )}
 
         {activeTab === 'setup' && (
-          <div id="panel-setup" role="tabpanel" className="space-y-6 max-w-4xl mx-auto">
+          <div id="panel-setup" role="tabpanel" aria-labelledby="tab-setup" className="space-y-6 max-w-4xl mx-auto">
             <HouseholdProfileForm
               profile={profile}
               t={t}
@@ -241,7 +289,7 @@ export const App: React.FC = () => {
         )}
 
         {activeTab === 'safety' && (
-          <div id="panel-safety" role="tabpanel" className="space-y-6 max-w-4xl mx-auto">
+          <div id="panel-safety" role="tabpanel" aria-labelledby="tab-safety" className="space-y-6 max-w-4xl mx-auto">
             <ActionPlanView
               plan={plan}
               isLoading={isLoadingPlan}
@@ -268,9 +316,11 @@ export const App: React.FC = () => {
         </div>
       </footer>
 
-      <AskVayuDrawer key={`${currentLang}-${airData.cityName}`} isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} airData={airData} profile={profile} plan={plan} currentLang={currentLang} t={t} />
-      <ShareCardModal isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} airData={airData} profile={profile} plan={plan} completedHackIds={completedHackIds} completedSwapIds={completedSwapIds} t={t} />
-      <ScoreHelpModal isOpen={isScoreHelpOpen} onClose={() => setIsScoreHelpOpen(false)} />
+      <Suspense fallback={null}>
+        <AskVayuDrawer key={`${currentLang}-${airData.cityName}`} isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} airData={airData} profile={profile} plan={plan} currentLang={currentLang} t={t} />
+        <ShareCardModal isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} airData={airData} profile={profile} plan={plan} completedHackIds={completedHackIds} completedSwapIds={completedSwapIds} t={t} />
+        <ScoreHelpModal isOpen={isScoreHelpOpen} onClose={() => setIsScoreHelpOpen(false)} />
+      </Suspense>
     </div>
   );
 };
