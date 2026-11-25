@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { X, Send, Sparkles, AlertCircle, Bot, User, Loader2, Mic, MicOff, Volume2 } from 'lucide-react';
-import type { ActionPlan, AirQualityData, ChatMessage, HouseholdProfile } from '../types';
+import React, { useEffect, useRef } from 'react';
+import { X, Send, AlertCircle, Bot, Loader2, Mic, MicOff } from 'lucide-react';
+import type { ActionPlan, AirQualityData, HouseholdProfile } from '../types';
 import type { UiTranslations, SupportedLanguage } from '../i18n';
-import { askVayu } from '../services/geminiService';
-import { logger } from '../utils/logger';
-import { getErrorMessage } from '../utils/errors';
-import { startVoiceRecognition, isSpeechRecognitionSupported, speakText } from '../utils/speech';
+import { isSpeechRecognitionSupported } from '../utils/speech';
 import { useModalAccessibility } from '../hooks/useModalAccessibility';
+import { useAskVayuChat } from '../hooks/useAskVayuChat';
+import { ChatMessageBubble } from './ChatMessageBubble';
 
 interface AskVayuDrawerProps {
   isOpen: boolean;
@@ -18,19 +17,9 @@ interface AskVayuDrawerProps {
   t: UiTranslations;
 }
 
-function createWelcomeMessage(lang: string, aqi: number, city: string): ChatMessage {
-  const welcome = lang === 'hi'
-    ? `हाँ, मैं आपके परिवार की मदद के लिए तैयार हूँ। वर्तमान AQI (${aqi}) को देखते हुए, खिड़कियां, बच्चों के खेलने या मास्क के बारे में कुछ भी पूछें।`
-    : `Yes, I am ready to advise your household. I have factored in your live ${city} AQI (${aqi}) and your home setup. Ask me any immediate question regarding windows, toddler play, or mask selection.`;
-
-  return {
-    id: 'welcome',
-    role: 'model',
-    content: welcome,
-    timestamp: 'Now',
-  };
-}
-
+/**
+ * Slide-over chat drawer for 3-sentence household air quality consultations.
+ */
 export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
   isOpen,
   onClose,
@@ -40,18 +29,20 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
   currentLang,
   t,
 }) => {
-  const [messages, setMessages] = useState<ChatMessage[]>(() => [
-    createWelcomeMessage(currentLang, airData.currentAqi, airData.cityName),
-  ]);
-  const [inputQuery, setInputQuery] = useState('');
-  const [isAnswering, setIsAnswering] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
-  const stopVoiceRef = useRef<(() => void) | null>(null);
-
-  const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   useModalAccessibility(isOpen, onClose, containerRef);
+
+  const {
+    messages,
+    inputQuery,
+    setInputQuery,
+    isAnswering,
+    isRecording,
+    messagesEndRef,
+    handleSend,
+    handleToggleVoice,
+  } = useAskVayuChat({ airData, profile, plan, currentLang });
 
   useEffect(() => {
     if (!isOpen) return;
@@ -60,68 +51,6 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
   }, [isOpen]);
 
   if (!isOpen) return null;
-
-  const handleSend = async (queryText?: string) => {
-    const textToSend = queryText || inputQuery;
-    if (!textToSend.trim() || isAnswering) return;
-
-    const userMsg: ChatMessage = {
-      id: `user-${Date.now()}`,
-      role: 'user',
-      content: textToSend.trim(),
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
-
-    setMessages((prev) => [...prev, userMsg]);
-    setInputQuery('');
-    setIsAnswering(true);
-    setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
-
-    try {
-      const reply = await askVayu(textToSend.trim(), airData, profile, plan, currentLang);
-      const botMsg: ChatMessage = {
-        id: `bot-${Date.now()}`,
-        role: 'model',
-        content: reply,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      };
-      setMessages((prev) => [...prev, botMsg]);
-    } catch (err: unknown) {
-      logger.warn('Ask Vayu submit error:', getErrorMessage(err));
-      const errorMsg: ChatMessage = {
-        id: `err-${Date.now()}`,
-        role: 'model',
-        content: 'Wait, an unexpected connection issue occurred. In severe smog, always keep windows shut and wear certified N95 respirators outdoors.',
-        timestamp: 'Now',
-      };
-      setMessages((prev) => [...prev, errorMsg]);
-    } finally {
-      setIsAnswering(false);
-      setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
-    }
-  };
-
-  const handleToggleVoice = () => {
-    if (isRecording) {
-      stopVoiceRef.current?.();
-      setIsRecording(false);
-    } else {
-      setIsRecording(true);
-      stopVoiceRef.current = startVoiceRecognition(
-        currentLang,
-        (transcript) => {
-          setIsRecording(false);
-          setInputQuery(transcript);
-          handleSend(transcript);
-        },
-        (err) => {
-          setIsRecording(false);
-          logger.warn('Voice recognition error:', err);
-        },
-        () => setIsRecording(false)
-      );
-    }
-  };
 
   const chips = currentLang === 'hi'
     ? [
@@ -178,49 +107,9 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
 
         {/* Message Thread */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4" role="log" aria-live="polite">
-          {messages.map((m) => {
-            const isBot = m.role === 'model';
-            return (
-              <div
-                key={m.id}
-                className={`flex items-start space-x-2.5 ${isBot ? '' : 'flex-row-reverse space-x-reverse'}`}
-              >
-                <div
-                  className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 text-xs ${
-                    isBot ? 'bg-sky-100 text-sky-800' : 'bg-slate-800 text-white'
-                  }`}
-                  aria-hidden="true"
-                >
-                  {isBot ? <Sparkles className="w-4 h-4" /> : <User className="w-4 h-4" />}
-                </div>
-
-                <div
-                  className={`max-w-[85%] p-4 rounded-3xl text-xs sm:text-sm leading-relaxed shadow-xs ${
-                    isBot
-                      ? 'bg-slate-50 border border-slate-200 text-slate-800 rounded-tl-sm'
-                      : 'bg-sky-600 text-white rounded-tr-sm'
-                  }`}
-                >
-                  {m.content}
-                  <div className="flex items-center justify-between mt-2 pt-1 border-t border-slate-200/50">
-                    <span className={`text-[10px] ${isBot ? 'text-slate-400' : 'text-sky-200'}`}>
-                      {m.timestamp}
-                    </span>
-                    {isBot && (
-                      <button
-                        type="button"
-                        onClick={() => speakText(m.content, currentLang)}
-                        className="p-1 text-slate-400 hover:text-sky-600 rounded"
-                        title="Read this answer aloud"
-                      >
-                        <Volume2 className="w-3.5 h-3.5" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          {messages.map((m) => (
+            <ChatMessageBubble key={m.id} message={m} currentLang={currentLang} />
+          ))}
 
           {isAnswering && (
             <div className="flex items-center space-x-2 text-xs text-slate-500 pl-9">
@@ -256,7 +145,7 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            handleSend();
+            void handleSend();
           }}
           className="p-3.5 border-t border-slate-200 bg-white"
         >
@@ -271,7 +160,6 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
               disabled={isAnswering}
             />
 
-            {/* Voice Input Button */}
             {isSpeechRecognitionSupported() && (
               <button
                 type="button"
@@ -282,6 +170,7 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
                 title={isRecording ? 'Listening... click to stop' : 'Click to speak'}
+                aria-label={isRecording ? 'Listening... click to stop' : 'Click to speak'}
               >
                 {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
               </button>

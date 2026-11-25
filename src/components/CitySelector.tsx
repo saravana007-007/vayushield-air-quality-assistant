@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef, useId } from 'react';
-import { Search, MapPin, Loader2, AlertCircle, X, Zap, Navigation } from 'lucide-react';
+import React, { useState, useId } from 'react';
+import { Search, MapPin, Loader2, AlertCircle, X, Navigation } from 'lucide-react';
 import type { GeocodingResult } from '../types';
 import type { UiTranslations } from '../i18n';
-import { searchCities } from '../services/airQualityService';
 import { logger } from '../utils/logger';
+import { useCitySearch } from '../hooks/useCitySearch';
+import { PresetButtons } from './PresetButtons';
 
 interface CitySelectorProps {
   currentCityName: string;
@@ -15,6 +16,9 @@ interface CitySelectorProps {
   onSelectPreset: (presetKey: string) => void;
 }
 
+/**
+ * City search bar with debounced autocomplete, GPS geolocation, and 1-click presets.
+ */
 export const CitySelector: React.FC<CitySelectorProps> = ({
   currentCityName,
   isPresetActive,
@@ -24,93 +28,30 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
   onSelectLocation,
   onSelectPreset,
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [results, setResults] = useState<GeocodingResult[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
-  const [searchError, setSearchError] = useState<string | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(-1);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const abortControllerRef = useRef<AbortController | null>(null);
   const listboxId = useId();
-
-  // Close dropdown on outside click & cleanup timers/aborts on unmount
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleOutsideClick);
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-    };
-  }, []);
-
-  // Debounced search handler with AbortController
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    setSearchError(null);
-    setActiveIndex(-1);
-
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-
-    if (!value.trim() || value.trim().length < 2) {
-      setResults([]);
-      setIsSearching(false);
-      setIsOpen(false);
-      return;
-    }
-
-    setIsSearching(true);
-    setIsOpen(true);
-
-    searchTimeoutRef.current = setTimeout(async () => {
-      const controller = new AbortController();
-      abortControllerRef.current = controller;
-
-      try {
-        const hits = await searchCities(value, controller.signal);
-        setResults(hits);
-        if (hits.length === 0) {
-          setSearchError(`No cities matching "${value}" were found.`);
-        }
-      } catch (err: unknown) {
-        if (err instanceof DOMException && err.name === 'AbortError') {
-          return;
-        }
-        const message = err instanceof Error ? err.message : 'Location lookup failed. Check connection.';
-        setSearchError(message);
-        setResults([]);
-      } finally {
-        setIsSearching(false);
-      }
-    }, 350);
-  };
 
   const handleSelectHit = (hit: GeocodingResult) => {
     const label = hit.admin1 ? `${hit.name}, ${hit.admin1}` : hit.name;
     onSelectLocation(label, hit.latitude, hit.longitude, hit.country);
-    setSearchTerm('');
-    setIsOpen(false);
-    setResults([]);
+    resetSearch(false);
   };
+
+  const {
+    searchTerm,
+    results,
+    isSearching,
+    searchError,
+    isOpen,
+    activeIndex,
+    setActiveIndex,
+    setIsOpen,
+    containerRef,
+    inputRef,
+    handleInputChange,
+    handleKeyDown,
+    resetSearch,
+  } = useCitySearch({ onSelectResult: handleSelectHit });
 
   const handleUseLocation = () => {
     if (!navigator.geolocation) {
@@ -126,35 +67,12 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
         onSelectLocation('My Current Location', latitude, longitude, 'Local');
       },
       (err) => {
-        // Reset locating state and alert the user
         setIsLocating(false);
         logger.warn('Geolocation error:', err);
         alert('Could not access your location. Please check browser permissions or type your city.');
       },
       { timeout: 10000 }
     );
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!isOpen || results.length === 0) return;
-
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      setActiveIndex((prev) => (prev < results.length - 1 ? prev + 1 : 0));
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      setActiveIndex((prev) => (prev > 0 ? prev - 1 : results.length - 1));
-    } else if (e.key === 'Enter') {
-      e.preventDefault();
-      if (activeIndex >= 0 && activeIndex < results.length) {
-        const item = results[activeIndex];
-        if (item) {
-          handleSelectHit(item);
-        }
-      }
-    } else if (e.key === 'Escape') {
-      setIsOpen(false);
-    }
   };
 
   return (
@@ -191,12 +109,7 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
             {searchTerm && (
               <button
                 type="button"
-                onClick={() => {
-                  setSearchTerm('');
-                  setResults([]);
-                  setIsOpen(false);
-                  inputRef.current?.focus();
-                }}
+                onClick={() => resetSearch(true)}
                 className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600"
                 aria-label="Clear search"
               >
@@ -259,49 +172,12 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
           )}
         </div>
 
-        {/* 1-Click Presets */}
-        <div className="flex items-center flex-wrap gap-2" role="group" aria-label="Quick pollution presets">
-          <span className="text-xs font-bold text-slate-500 flex items-center uppercase tracking-wider mr-1">
-            <Zap className="w-3.5 h-3.5 mr-1 text-amber-500" aria-hidden="true" />
-            Presets:
-          </span>
-
-          <button
-            type="button"
-            onClick={() => onSelectPreset('delhi-severe')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all shadow-2xs focus:ring-2 focus:ring-purple-500 ${
-              isPresetActive && activePresetId === 'delhi-severe'
-                ? 'bg-purple-900 text-white border-purple-900 ring-2 ring-purple-400'
-                : 'bg-purple-50 text-purple-900 border-purple-200 hover:bg-purple-100'
-            }`}
-          >
-            {t.presetDelhi}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => onSelectPreset('lahore-hazardous')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all shadow-2xs focus:ring-2 focus:ring-rose-500 ${
-              isPresetActive && activePresetId === 'lahore-hazardous'
-                ? 'bg-rose-900 text-white border-rose-900 ring-2 ring-rose-400'
-                : 'bg-rose-50 text-rose-900 border-rose-200 hover:bg-rose-100'
-            }`}
-          >
-            {t.presetLahore}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => onSelectPreset('moderate-haze')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all shadow-2xs focus:ring-2 focus:ring-amber-500 ${
-              isPresetActive && activePresetId === 'moderate-haze'
-                ? 'bg-amber-800 text-white border-amber-800 ring-2 ring-amber-400'
-                : 'bg-amber-50 text-amber-900 border-amber-200 hover:bg-amber-100'
-            }`}
-          >
-            {t.presetModerate}
-          </button>
-        </div>
+        <PresetButtons
+          isPresetActive={isPresetActive}
+          activePresetId={activePresetId}
+          t={t}
+          onSelectPreset={onSelectPreset}
+        />
       </div>
     </section>
   );
