@@ -91,4 +91,54 @@ describe('components/ShareCardModal', () => {
     fireEvent.click(closeBtn);
     expect(onClose).toHaveBeenCalled();
   });
+
+  it('handles WhatsApp launch, clipboard error, and PDF fallback download', async () => {
+    vi.spyOn(pdfService, 'generateActionPlanPdf').mockRejectedValue(new Error('PDF failed'));
+    const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url');
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+
+    Object.assign(navigator, {
+      clipboard: {
+        writeText: vi.fn().mockRejectedValue(new Error('Clipboard blocked')),
+      },
+    });
+
+    render(
+      <ShareCardModal
+        isOpen={true}
+        onClose={vi.fn()}
+        airData={AIR_PRESETS['delhi-severe']!}
+        profile={mockProfile}
+        plan={{
+          ...DEMO_PLANS['delhi-severe']!,
+          indoorHacks: [],
+          swaps: [],
+        }}
+        completedHackIds={[]}
+        completedSwapIds={[]}
+        t={TRANSLATIONS.en}
+      />
+    );
+
+    // Select WhatsApp format then click Send via WhatsApp
+    fireEvent.click(screen.getByRole('button', { name: /WhatsApp/i }));
+    const waBtn = screen.getByRole('button', { name: /Send via WhatsApp/i });
+    fireEvent.click(waBtn);
+    expect(openSpy).toHaveBeenCalledWith(expect.stringContaining('wa.me'), '_blank');
+
+    // Plain Text copy failure
+    fireEvent.click(screen.getByRole('button', { name: /Plain Text/i }));
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /Copy Clean Text/i }));
+    });
+    expect(navigator.clipboard.writeText).toHaveBeenCalled();
+
+    // PDF failure -> .txt fallback
+    fireEvent.click(screen.getByRole('button', { name: /PDF File/i }));
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /Download Clean PDF Document/i }));
+    });
+    expect(URL.createObjectURL).toHaveBeenCalled();
+  });
 });
