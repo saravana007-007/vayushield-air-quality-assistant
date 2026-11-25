@@ -40,25 +40,23 @@ interface SpeechRecognitionConstructor {
   new (): SpeechRecognitionInstance;
 }
 
-interface WindowWithSpeechRecognition extends Window {
-  SpeechRecognition?: SpeechRecognitionConstructor;
-  webkitSpeechRecognition?: SpeechRecognitionConstructor;
+declare global {
+  interface Window {
+    SpeechRecognition?: SpeechRecognitionConstructor;
+    webkitSpeechRecognition?: SpeechRecognitionConstructor;
+  }
 }
 
 export function isSpeechSynthesisSupported(): boolean {
   if (typeof window === 'undefined') return false;
-  const synth = (window as unknown as { speechSynthesis?: { cancel?: () => void } })
-    .speechSynthesis;
-  return Boolean(synth) && typeof synth?.cancel === 'function';
+  const synth = window.speechSynthesis;
+  return Boolean(synth) && typeof synth.cancel === 'function';
 }
 
 export function isSpeechRecognitionSupported(): boolean {
   return (
     typeof window !== 'undefined' &&
-    (('SpeechRecognition' in window &&
-      Boolean((window as unknown as WindowWithSpeechRecognition).SpeechRecognition)) ||
-      ('webkitSpeechRecognition' in window &&
-        Boolean((window as unknown as WindowWithSpeechRecognition).webkitSpeechRecognition)))
+    Boolean(window.SpeechRecognition ?? window.webkitSpeechRecognition)
   );
 }
 
@@ -130,8 +128,7 @@ export function startVoiceRecognition(
     return () => {};
   }
 
-  const win = window as unknown as WindowWithSpeechRecognition;
-  const SpeechRecognitionClass = win.SpeechRecognition ?? win.webkitSpeechRecognition;
+  const SpeechRecognitionClass = window.SpeechRecognition ?? window.webkitSpeechRecognition;
   if (!SpeechRecognitionClass) {
     onError?.('Speech recognition constructor not available.');
     return () => {};
