@@ -1,11 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { SupportedLanguage, UiTranslations } from '../i18n';
-import {
-  getTranslation,
-  getSavedLanguage,
-  saveLanguage,
-  applyLanguageToDocument,
-} from '../i18n';
+import { getTranslation, getSavedLanguage, saveLanguage, applyLanguageToDocument } from '../i18n';
 
 export interface UseLanguageResult {
   currentLang: SupportedLanguage;

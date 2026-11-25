@@ -46,7 +46,8 @@ export const ScoreHelpModal: React.FC<ScoreHelpModalProps> = ({ isOpen, onClose 
 
         <div className="space-y-3.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
           <p>
-            The <strong>Family Smog Protection Score</strong> measures how effectively your household envelope and daily behaviors isolate you from ambient winter particulate:
+            The <strong>Family Smog Protection Score</strong> measures how effectively your
+            household envelope and daily behaviors isolate you from ambient winter particulate:
           </p>
 
           <div className="space-y-2 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
@@ -59,11 +60,15 @@ export const ScoreHelpModal: React.FC<ScoreHelpModalProps> = ({ isOpen, onClose 
               <span className="font-mono font-bold text-emerald-700">+15%</span>
             </div>
             <div className="flex items-center justify-between border-b border-slate-200/60 pb-1.5">
-              <span className="font-semibold text-slate-900">3. Non-Combustion Stove (Electric/Induction)</span>
+              <span className="font-semibold text-slate-900">
+                3. Non-Combustion Stove (Electric/Induction)
+              </span>
               <span className="font-mono font-bold text-emerald-700">+5%</span>
             </div>
             <div className="flex items-center justify-between border-b border-slate-200/60 pb-1.5">
-              <span className="font-semibold text-slate-900">4. Four Completed Indoor Micro-Hacks</span>
+              <span className="font-semibold text-slate-900">
+                4. Four Completed Indoor Micro-Hacks
+              </span>
               <span className="font-mono font-bold text-sky-700">+30% (7.5% each)</span>
             </div>
             <div className="flex items-center justify-between">
@@ -74,7 +79,9 @@ export const ScoreHelpModal: React.FC<ScoreHelpModalProps> = ({ isOpen, onClose 
 
           <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-900">
             <strong className="font-bold block mb-0.5">🌱 Daily CO₂ Saved Calculation:</strong>
-            Each adopted swap pulls directly from our validated Catalog (e.g. carpooling saves ~3.2 kg CO₂/day, avoided backyard waste burning saves ~4.8 kg CO₂/day). All figures are clearly codified estimates.
+            Each adopted swap pulls directly from our validated Catalog (e.g. carpooling saves ~3.2
+            kg CO₂/day, avoided backyard waste burning saves ~4.8 kg CO₂/day). All figures are
+            clearly codified estimates.
           </div>
         </div>
 

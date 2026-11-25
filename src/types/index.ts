@@ -1,12 +1,7 @@
 // VayuShield Types (Multilingual & Accessibility Upgraded)
 
-export type AqiCategoryKey = 
-  | 'good'
-  | 'moderate'
-  | 'unhealthy_sensitive'
-  | 'unhealthy'
-  | 'very_unhealthy'
-  | 'hazardous';
+export type AqiCategoryKey =
+  'good' | 'moderate' | 'unhealthy_sensitive' | 'unhealthy' | 'very_unhealthy' | 'hazardous';
 
 export type TrafficStatus = 'safe' | 'warning' | 'danger';
 
@@ -65,13 +60,8 @@ export interface AirQualityData {
   lastUpdated: string;
 }
 
-export type HouseholdTag = 
-  | 'toddler_kids'
-  | 'elderly'
-  | 'asthma_respiratory'
-  | 'outdoor_commuter'
-  | 'wfh'
-  | 'other';
+export type HouseholdTag =
+  'toddler_kids' | 'elderly' | 'asthma_respiratory' | 'outdoor_commuter' | 'wfh' | 'other';
 
 export type StoveType = 'gas' | 'electric' | 'induction' | 'other';
 export type CommuteMode = 'metro_bus' | 'car_cab' | 'two_wheeler' | 'walk_cycle' | 'other';

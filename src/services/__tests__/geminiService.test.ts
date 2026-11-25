@@ -8,7 +8,11 @@ import {
   getCachedPlan,
 } from '../geminiService';
 import type { AirQualityData, HouseholdProfile, ActionPlan } from '../../types';
-import { getAqiCategory, calculateWhoMultiplier, calculateBestAirWindow } from '../../utils/aqiCalculator';
+import {
+  getAqiCategory,
+  calculateWhoMultiplier,
+  calculateBestAirWindow,
+} from '../../utils/aqiCalculator';
 import { TIMEOUTS } from '../../config';
 
 // Mock @google/genai SDK
@@ -68,7 +72,8 @@ const mockProfile: HouseholdProfile = {
 
 const sampleValidPlanJson: Omit<ActionPlan, 'isDemo' | 'generatedAt' | 'language'> = {
   oneThingToDo: 'Run HEPA purifier in the bedroom and seal external doors with damp towels.',
-  familyRiskBriefing: 'High-density winter smog creates extreme risks for toddlers and elderly relatives.',
+  familyRiskBriefing:
+    'High-density winter smog creates extreme risks for toddlers and elderly relatives.',
   dailyRoutine: [
     {
       id: 'morning',
@@ -155,7 +160,11 @@ const sampleValidPlanJson: Omit<ActionPlan, 'isDemo' | 'generatedAt' | 'language
       customReason: 'Minimize indoor combustion PM2.5 in gas kitchen.',
     },
   ],
-  dos: ['Wear certified N95 masks outdoors', 'Drink warm liquids', 'Check live AQI before departure'],
+  dos: [
+    'Wear certified N95 masks outdoors',
+    'Drink warm liquids',
+    'Check live AQI before departure',
+  ],
   donts: ['Do not burn incense', 'Do not exercise outdoors at dawn', 'Do not use cloth bandanas'],
 };
 
@@ -189,11 +198,8 @@ describe('services/geminiService', () => {
   describe('generateActionPlan', () => {
     it('seamlessly returns demo plan when no API key is provided and proxy is offline', async () => {
       const statusUpdates: string[] = [];
-      const result = await generateActionPlan(
-        mockAirData,
-        mockProfile,
-        'en',
-        (s) => statusUpdates.push(s)
+      const result = await generateActionPlan(mockAirData, mockProfile, 'en', (s) =>
+        statusUpdates.push(s)
       );
 
       expect(result.isDemo).toBe(true);
@@ -210,11 +216,8 @@ describe('services/geminiService', () => {
       });
 
       const statusUpdates: string[] = [];
-      const result = await generateActionPlan(
-        mockAirData,
-        mockProfile,
-        'en',
-        (s) => statusUpdates.push(s)
+      const result = await generateActionPlan(mockAirData, mockProfile, 'en', (s) =>
+        statusUpdates.push(s)
       );
 
       expect(result.isDemo).toBe(false);
@@ -242,11 +245,8 @@ describe('services/geminiService', () => {
       });
 
       const statusUpdates: string[] = [];
-      const result = await generateActionPlan(
-        mockAirData,
-        mockProfile,
-        'en',
-        (s) => statusUpdates.push(s)
+      const result = await generateActionPlan(mockAirData, mockProfile, 'en', (s) =>
+        statusUpdates.push(s)
       );
 
       expect(result.isDemo).toBe(false);
@@ -280,11 +280,8 @@ describe('services/geminiService', () => {
       mockGenerateContent.mockRejectedValueOnce(new Error('Service unavailable 503'));
 
       const statusUpdates: string[] = [];
-      const result = await generateActionPlan(
-        mockAirData,
-        mockProfile,
-        'en',
-        (s) => statusUpdates.push(s)
+      const result = await generateActionPlan(mockAirData, mockProfile, 'en', (s) =>
+        statusUpdates.push(s)
       );
 
       expect(result.isDemo).toBe(true);
@@ -328,7 +325,8 @@ describe('services/geminiService', () => {
   describe('askVayu consultation', () => {
     it('returns concise consultation reply from live Gemini model when API key is set', async () => {
       setSessionApiKey('valid-test-key');
-      const mockReply = 'No, outdoor play is unsafe today at AQI 350. Keep children indoors with air purification running.';
+      const mockReply =
+        'No, outdoor play is unsafe today at AQI 350. Keep children indoors with air purification running.';
       mockGenerateContent.mockResolvedValueOnce({
         text: mockReply,
       });
@@ -340,7 +338,13 @@ describe('services/geminiService', () => {
         language: 'en',
       };
 
-      const reply = await askVayu('Can my children play in the park today?', mockAirData, mockProfile, dummyPlan, 'en');
+      const reply = await askVayu(
+        'Can my children play in the park today?',
+        mockAirData,
+        mockProfile,
+        dummyPlan,
+        'en'
+      );
 
       expect(reply).toBe(mockReply);
       expect(mockGenerateContent).toHaveBeenCalledTimes(1);
@@ -357,7 +361,13 @@ describe('services/geminiService', () => {
         language: 'en',
       };
 
-      const reply = await askVayu('Should I take my asthma inhaler or change the dose?', mockAirData, mockProfile, dummyPlan, 'en');
+      const reply = await askVayu(
+        'Should I take my asthma inhaler or change the dose?',
+        mockAirData,
+        mockProfile,
+        dummyPlan,
+        'en'
+      );
 
       expect(reply).toContain('No, VayuShield cannot provide medication advice');
       expect(reply).toContain('physician');
@@ -394,7 +404,13 @@ describe('services/geminiService', () => {
         language: 'en',
       };
 
-      const reply = await askVayu('What medicine or antibiotic should I take for coughing?', mockAirData, mockProfile, dummyPlan, 'en');
+      const reply = await askVayu(
+        'What medicine or antibiotic should I take for coughing?',
+        mockAirData,
+        mockProfile,
+        dummyPlan,
+        'en'
+      );
 
       expect(reply.startsWith('No,')).toBe(true);
       expect(reply).toContain('medication advice');
@@ -410,7 +426,13 @@ describe('services/geminiService', () => {
         language: 'en',
       };
 
-      const reply = await askVayu('Can I go for a jog in the park?', mockAirData, mockProfile, dummyPlan, 'en');
+      const reply = await askVayu(
+        'Can I go for a jog in the park?',
+        mockAirData,
+        mockProfile,
+        dummyPlan,
+        'en'
+      );
 
       expect(reply.startsWith('No,')).toBe(true);
       expect(reply).toContain('outdoor physical activity is unsafe today');
@@ -425,7 +447,13 @@ describe('services/geminiService', () => {
         language: 'en',
       };
 
-      const reply = await askVayu('Should I open windows while cooking?', mockAirData, mockProfile, dummyPlan, 'en');
+      const reply = await askVayu(
+        'Should I open windows while cooking?',
+        mockAirData,
+        mockProfile,
+        dummyPlan,
+        'en'
+      );
 
       expect(reply.startsWith('No,')).toBe(true);
       expect(reply).toContain('exterior windows hermetically sealed');
@@ -440,7 +468,13 @@ describe('services/geminiService', () => {
         language: 'en',
       };
 
-      const reply = await askVayu('Is a cloth mask sufficient?', mockAirData, mockProfile, dummyPlan, 'en');
+      const reply = await askVayu(
+        'Is a cloth mask sufficient?',
+        mockAirData,
+        mockProfile,
+        dummyPlan,
+        'en'
+      );
 
       expect(reply.startsWith('No,')).toBe(true);
       expect(reply).toContain('N95 or FFP2');
@@ -455,10 +489,22 @@ describe('services/geminiService', () => {
         language: 'hi',
       };
 
-      const medReply = await askVayu('दवा और डॉक्टर की सलाह', mockAirData, mockProfile, dummyPlan, 'hi');
+      const medReply = await askVayu(
+        'दवा और डॉक्टर की सलाह',
+        mockAirData,
+        mockProfile,
+        dummyPlan,
+        'hi'
+      );
       expect(medReply).toContain('नहीं, वायुशील्ड दवाओं');
 
-      const parkReply = await askVayu('पार्क में खेलने जा सकते हैं?', mockAirData, mockProfile, dummyPlan, 'hi');
+      const parkReply = await askVayu(
+        'पार्क में खेलने जा सकते हैं?',
+        mockAirData,
+        mockProfile,
+        dummyPlan,
+        'hi'
+      );
       expect(parkReply).toContain('नहीं, आज AQI');
     });
   });

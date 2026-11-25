@@ -7,9 +7,10 @@ import { getErrorMessage } from '../utils/errors';
 import { startVoiceRecognition } from '../utils/speech';
 
 function createWelcomeMessage(lang: string, aqi: number, city: string): ChatMessage {
-  const welcome = lang === 'hi'
-    ? `हाँ, मैं आपके परिवार की मदद के लिए तैयार हूँ। वर्तमान AQI (${aqi}) को देखते हुए, खिड़कियां, बच्चों के खेलने या मास्क के बारे में कुछ भी पूछें।`
-    : `Yes, I am ready to advise your household. I have factored in your live ${city} AQI (${aqi}) and your home setup. Ask me any immediate question regarding windows, toddler play, or mask selection.`;
+  const welcome =
+    lang === 'hi'
+      ? `हाँ, मैं आपके परिवार की मदद के लिए तैयार हूँ। वर्तमान AQI (${aqi}) को देखते हुए, खिड़कियां, बच्चों के खेलने या मास्क के बारे में कुछ भी पूछें।`
+      : `Yes, I am ready to advise your household. I have factored in your live ${city} AQI (${aqi}) and your home setup. Ask me any immediate question regarding windows, toddler play, or mask selection.`;
 
   return {
     id: 'welcome',
@@ -69,7 +70,8 @@ export function useAskVayuChat({ airData, profile, plan, currentLang }: UseAskVa
       const errorMsg: ChatMessage = {
         id: `err-${Date.now()}`,
         role: 'model',
-        content: 'Wait, an unexpected connection issue occurred. In severe smog, always keep windows shut and wear certified N95 respirators outdoors.',
+        content:
+          'Wait, an unexpected connection issue occurred. In severe smog, always keep windows shut and wear certified N95 respirators outdoors.',
         timestamp: 'Now',
       };
       setMessages((prev) => [...prev, errorMsg]);

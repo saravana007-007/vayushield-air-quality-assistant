@@ -11,11 +11,13 @@
 ---
 
 ## 📌 Problem Statement
-During severe winter inversion events across South Asian cities (Delhi NCR, Lahore, Kolkata, Dhaka), ambient AQI surges beyond **300–500+ (Hazardous)**, trapping fine particulate matter ($\text{PM}_{2.5}$) close to the ground. 
+
+During severe winter inversion events across South Asian cities (Delhi NCR, Lahore, Kolkata, Dhaka), ambient AQI surges beyond **300–500+ (Hazardous)**, trapping fine particulate matter ($\text{PM}_{2.5}$) close to the ground.
 
 Most public air-quality dashboards only present numbers and generic advice ("stay indoors"), failing to offer actionable household containment strategies. Families with infants, asthmatic elders, and daily commuters are left exposed without practical, low-cost mitigations.
 
 **VayuShield** bridges this gap:
+
 1. Translates complex open meteorological data into **1 Critical Action**, a **4-stage daily routine**, and **zero-cost indoor containment hacks**.
 2. Tailors protective actions dynamically to household vulnerabilities (toddlers, elderly, asthma, stove type, commute mode).
 3. Provides offline resilience: 100% operational with verified local safety plans even when offline or without API keys.
@@ -27,12 +29,12 @@ Most public air-quality dashboards only present numbers and generic advice ("sta
 ```mermaid
 flowchart TD
     User["User / Household Profile"] --> UI["React 19 Interface"]
-    
+
     subgraph Data Layer
         UI --> OM["Open-Meteo API\n(No key, Hourly PM2.5 & AQI)"]
         UI --> Presets["1-Click Bundled Presets\n(Delhi, Lahore, Moderate)"]
     end
-    
+
     subgraph Engine & Protection
         OM --> Calc["AQI & Physics Calculator\n(WHO Multiplier, Best Window, Shield Score)"]
         Presets --> Calc
@@ -67,15 +69,15 @@ flowchart TD
 
 ## 🛠️ Tech Stack & Code Quality Standards
 
-| Layer | Technologies & Tools |
-|---|---|
-| **Core Framework** | React 19, TypeScript 5.8 (Strict mode with `noUncheckedIndexedAccess`) |
-| **Build Tool** | Vite 8 + Rolldown runtime (Code-split vendor chunks) |
-| **Type Checking** | Strict TypeScript (`noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`) |
-| **Linting** | Oxlint with `correctness`, `suspicious`, `perf`, `eqeqeq`, `no-explicit-any` |
-| **Testing** | Vitest 5, `@testing-library/react`, `@testing-library/user-event`, jsdom, v8 coverage |
-| **Styling** | Tailwind CSS 3.4, Lucide React icons |
-| **AI Integration** | Google GenAI SDK (`@google/genai`) with strict `Schema` validation |
+| Layer              | Technologies & Tools                                                                  |
+| ------------------ | ------------------------------------------------------------------------------------- |
+| **Core Framework** | React 19, TypeScript 5.8 (Strict mode with `noUncheckedIndexedAccess`)                |
+| **Build Tool**     | Vite 8 + Rolldown runtime (Code-split vendor chunks)                                  |
+| **Type Checking**  | Strict TypeScript (`noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`)       |
+| **Linting**        | Oxlint with `correctness`, `suspicious`, `perf`, `eqeqeq`, `no-explicit-any`          |
+| **Testing**        | Vitest 5, `@testing-library/react`, `@testing-library/user-event`, jsdom, v8 coverage |
+| **Styling**        | Tailwind CSS 3.4, Lucide React icons                                                  |
+| **AI Integration** | Google GenAI SDK (`@google/genai`) with strict `Schema` validation                    |
 
 ---
 
@@ -100,10 +102,12 @@ src/
 ## ⚡ Getting Started
 
 ### Prerequisites
+
 - Node.js 20+
 - npm 10+
 
 ### Installation
+
 ```bash
 git clone https://github.com/saravana007-007/vayushield-air-quality-assistant.git
 cd vayushield-air-quality-assistant
@@ -111,22 +115,29 @@ npm install
 ```
 
 ### Environment Variables
+
 Copy `.env.example` to `.env`:
+
 ```bash
 cp .env.example .env
 ```
+
 Add your optional Gemini API key:
+
 ```env
 VITE_GEMINI_API_KEY=your_gemini_api_key_here
 ```
-*(If omitted, VayuShield runs in 100% offline Demo Mode with verified safety plans.)*
+
+_(If omitted, VayuShield runs in 100% offline Demo Mode with verified safety plans.)_
 
 ### Development Server
+
 ```bash
 npm run dev
 ```
 
 ### Verification & Testing
+
 ```bash
 # Type check with strict TypeScript
 npm run typecheck
@@ -156,9 +167,11 @@ npm run build
 ---
 
 ## ⚕️ Health & Educational Disclaimer
-*VayuShield provides educational ambient air guidance and algorithmic exposure mitigation estimates based on published building physics research and WHO air quality guidelines. It does not provide medical diagnoses, prescriptions, or clinical treatments. For acute symptoms, respiratory distress, or severe chest discomfort, immediately consult a licensed physician or emergency medical care.*
+
+_VayuShield provides educational ambient air guidance and algorithmic exposure mitigation estimates based on published building physics research and WHO air quality guidelines. It does not provide medical diagnoses, prescriptions, or clinical treatments. For acute symptoms, respiratory distress, or severe chest discomfort, immediately consult a licensed physician or emergency medical care._
 
 ---
 
 ## 📄 License
+
 MIT © 2026 VayuShield Contributors

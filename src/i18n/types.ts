@@ -33,7 +33,7 @@ export interface UiTranslations {
   demoBadge: string;
   liveBadge: string;
   cachedNotice: string;
-  
+
   // Danger Explainer
   dangerTitle: string;
   gaugeLabel: string;
@@ -48,7 +48,7 @@ export interface UiTranslations {
   pm10Label: string;
   maskStandardLabel: string;
   clothFailsShort: string;
-  
+
   // When Will it Get Better
   bestTimeTitle: string;
   bestTimeLabel: string;
@@ -60,10 +60,10 @@ export interface UiTranslations {
   bestTimeSentence: (start: string, end: string, worse: string) => string;
   happeningNow: string;
   nextSafeTomorrow: string;
-  
+
   // One Thing To Do
   oneThingTitle: string;
-  
+
   // City Selector
   searchCityPlaceholder: string;
   useMyLocation: string;
@@ -71,7 +71,7 @@ export interface UiTranslations {
   presetDelhi: string;
   presetLahore: string;
   presetModerate: string;
-  
+
   // Household Profile
   profileTitle: string;
   profileSubtitle: string;
@@ -87,7 +87,7 @@ export interface UiTranslations {
   tapToAdd: string;
   selectedText: string;
   customConditionPrompt: string;
-  
+
   // Custom Setup Questions
   purifierLabel: string;
   purifierYes: string;
@@ -104,7 +104,7 @@ export interface UiTranslations {
   commuteWalk: string;
   commuteOther: string;
   customSetupPlaceholder: string;
-  
+
   // Action Plan Sections
   familyBriefingTitle: string;
   routineTitle: string;
@@ -120,7 +120,7 @@ export interface UiTranslations {
   doneText: string;
   adoptSwap: string;
   adoptedText: string;
-  
+
   // Masks & Doctor Guide
   maskGuideTitle: string;
   n95Works: string;
@@ -131,7 +131,7 @@ export interface UiTranslations {
   doctorWarningSymptoms: string;
   doctorSymptomsList: string[];
   disclaimerText: string;
-  
+
   // Protection Tracker
   trackerTitle: string;
   trackerSubtitle: string;
@@ -148,13 +148,13 @@ export interface UiTranslations {
   swapsChecklistTitle: string;
   realtimeUpdateNote: string;
   viewFormulaBtn: string;
-  
+
   // Ask Vayu Drawer
   askVayuBtn: string;
   askVayuTitle: string;
   askPlaceholder: string;
   askContextNotice: string;
-  
+
   // Share & Export
   shareCardBtn: string;
   copyTextBtn: string;

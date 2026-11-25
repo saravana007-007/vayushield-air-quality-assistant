@@ -13,7 +13,7 @@ export const HI_TRANSLATIONS: UiTranslations = {
   demoBadge: 'डेमो मोड (ऑफलाइन सुरक्षित प्लान)',
   liveBadge: 'जेमिनी लाइव एआई',
   cachedNotice: 'पिछला सुरक्षित डेटा दिखाया जा रहा है',
-  
+
   dangerTitle: 'आज का प्रदूषण स्तर',
   gaugeLabel: 'प्रदूषण पैमाना (0 - 500)',
   categoryLabelPrefix: 'श्रेणी',
@@ -27,7 +27,7 @@ export const HI_TRANSLATIONS: UiTranslations = {
     unhealthy_sensitive: 'संवेदनशील लोगों के लिए अस्वस्थ',
     unhealthy: 'अस्वस्थ (Unhealthy)',
     very_unhealthy: 'बहुत अस्वस्थ (Very Unhealthy)',
-    hazardous: 'खतरनाक / गंभीर स्मॉग (Hazardous)'
+    hazardous: 'खतरनाक / गंभीर स्मॉग (Hazardous)',
   },
   categorySummaries: {
     good: 'हवा पूरी तरह साफ है। खिड़कियां खोल सकते हैं और बाहर खेल सकते हैं।',
@@ -35,13 +35,13 @@ export const HI_TRANSLATIONS: UiTranslations = {
     unhealthy_sensitive: 'बच्चों, बुजुर्गों और दमा के मरीजों के लिए असुरक्षित। खिड़कियां बंद रखें।',
     unhealthy: 'सभी के लिए हानिकारक हवा। बाहर ज्यादा देर रहने से फेफड़ों में जलन होगी।',
     very_unhealthy: 'आपातकालीन चेतावनी: बाहर जहरीला स्मॉग है। घर में रहें और खिड़की-दरवाजे सील रखें।',
-    hazardous: 'महा-आपदा: हवा में अत्यधिक जहरीले कण हैं जो सीधे फेफड़ों में जाते हैं। घर में ही क्वारंटाइन रहें।'
+    hazardous: 'महा-आपदा: हवा में अत्यधिक जहरीले कण हैं जो सीधे फेफड़ों में जाते हैं। घर में ही क्वारंटाइन रहें।',
   },
   pm25Label: 'PM2.5 (बारीक कालिख)',
   pm10Label: 'PM10 (सड़क की धूल)',
   maskStandardLabel: 'मास्क मानक',
   clothFailsShort: 'कपड़े का मास्क बेकार',
-  
+
   bestTimeTitle: 'हवा कब बेहतर होगी?',
   bestTimeLabel: 'आज बाहर जाने का सबसे सुरक्षित समय',
   worseAfter: 'इसके बाद हवा फिर खराब होगी',
@@ -49,19 +49,20 @@ export const HI_TRANSLATIONS: UiTranslations = {
   countdownImproving: 'हवा में सुधार होगा',
   remindMe: 'सुरक्षित समय पर याद दिलाएं 🔔',
   reminderSet: 'रिमाइंडर सेट हो गया है!',
-  bestTimeSentence: (start, end, worse) => `बाहर जाने का सबसे अच्छा समय: ${start} से ${end} तक। इसके बाद ${worse} बजे हवा फिर खराब होगी।`,
+  bestTimeSentence: (start, end, worse) =>
+    `बाहर जाने का सबसे अच्छा समय: ${start} से ${end} तक। इसके बाद ${worse} बजे हवा फिर खराब होगी।`,
   happeningNow: 'यह समय अभी चल रहा है!',
   nextSafeTomorrow: 'कल सुरक्षित समय शुरू होगा',
-  
+
   oneThingTitle: '⭐ आज का सबसे जरूरी 1 काम',
-  
+
   searchCityPlaceholder: 'अपने शहर का नाम लिखें...',
   useMyLocation: 'मेरी लोकेशन से खोजें 📍',
   presetsTitle: '1-क्लिक प्रदूषण उदाहरण:',
   presetDelhi: 'दिल्ली: गंभीर स्मॉग AQI 385',
   presetLahore: 'लाहौर: खतरनाक स्मॉग AQI 340',
   presetModerate: 'हल्की धुंध AQI 145',
-  
+
   profileTitle: 'घर में कौन-कौन सदस्य हैं?',
   profileSubtitle: 'परिवार के सभी सदस्यों पर निशान लगाएं ताकि सही सुरक्षा मिले।',
   updatePlanBtn: 'नया फैमिली प्लान बनाएं',
@@ -76,7 +77,7 @@ export const HI_TRANSLATIONS: UiTranslations = {
   tapToAdd: 'जोड़ने के लिए छुएं',
   selectedText: 'चुना गया ✓',
   customConditionPrompt: 'अन्य सदस्य या बीमारी के बारे में बताएं:',
-  
+
   purifierLabel: 'क्या घर में एयर प्यूरीफायर (Air Purifier) है?',
   purifierYes: 'घर में एक्टिव HEPA प्यूरीफायर है',
   purifierNo: 'प्यूरीफायर नहीं है (घरेलू तरीकों पर निर्भर)',
@@ -92,7 +93,7 @@ export const HI_TRANSLATIONS: UiTranslations = {
   commuteWalk: 'पैदल / साइकिल',
   commuteOther: 'अन्य साधन',
   customSetupPlaceholder: 'अपने चूल्हे या सफर के बारे में लिखें...',
-  
+
   familyBriefingTitle: 'परिवार के लिए सीधी सलाह',
   routineTitle: 'आज का 4-चरणीय रूटीन',
   indoorHacksTitle: 'आसान घरेलू उपाय (बिना खर्च के)',
@@ -107,7 +108,7 @@ export const HI_TRANSLATIONS: UiTranslations = {
   doneText: 'हो गया ✓',
   adoptSwap: 'आदत अपनाएं',
   adoptedText: 'अपना लिया ✓',
-  
+
   maskGuideTitle: 'मास्क गाइड: कौन सा मास्क बचाता है?',
   n95Works: 'N95 / FFP2 मास्क: 95% जहरीला धुआं रोकता है। नाक पर सही बैठाएं।',
   n95Tip: '👉 नाक की पत्ती को दबाकर पूरी तरह सील करें।',
@@ -119,10 +120,10 @@ export const HI_TRANSLATIONS: UiTranslations = {
     '⚠️ अत्यधिक सांस फूलना या घबराहट',
     '⚠️ सीने में तेज दर्द या जकड़न',
     '⚠️ होंठ या नाखूनों का नीला पड़ना',
-    '⚠️ लगातार खांसी और उल्टी का मन'
+    '⚠️ लगातार खांसी और उल्टी का मन',
   ],
   disclaimerText: 'यह सामान्य प्रदूषण जानकारी है, डॉक्टर की दवा या इलाज का विकल्प नहीं।',
-  
+
   trackerTitle: 'पारिवारिक सुरक्षा ट्रैकर',
   trackerSubtitle: 'लाइव परिवार सुरक्षा इंडेक्स',
   protectionScore: 'सुरक्षा स्कोर',
@@ -138,12 +139,12 @@ export const HI_TRANSLATIONS: UiTranslations = {
   swapsChecklistTitle: 'स्वच्छ हवा की आदतें',
   realtimeUpdateNote: 'तुरंत अपडेट होता है',
   viewFormulaBtn: 'गणना का फॉर्मूला देखें',
-  
+
   askVayuBtn: 'वायु सहायक से पूछें',
   askVayuTitle: 'पूछें वायु: तुरंत मदद',
   askPlaceholder: 'छोटा सवाल पूछें (जैसे: क्या बच्चे पार्क जा सकते हैं?)...',
   askContextNotice: '3 छोटे वाक्यों में हां / ना / रुकें से शुरू होने वाला उत्तर।',
-  
+
   shareCardBtn: 'फैमिली कार्ड शेयर करें',
   copyTextBtn: 'कॉपी करें',
   whatsAppBtn: 'व्हाट्सएप पर भेजें',

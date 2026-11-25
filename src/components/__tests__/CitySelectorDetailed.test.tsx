@@ -76,12 +76,7 @@ describe('components/CitySelector detailed branches', () => {
 
     fireEvent.click(resultOption);
 
-    expect(onSelectLocation).toHaveBeenCalledWith(
-      'Bengaluru, Karnataka',
-      12.97,
-      77.59,
-      'India'
-    );
+    expect(onSelectLocation).toHaveBeenCalledWith('Bengaluru, Karnataka', 12.97, 77.59, 'India');
   });
 
   it('navigates search dropdown with ArrowDown, ArrowUp, Enter and Escape keys', async () => {
@@ -131,7 +126,9 @@ describe('components/CitySelector detailed branches', () => {
 
   it('displays search error when geocoding network fails', async () => {
     vi.useFakeTimers();
-    vi.spyOn(airQualityService, 'searchCities').mockRejectedValueOnce(new Error('Network lookup timed out'));
+    vi.spyOn(airQualityService, 'searchCities').mockRejectedValueOnce(
+      new Error('Network lookup timed out')
+    );
 
     render(
       <CitySelector

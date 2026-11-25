@@ -1,7 +1,11 @@
 import React from 'react';
 import type { ActionPlan, HouseholdProfile } from '../types';
 import type { UiTranslations } from '../i18n';
-import { calculateProtectionScore, calculateCo2Saved, calculateExposureReduction } from '../utils/aqiCalculator';
+import {
+  calculateProtectionScore,
+  calculateCo2Saved,
+  calculateExposureReduction,
+} from '../utils/aqiCalculator';
 import { getSwapById } from '../data/swapCatalog';
 import { ShieldCheck, CheckCircle2, Circle, Leaf, HelpCircle, ArrowUpRight } from 'lucide-react';
 
@@ -39,11 +43,12 @@ export const ActionTracker: React.FC<ActionTrackerProps> = ({
   const co2Saved = calculateCo2Saved(completedSwapIds);
   const exposureInfo = calculateExposureReduction(scoreBreakdown.total, currentAqi);
 
-  const localizedIsolationNote = exposureInfo.reductionPercentage >= 80
-    ? t.isolationOptimal
-    : exposureInfo.reductionPercentage >= 60
-    ? t.isolationModerate
-    : t.isolationElevated;
+  const localizedIsolationNote =
+    exposureInfo.reductionPercentage >= 80
+      ? t.isolationOptimal
+      : exposureInfo.reductionPercentage >= 60
+        ? t.isolationModerate
+        : t.isolationElevated;
 
   return (
     <aside
@@ -58,7 +63,10 @@ export const ActionTracker: React.FC<ActionTrackerProps> = ({
               <ShieldCheck className="w-5 h-5" aria-hidden="true" />
             </div>
             <div>
-              <h3 id="tracker-heading" className="text-base sm:text-lg font-bold font-display text-slate-900">
+              <h3
+                id="tracker-heading"
+                className="text-base sm:text-lg font-bold font-display text-slate-900"
+              >
                 {t.trackerTitle}
               </h3>
               <p className="text-xs text-slate-500">{t.trackerSubtitle}</p>
@@ -128,7 +136,9 @@ export const ActionTracker: React.FC<ActionTrackerProps> = ({
         <div className="space-y-4">
           <div>
             <div className="flex items-center justify-between text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-              <span>{t.indoorHacksChecklistTitle} ({completedHackIds.length}/{plan.indoorHacks.length})</span>
+              <span>
+                {t.indoorHacksChecklistTitle} ({completedHackIds.length}/{plan.indoorHacks.length})
+              </span>
             </div>
             <div className="space-y-1.5" role="group" aria-label="Indoor micro hacks checklist">
               {plan.indoorHacks.map((hack) => {
@@ -148,7 +158,10 @@ export const ActionTracker: React.FC<ActionTrackerProps> = ({
                   >
                     <div className="flex items-center space-x-2.5 pr-2">
                       {isDone ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
+                        <CheckCircle2
+                          className="w-4 h-4 text-emerald-600 shrink-0"
+                          aria-hidden="true"
+                        />
                       ) : (
                         <Circle className="w-4 h-4 text-slate-300 shrink-0" aria-hidden="true" />
                       )}
@@ -156,9 +169,7 @@ export const ActionTracker: React.FC<ActionTrackerProps> = ({
                         {hack.title}
                       </span>
                     </div>
-                    <span className="text-[10px] font-bold text-slate-400 shrink-0">
-                      +7.5%
-                    </span>
+                    <span className="text-[10px] font-bold text-slate-400 shrink-0">+7.5%</span>
                   </button>
                 );
               })}
@@ -167,7 +178,9 @@ export const ActionTracker: React.FC<ActionTrackerProps> = ({
 
           <div>
             <div className="flex items-center justify-between text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-              <span>{t.swapsChecklistTitle} ({completedSwapIds.length}/{plan.swaps.length})</span>
+              <span>
+                {t.swapsChecklistTitle} ({completedSwapIds.length}/{plan.swaps.length})
+              </span>
             </div>
             <div className="space-y-1.5" role="group" aria-label="Smog swaps checklist">
               {plan.swaps.map((item) => {
@@ -188,7 +201,10 @@ export const ActionTracker: React.FC<ActionTrackerProps> = ({
                   >
                     <div className="flex items-center space-x-2.5 pr-2">
                       {isDone ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
+                        <CheckCircle2
+                          className="w-4 h-4 text-emerald-600 shrink-0"
+                          aria-hidden="true"
+                        />
                       ) : (
                         <Circle className="w-4 h-4 text-slate-300 shrink-0" aria-hidden="true" />
                       )}

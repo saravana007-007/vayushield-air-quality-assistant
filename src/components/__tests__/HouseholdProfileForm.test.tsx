@@ -113,7 +113,9 @@ describe('components/HouseholdProfileForm', () => {
     });
 
     // Click generate button
-    const submitBtn = screen.getByRole('button', { name: new RegExp(TRANSLATIONS.en.updatePlanBtn, 'i') });
+    const submitBtn = screen.getByRole('button', {
+      name: new RegExp(TRANSLATIONS.en.updatePlanBtn, 'i'),
+    });
     fireEvent.click(submitBtn);
     expect(onGeneratePlan).toHaveBeenCalled();
   });

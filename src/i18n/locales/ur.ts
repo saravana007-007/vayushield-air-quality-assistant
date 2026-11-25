@@ -13,7 +13,7 @@ export const UR_TRANSLATIONS: UiTranslations = {
   demoBadge: 'ڈیمو موڈ (آف لائن پلان)',
   liveBadge: 'جیمنی لائیو AI',
   cachedNotice: 'محفوظ شدہ پرانا ڈیٹا دکھایا جا رہا ہے',
-  
+
   dangerTitle: 'آج کا فضائی آلودگی لیول',
   gaugeLabel: 'آلودگی کا پیمانہ (0 - 500)',
   categoryLabelPrefix: 'درجہ بندی',
@@ -27,7 +27,7 @@ export const UR_TRANSLATIONS: UiTranslations = {
     unhealthy_sensitive: 'حساس افراد کے لیے مضر',
     unhealthy: 'مضر صحت (Unhealthy)',
     very_unhealthy: 'انتہائی مضر صحت',
-    hazardous: 'خطرناک اسموگ (Hazardous)'
+    hazardous: 'خطرناک اسموگ (Hazardous)',
   },
   categorySummaries: {
     good: 'ہوا بالکل صاف ہے۔ کھڑکیاں کھول سکتے ہیں اور باہر جا سکتے ہیں۔',
@@ -35,13 +35,13 @@ export const UR_TRANSLATIONS: UiTranslations = {
     unhealthy_sensitive: 'بچوں، بوڑھوں اور دمہ کے مریضوں کے لیے خطرناک۔ کھڑکیاں بند رکھیں۔',
     unhealthy: 'تمام افراد کے لیے مضر ہوا ہے۔ باہر جانے سے گریز کریں۔',
     very_unhealthy: 'ہنگامی الرٹ: باہر زہریلا دھواں ہے۔ گھر میں رہیں اور کھڑکیاں بند رکھیں۔',
-    hazardous: 'شدید آفت: ہوا میں زہریلے ذرات پھیپھڑوں کو نقصان پہنچاتے ہیں۔ باہر نہ نکلیں۔'
+    hazardous: 'شدید آفت: ہوا میں زہریلے ذرات پھیپھڑوں کو نقصان پہنچاتے ہیں۔ باہر نہ نکلیں۔',
   },
   pm25Label: 'PM2.5 (باریک دھواں)',
   pm10Label: 'PM10 (سڑک کی مٹی)',
   maskStandardLabel: 'ماسک کی ضرورت',
   clothFailsShort: 'کپڑے کا ماسک ناکارہ',
-  
+
   bestTimeTitle: 'ہوا کب بہتر ہوگی؟',
   bestTimeLabel: 'آج باہر جانے کا محفوظ ترین وقت',
   worseAfter: 'اس کے بعد ہوا دوبارہ خراب ہوگی',
@@ -49,19 +49,20 @@ export const UR_TRANSLATIONS: UiTranslations = {
   countdownImproving: 'ہوا میں بہتری آئے گی',
   remindMe: 'محفوظ وقت پر یاد دہانی کرائیں 🔔',
   reminderSet: 'یاد دہانی فعال ہو چکی ہے!',
-  bestTimeSentence: (start, end, worse) => `باہر جانے کا بہترین وقت: ${start} سے ${end}۔ اس کے بعد ${worse} بجے ہوا دوبارہ خراب ہوگی۔`,
+  bestTimeSentence: (start, end, worse) =>
+    `باہر جانے کا بہترین وقت: ${start} سے ${end}۔ اس کے بعد ${worse} بجے ہوا دوبارہ خراب ہوگی۔`,
   happeningNow: 'یہ وقت ابھی جاری ہے!',
   nextSafeTomorrow: 'اگلا محفوظ وقت کل شروع ہوگا',
-  
+
   oneThingTitle: '⭐ آج کا سب سے اہم ترین 1 کام',
-  
+
   searchCityPlaceholder: 'اپنے شہر کا نام لکھیں...',
   useMyLocation: 'میری لوکیشن استعمال کریں 📍',
   presetsTitle: 'فوری 1-کلک اسموگ کے نمونے:',
   presetDelhi: 'دہلی: شدید اسموگ AQI 385',
   presetLahore: 'لاہور: خطرناک اسموگ AQI 340',
   presetModerate: 'ہلکی دھند AQI 145',
-  
+
   profileTitle: 'گھر میں کون کون رہتا ہے؟',
   profileSubtitle: 'گھر کے تمام افراد پر نشان لگائیں تاکہ ان کی مکمل حفاظت ہو سکے۔',
   updatePlanBtn: 'نیا فیملی پلان بنائیں',
@@ -76,7 +77,7 @@ export const UR_TRANSLATIONS: UiTranslations = {
   tapToAdd: 'شامل کرنے کے لیے دبائیں',
   selectedText: 'منتخب شدہ ✓',
   customConditionPrompt: 'دیگر مسئلہ یا بیماری کی تفصیل:',
-  
+
   purifierLabel: 'کیا گھر میں ایئر پیوریفائر موجود ہے؟',
   purifierYes: 'گھر میں فعال HEPA پیوریفائر موجود ہے',
   purifierNo: 'پیوریفائر نہیں ہے (گھریلو طریقوں پر انحصار)',
@@ -92,7 +93,7 @@ export const UR_TRANSLATIONS: UiTranslations = {
   commuteWalk: 'پیدل / سائیکل',
   commuteOther: 'کوئی اور ذریعہ',
   customSetupPlaceholder: 'چولہے یا سفر کی تفصیل لکھیں...',
-  
+
   familyBriefingTitle: 'خاندان کے لیے آسان رہنمائی',
   routineTitle: 'آج کا 4 مرحلوں پر مشتمل معمول',
   indoorHacksTitle: 'گھریلو اور مفت تدابیر',
@@ -107,22 +108,23 @@ export const UR_TRANSLATIONS: UiTranslations = {
   doneText: 'ہو گیا ✓',
   adoptSwap: 'اپنائیں',
   adoptedText: 'اپنا لیا ✓',
-  
+
   maskGuideTitle: 'ماسک گائیڈ: کون سا ماسک کام کرتا ہے؟',
   n95Works: 'N95 / FFP2 ماسک: باریک زہریلے دھوئیں کو روکتا ہے۔ ناک پر درست فٹ کریں۔',
   n95Tip: '👉 ناک کی پٹی کو دبا کر مکمل بند کریں۔',
   clothFails: 'کپڑے اور سرجیکل ماسک: زہریلے اسموگ ذرات کے خلاف بالکل بے اثر ہیں۔',
   clothTip: '👉 زہریلا دھواں کپڑے کے سوراخوں سے باآسانی گزر جاتا ہے۔',
   seeDoctorTitle: '🚨 فوری طور پر ڈاکٹر کے پاس کب جائیں؟',
-  doctorWarningSymptoms: 'سینے میں شدید درد، سانس لینے میں دشواری، یا ہونٹوں کی نیلاہٹ پر فوری اسپتال جائیں۔',
+  doctorWarningSymptoms:
+    'سینے میں شدید درد، سانس لینے میں دشواری، یا ہونٹوں کی نیلاہٹ پر فوری اسپتال جائیں۔',
   doctorSymptomsList: [
     '⚠️ سانس لینے میں شدید دشواری',
     '⚠️ سینے میں درد یا دباؤ',
     '⚠️ ہونٹوں یا ناخنوں کا نیلا پڑنا',
-    '⚠️ مسلسل کھانسی یا الٹی'
+    '⚠️ مسلسل کھانسی یا الٹی',
   ],
   disclaimerText: 'یہ عمومی معلومات ہے، طبی تشخیص یا دوا کا متبادل نہیں۔',
-  
+
   trackerTitle: 'خاندانی حفاظتی ٹریکر',
   trackerSubtitle: 'لائیو فیملی پروٹیکشن انڈیکس',
   protectionScore: 'حفاظتی اسکور',
@@ -138,12 +140,12 @@ export const UR_TRANSLATIONS: UiTranslations = {
   swapsChecklistTitle: 'صاف ہوا کی عادات',
   realtimeUpdateNote: 'فوری اپ ڈیٹ ہوتا ہے',
   viewFormulaBtn: 'حساب کا طریقہ دیکھیں',
-  
+
   askVayuBtn: 'وایو اسسٹنٹ سے پوچھیں',
   askVayuTitle: 'پوچھیں وایو: فوری مدد',
   askPlaceholder: 'مختصر سوال پوچھیں (مثلاً: کیا بچے پارک جا سکتے ہیں؟)...',
   askContextNotice: '3 مختصر جملوں میں جواب جو ہاں / نہیں / ٹھہریں سے شروع ہوگا۔',
-  
+
   shareCardBtn: 'فیملی کارڈ شیئر کریں',
   copyTextBtn: 'کاپی کریں',
   whatsAppBtn: 'واٹس ایپ پر بھیجیں',

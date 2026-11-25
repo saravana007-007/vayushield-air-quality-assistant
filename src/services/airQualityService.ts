@@ -3,7 +3,12 @@
 
 import { z } from 'zod';
 import type { AirQualityData, HourlyAqiPoint, GeocodingResult } from '../types';
-import { getAqiCategory, calculateWhoMultiplier, calculateBestAirWindow, validateCityInput } from '../utils/aqiCalculator';
+import {
+  getAqiCategory,
+  calculateWhoMultiplier,
+  calculateBestAirWindow,
+  validateCityInput,
+} from '../utils/aqiCalculator';
 import { APP_CONFIG } from '../config';
 
 const GeocodingItemSchema = z.object({
@@ -83,7 +88,7 @@ export const AIR_PRESETS: Record<string, AirQualityData> = {
     cityName: 'Delhi (Severe Smog)',
     country: 'India',
     latitude: 28.6139,
-    longitude: 77.2090,
+    longitude: 77.209,
     timezone: 'Asia/Kolkata',
     currentAqi: 385,
     currentPm25: 320.4,
@@ -135,14 +140,17 @@ export const AIR_PRESETS: Record<string, AirQualityData> = {
 /**
  * Search cities using Open-Meteo Geocoding API
  */
-export async function searchCities(query: string, signal?: AbortSignal): Promise<GeocodingResult[]> {
+export async function searchCities(
+  query: string,
+  signal?: AbortSignal
+): Promise<GeocodingResult[]> {
   const validation = validateCityInput(query);
   if (!validation.isValid) {
     throw new Error(validation.error || 'Invalid city name.');
   }
 
   const url = `${APP_CONFIG.openMeteoGeocodingUrl}?name=${encodeURIComponent(validation.sanitized)}&count=5&language=en&format=json`;
-  
+
   const response = await fetch(url, { signal });
   if (!response.ok) {
     throw new Error(`Location search failed (${response.status}). Check network connection.`);
@@ -202,16 +210,16 @@ export async function fetchLiveAirQuality(
 
   const hourly: HourlyAqiPoint[] = [];
   const now = new Date();
-  
+
   for (let i = 0; i < hourlyTimes.length && hourly.length < 24; i++) {
     const timeStr = hourlyTimes[i];
     if (!timeStr) continue;
     const pointDate = new Date(timeStr);
-    
+
     if (pointDate >= now || i >= hourlyTimes.length - 24) {
       const hours = pointDate.getHours();
       const formattedTime = `${hours.toString().padStart(2, '0')}:00`;
-      
+
       hourly.push({
         time: formattedTime,
         hour: hours,
@@ -224,7 +232,7 @@ export async function fetchLiveAirQuality(
 
   if (hourly.length === 0) {
     const hours = [6, 9, 12, 15, 18, 21];
-    hours.forEach(h => {
+    hours.forEach((h) => {
       hourly.push({
         time: `${h.toString().padStart(2, '0')}:00`,
         hour: h,

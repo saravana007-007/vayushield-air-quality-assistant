@@ -89,7 +89,9 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
       logger.error('PDF generation error:', err);
       // User-friendly fallback: download as plain text if PDF fails
       try {
-        const blob = new Blob([shareText.replace(/[*_]/g, '')], { type: 'text/plain;charset=utf-8' });
+        const blob = new Blob([shareText.replace(/[*_]/g, '')], {
+          type: 'text/plain;charset=utf-8',
+        });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -137,9 +139,7 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
 
         {/* STEP 1: Format Selector Cards */}
         <div className="mb-4">
-          <label className="text-xs font-bold text-slate-700 block mb-2">
-            1. Choose Format:
-          </label>
+          <label className="text-xs font-bold text-slate-700 block mb-2">1. Choose Format:</label>
           <div className="grid grid-cols-3 gap-2">
             <button
               type="button"
@@ -151,7 +151,9 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
               }`}
             >
               <div className="flex items-center justify-between w-full mb-1">
-                <FileText className={`w-4 h-4 ${selectedFormat === 'pdf' ? 'text-sky-600' : 'text-slate-400'}`} />
+                <FileText
+                  className={`w-4 h-4 ${selectedFormat === 'pdf' ? 'text-sky-600' : 'text-slate-400'}`}
+                />
                 {selectedFormat === 'pdf' && <span className="w-2 h-2 rounded-full bg-sky-600" />}
               </div>
               <strong className="text-xs font-bold block">PDF File</strong>
@@ -168,8 +170,12 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
               }`}
             >
               <div className="flex items-center justify-between w-full mb-1">
-                <MessageCircle className={`w-4 h-4 ${selectedFormat === 'whatsapp' ? 'text-emerald-600' : 'text-slate-400'}`} />
-                {selectedFormat === 'whatsapp' && <span className="w-2 h-2 rounded-full bg-emerald-600" />}
+                <MessageCircle
+                  className={`w-4 h-4 ${selectedFormat === 'whatsapp' ? 'text-emerald-600' : 'text-slate-400'}`}
+                />
+                {selectedFormat === 'whatsapp' && (
+                  <span className="w-2 h-2 rounded-full bg-emerald-600" />
+                )}
               </div>
               <strong className="text-xs font-bold block">WhatsApp</strong>
               <span className="text-[10px] text-slate-500 leading-tight">Chat Text</span>
@@ -185,8 +191,12 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
               }`}
             >
               <div className="flex items-center justify-between w-full mb-1">
-                <Copy className={`w-4 h-4 ${selectedFormat === 'text' ? 'text-purple-600' : 'text-slate-400'}`} />
-                {selectedFormat === 'text' && <span className="w-2 h-2 rounded-full bg-purple-600" />}
+                <Copy
+                  className={`w-4 h-4 ${selectedFormat === 'text' ? 'text-purple-600' : 'text-slate-400'}`}
+                />
+                {selectedFormat === 'text' && (
+                  <span className="w-2 h-2 rounded-full bg-purple-600" />
+                )}
               </div>
               <strong className="text-xs font-bold block">Plain Text</strong>
               <span className="text-[10px] text-slate-500 leading-tight">Clipboard</span>
@@ -207,7 +217,9 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
                 <span className="font-bold">Official Formatted PDF Document</span>
               </div>
               <p className="text-[11px] text-slate-600 leading-relaxed">
-                Includes today's AQI ({airData.currentAqi}), safe ventilation window, 4-block inversion routine, and all 4 indoor hacks with no text overlap. Ideal for printing or sending as a WhatsApp document.
+                Includes today's AQI ({airData.currentAqi}), safe ventilation window, 4-block
+                inversion routine, and all 4 indoor hacks with no text overlap. Ideal for printing
+                or sending as a WhatsApp document.
               </p>
             </div>
           )}
@@ -250,9 +262,7 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
           </div>
           <div className="text-right">
             <span className="text-[11px] text-slate-400 block">{t.protectionScore}</span>
-            <span className="text-xl font-black font-display text-emerald-400">
-              {score}%
-            </span>
+            <span className="text-xl font-black font-display text-emerald-400">{score}%</span>
           </div>
         </div>
 
@@ -270,7 +280,8 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
                 {isGeneratingPdf ? t.downloadingPdf : 'Download Clean PDF Document'}
               </button>
               <p className="text-[11px] text-slate-500 text-center">
-                💡 Tip: Once downloaded, you can attach this PDF directly into any WhatsApp chat or email.
+                💡 Tip: Once downloaded, you can attach this PDF directly into any WhatsApp chat or
+                email.
               </p>
             </>
           )}

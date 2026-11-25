@@ -88,9 +88,7 @@ export const ActionPlanView: React.FC<ActionPlanViewProps> = ({
       )}
 
       {/* PLAN TAB: Hero Action, Risk Briefing, 4 Routine Blocks, and Dos & Don'ts */}
-      {activeTab === 'plan' && (
-        <TodayPlanTab plan={plan} currentLang={currentLang} t={t} />
-      )}
+      {activeTab === 'plan' && <TodayPlanTab plan={plan} currentLang={currentLang} t={t} />}
 
       {/* HACKS TAB: Indoor Hacks and Swaps */}
       {activeTab === 'hacks' && (

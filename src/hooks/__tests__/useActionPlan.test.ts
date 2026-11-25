@@ -137,5 +137,7 @@ describe('hooks/useActionPlan', () => {
 });
 
 function resultPlan() {
-  return AIR_PRESETS['delhi-severe'] ? { ...geminiService.getCachedPlan()?.plan ?? {} as ActionPlan } : {} as ActionPlan;
+  return AIR_PRESETS['delhi-severe']
+    ? { ...(geminiService.getCachedPlan()?.plan ?? ({} as ActionPlan)) }
+    : ({} as ActionPlan);
 }

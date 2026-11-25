@@ -73,7 +73,9 @@ describe('components/AskVayuDrawer', () => {
   });
 
   it('clicks quick question chip to trigger answer', async () => {
-    vi.spyOn(geminiService, 'askVayu').mockResolvedValueOnce('No, cloth masks do not filter PM2.5.');
+    vi.spyOn(geminiService, 'askVayu').mockResolvedValueOnce(
+      'No, cloth masks do not filter PM2.5.'
+    );
 
     render(
       <AskVayuDrawer

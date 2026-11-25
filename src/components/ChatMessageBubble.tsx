@@ -16,7 +16,9 @@ export const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({ message, c
   const isBot = message.role === 'model';
 
   return (
-    <div className={`flex items-start space-x-2.5 ${isBot ? '' : 'flex-row-reverse space-x-reverse'}`}>
+    <div
+      className={`flex items-start space-x-2.5 ${isBot ? '' : 'flex-row-reverse space-x-reverse'}`}
+    >
       <div
         className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 text-xs ${
           isBot ? 'bg-sky-100 text-sky-800' : 'bg-slate-800 text-white'

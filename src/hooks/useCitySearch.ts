@@ -77,7 +77,8 @@ export function useCitySearch({ onSelectResult }: UseCitySearchOptions) {
         if (err instanceof DOMException && err.name === 'AbortError') {
           return;
         }
-        const message = err instanceof Error ? err.message : 'Location lookup failed. Check connection.';
+        const message =
+          err instanceof Error ? err.message : 'Location lookup failed. Check connection.';
         setSearchError(message);
         setResults([]);
       } finally {

@@ -277,7 +277,10 @@ describe('Zod Schema Validation for Gemini Output', () => {
   it('fails validation when oneThingToDo is missing', () => {
     const validPlan = DEMO_PLANS['delhi-severe'];
     if (!validPlan) throw new Error('Plan not found');
-    const { oneThingToDo: _removed, ...invalidPlan } = validPlan as unknown as Record<string, unknown>;
+    const { oneThingToDo: _removed, ...invalidPlan } = validPlan as unknown as Record<
+      string,
+      unknown
+    >;
     const result = ActionPlanSchema.safeParse(invalidPlan);
     expect(result.success).toBe(false);
   });

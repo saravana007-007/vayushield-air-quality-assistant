@@ -1,12 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { getErrorMessage } from '../errors';
 import { logger } from '../logger';
-import {
-  getStorageItem,
-  setStorageItem,
-  removeStorageItem,
-  getStorageString,
-} from '../storage';
+import { getStorageItem, setStorageItem, removeStorageItem, getStorageString } from '../storage';
 
 describe('utils/errors', () => {
   it('extracts message from standard Error instance', () => {

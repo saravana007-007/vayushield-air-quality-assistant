@@ -17,13 +17,14 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const activeLangMeta = SUPPORTED_LANGUAGES.find((l) => l.code === currentLang) ?? SUPPORTED_LANGUAGES[0] ?? {
-    code: 'en' as const,
-    nativeName: 'English',
-    englishName: 'English',
-    dir: 'ltr' as const,
-    speechLang: 'en-US',
-  };
+  const activeLangMeta = SUPPORTED_LANGUAGES.find((l) => l.code === currentLang) ??
+    SUPPORTED_LANGUAGES[0] ?? {
+      code: 'en' as const,
+      nativeName: 'English',
+      englishName: 'English',
+      dir: 'ltr' as const,
+      speechLang: 'en-US',
+    };
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
@@ -53,8 +54,12 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = ({
       >
         <Globe className="w-3.5 h-3.5 text-sky-600 shrink-0" />
         <span className="font-semibold">{activeLangMeta.nativeName}</span>
-        <span className="text-[10px] text-slate-400 hidden xs:inline">({activeLangMeta.englishName})</span>
-        <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <span className="text-[10px] text-slate-400 hidden xs:inline">
+          ({activeLangMeta.englishName})
+        </span>
+        <ChevronDown
+          className={`w-3.5 h-3.5 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+        />
       </button>
 
       {/* ListView Dropdown Overlay */}

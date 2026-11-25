@@ -8,11 +8,7 @@ export {
   formatHour12,
 } from './aqiCategories';
 
-export {
-  calculateBestAirWindow,
-  validateCityInput,
-  validateAqi,
-} from './aqiWindow';
+export { calculateBestAirWindow, validateCityInput, validateAqi } from './aqiWindow';
 
 export {
   type ScoreWeightsBreakdown,

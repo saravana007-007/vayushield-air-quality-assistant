@@ -126,7 +126,8 @@ export const GEMINI_RESPONSE_SCHEMA: Schema = {
           },
           customReason: {
             type: Type.STRING,
-            description: 'Personalized explanation why this swap protects this specific household today.',
+            description:
+              'Personalized explanation why this swap protects this specific household today.',
           },
         },
         required: ['catalogId', 'customReason'],
@@ -143,5 +144,13 @@ export const GEMINI_RESPONSE_SCHEMA: Schema = {
       items: { type: Type.STRING },
     },
   },
-  required: ['oneThingToDo', 'familyRiskBriefing', 'dailyRoutine', 'indoorHacks', 'swaps', 'dos', 'donts'],
+  required: [
+    'oneThingToDo',
+    'familyRiskBriefing',
+    'dailyRoutine',
+    'indoorHacks',
+    'swaps',
+    'dos',
+    'donts',
+  ],
 };

@@ -87,11 +87,14 @@ export function calculateExposureReduction(
 
   let personalExposureNotes = '';
   if (reductionPercentage >= 80) {
-    personalExposureNotes = 'Optimal protection: Indoor air is effectively isolated from severe outdoor smog.';
+    personalExposureNotes =
+      'Optimal protection: Indoor air is effectively isolated from severe outdoor smog.';
   } else if (reductionPercentage >= 60) {
-    personalExposureNotes = 'Moderate protection: Good baseline; complete checklist swaps to seal leaks.';
+    personalExposureNotes =
+      'Moderate protection: Good baseline; complete checklist swaps to seal leaks.';
   } else {
-    personalExposureNotes = 'Elevated exposure risk: Significant outdoor particulate infiltrating indoor zones.';
+    personalExposureNotes =
+      'Elevated exposure risk: Significant outdoor particulate infiltrating indoor zones.';
   }
 
   return {

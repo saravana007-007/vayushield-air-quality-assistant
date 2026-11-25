@@ -39,8 +39,12 @@ export const WhenWillItGetBetter: React.FC<WhenWillItGetBetterProps> = ({ bestWi
   const localizedSentence = bestWindow.stayIndoorsAllDay
     ? t.stayIndoorsAllDay
     : t.bestTimeSentence
-    ? t.bestTimeSentence(bestWindow.startTime, bestWindow.endTime, bestWindow.worseAfterTime || '5 PM')
-    : bestWindow.plainSentence;
+      ? t.bestTimeSentence(
+          bestWindow.startTime,
+          bestWindow.endTime,
+          bestWindow.worseAfterTime || '5 PM'
+        )
+      : bestWindow.plainSentence;
 
   // Localized countdown
   let localizedCountdown = bestWindow.countdownText;
@@ -68,7 +72,10 @@ export const WhenWillItGetBetter: React.FC<WhenWillItGetBetterProps> = ({ bestWi
             ) : (
               <Sun className="w-5 h-5 text-emerald-600 shrink-0" aria-hidden="true" />
             )}
-            <h3 id="when-better-title" className="text-base sm:text-lg font-bold font-display text-slate-900">
+            <h3
+              id="when-better-title"
+              className="text-base sm:text-lg font-bold font-display text-slate-900"
+            >
               {t.bestTimeTitle}
             </h3>
           </div>

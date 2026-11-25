@@ -1,9 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import {
-  searchCities,
-  fetchLiveAirQuality,
-  AIR_PRESETS,
-} from '../airQualityService';
+import { searchCities, fetchLiveAirQuality, AIR_PRESETS } from '../airQualityService';
 
 describe('services/airQualityService', () => {
   beforeEach(() => {

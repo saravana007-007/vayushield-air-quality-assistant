@@ -1,7 +1,19 @@
 import React from 'react';
 import type { HouseholdProfile, HouseholdTag, StoveType, CommuteMode } from '../types';
 import type { UiTranslations } from '../i18n';
-import { Baby, Users, HeartPulse, Bike, Home, Wind, Flame, Compass, RefreshCw, PlusCircle, Edit3 } from 'lucide-react';
+import {
+  Baby,
+  Users,
+  HeartPulse,
+  Bike,
+  Home,
+  Wind,
+  Flame,
+  Compass,
+  RefreshCw,
+  PlusCircle,
+  Edit3,
+} from 'lucide-react';
 
 interface HouseholdProfileFormProps {
   profile: HouseholdProfile;
@@ -22,9 +34,7 @@ export const HouseholdProfileForm: React.FC<HouseholdProfileFormProps> = ({
 }) => {
   const toggleTag = (tag: HouseholdTag) => {
     const exists = profile.tags.includes(tag);
-    const updatedTags = exists
-      ? profile.tags.filter((tId) => tId !== tag)
-      : [...profile.tags, tag];
+    const updatedTags = exists ? profile.tags.filter((tId) => tId !== tag) : [...profile.tags, tag];
     onChangeProfile({
       ...profile,
       tags: updatedTags,
@@ -44,7 +54,12 @@ export const HouseholdProfileForm: React.FC<HouseholdProfileFormProps> = ({
     });
   };
 
-  const tagList: { id: HouseholdTag; label: string; icon: React.FC<{ className?: string }>; emoji: string }[] = [
+  const tagList: {
+    id: HouseholdTag;
+    label: string;
+    icon: React.FC<{ className?: string }>;
+    emoji: string;
+  }[] = [
     { id: 'toddler_kids', label: t.toddlersLabel, icon: Baby, emoji: '👶' },
     { id: 'elderly', label: t.elderlyLabel, icon: Users, emoji: '👵' },
     { id: 'asthma_respiratory', label: t.asthmaLabel, icon: HeartPulse, emoji: '🫁' },
@@ -60,12 +75,13 @@ export const HouseholdProfileForm: React.FC<HouseholdProfileFormProps> = ({
     >
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-slate-100 gap-3">
         <div>
-          <h2 id="profile-form-title" className="text-lg sm:text-xl font-bold font-display text-slate-900">
+          <h2
+            id="profile-form-title"
+            className="text-lg sm:text-xl font-bold font-display text-slate-900"
+          >
             {t.profileTitle}
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            {t.profileSubtitle}
-          </p>
+          <p className="text-xs sm:text-sm text-slate-500">{t.profileSubtitle}</p>
         </div>
 
         <button
@@ -74,7 +90,10 @@ export const HouseholdProfileForm: React.FC<HouseholdProfileFormProps> = ({
           disabled={isLoading}
           className="inline-flex items-center justify-center px-5 py-3 rounded-2xl font-bold text-sm text-white bg-slate-900 hover:bg-slate-800 disabled:bg-slate-400 transition-colors shadow-sm focus:ring-2 focus:ring-sky-500 shrink-0"
         >
-          <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} aria-hidden="true" />
+          <RefreshCw
+            className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`}
+            aria-hidden="true"
+          />
           {isLoading ? t.loadingPlan : t.updatePlanBtn}
         </button>
       </div>
@@ -132,7 +151,10 @@ export const HouseholdProfileForm: React.FC<HouseholdProfileFormProps> = ({
         {/* Custom "Other" Condition Input Box (Expands when "other" tag is selected) */}
         {profile.tags.includes('other') && (
           <div className="mt-3.5 p-3.5 bg-sky-50/70 border border-sky-200 rounded-2xl animate-fadeIn">
-            <label htmlFor="custom-condition-input" className="block text-xs font-bold text-sky-950 mb-1 flex items-center">
+            <label
+              htmlFor="custom-condition-input"
+              className="block text-xs font-bold text-sky-950 mb-1 flex items-center"
+            >
               <Edit3 className="w-3.5 h-3.5 mr-1.5 text-sky-600" />
               <span>Describe other member or health vulnerability:</span>
             </label>

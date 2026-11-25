@@ -52,17 +52,18 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
 
   if (!isOpen) return null;
 
-  const chips = currentLang === 'hi'
-    ? [
-        'क्या शाम को बच्चे पार्क जा सकते हैं?',
-        'खाना बनाते समय खिड़की खोलें या बंद रखें?',
-        'क्या कपड़े का मास्क स्मॉग से बचाता है?',
-      ]
-    : [
-        'Can my toddler play in the park at 4 PM?',
-        'Should I open the windows while cooking?',
-        'Is a double cloth mask enough for my walk?',
-      ];
+  const chips =
+    currentLang === 'hi'
+      ? [
+          'क्या शाम को बच्चे पार्क जा सकते हैं?',
+          'खाना बनाते समय खिड़की खोलें या बंद रखें?',
+          'क्या कपड़े का मास्क स्मॉग से बचाता है?',
+        ]
+      : [
+          'Can my toddler play in the park at 4 PM?',
+          'Should I open the windows while cooking?',
+          'Is a double cloth mask enough for my walk?',
+        ];
 
   return (
     <div
@@ -80,12 +81,17 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
               <Bot className="w-5 h-5" />
             </div>
             <div>
-              <h2 id="ask-vayu-drawer-title" className="text-base font-bold font-display text-slate-900">
+              <h2
+                id="ask-vayu-drawer-title"
+                className="text-base font-bold font-display text-slate-900"
+              >
                 {t.askVayuTitle}
               </h2>
               <div className="flex items-center space-x-1.5 text-xs text-slate-500">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>{airData.cityName} (AQI {airData.currentAqi})</span>
+                <span>
+                  {airData.cityName} (AQI {airData.currentAqi})
+                </span>
               </div>
             </div>
           </div>
@@ -185,9 +191,7 @@ export const AskVayuDrawer: React.FC<AskVayuDrawerProps> = ({
               <Send className="w-4 h-4" />
             </button>
           </div>
-          <p className="text-[10px] text-slate-400 text-center mt-1.5">
-            {t.askContextNotice}
-          </p>
+          <p className="text-[10px] text-slate-400 text-center mt-1.5">{t.askContextNotice}</p>
         </form>
       </div>
     </div>

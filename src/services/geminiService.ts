@@ -55,7 +55,9 @@ export async function generateActionPlan(
     if (typeof window !== 'undefined' && typeof window.fetch === 'function') {
       try {
         onStatusUpdate?.('Connecting to secure VayuShield proxy...');
-        const customCondition = profile.customTagDetails ? profile.customTagDetails.slice(0, 200) : undefined;
+        const customCondition = profile.customTagDetails
+          ? profile.customTagDetails.slice(0, 200)
+          : undefined;
         const proxyRes = await fetch('/api/gemini', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -74,7 +76,10 @@ export async function generateActionPlan(
             const fullPlan: ActionPlan = {
               ...validatedPlan,
               isDemo: false,
-              generatedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              generatedAt: new Date().toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              }),
               language: lang,
             };
             saveCachedPlan(fullPlan, airData);

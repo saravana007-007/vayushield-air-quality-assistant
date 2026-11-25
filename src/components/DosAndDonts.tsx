@@ -16,7 +16,10 @@ export const DosAndDonts: React.FC<DosAndDontsProps> = ({ dos, donts, t }) => {
   return (
     <section aria-labelledby="dos-donts-title" className="space-y-4">
       <div>
-        <h3 id="dos-donts-title" className="text-lg sm:text-xl font-bold font-display text-slate-900">
+        <h3
+          id="dos-donts-title"
+          className="text-lg sm:text-xl font-bold font-display text-slate-900"
+        >
           {t.dosAndDontsTitle}
         </h3>
         <p className="text-xs sm:text-sm text-slate-500">
@@ -34,7 +37,10 @@ export const DosAndDonts: React.FC<DosAndDontsProps> = ({ dos, donts, t }) => {
           <ul className="space-y-2.5 text-xs sm:text-sm text-emerald-950 font-medium">
             {dos.map((item) => (
               <li key={item} className="flex items-start space-x-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" aria-hidden="true" />
+                <CheckCircle2
+                  className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"
+                  aria-hidden="true"
+                />
                 <span>{item}</span>
               </li>
             ))}

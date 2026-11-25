@@ -103,7 +103,11 @@ export function calculateBestAirWindow(
 /**
  * Input validation for City string.
  */
-export function validateCityInput(city: unknown): { isValid: boolean; sanitized: string; error?: string } {
+export function validateCityInput(city: unknown): {
+  isValid: boolean;
+  sanitized: string;
+  error?: string;
+} {
   if (typeof city !== 'string') {
     return { isValid: false, sanitized: '', error: 'City name must be a text string.' };
   }
@@ -114,11 +118,19 @@ export function validateCityInput(city: unknown): { isValid: boolean; sanitized:
   }
 
   if (trimmed.length < 2) {
-    return { isValid: false, sanitized: trimmed, error: 'City name must be at least 2 characters long.' };
+    return {
+      isValid: false,
+      sanitized: trimmed,
+      error: 'City name must be at least 2 characters long.',
+    };
   }
 
   if (trimmed.length > 80) {
-    return { isValid: false, sanitized: trimmed.substring(0, 80), error: 'City name cannot exceed 80 characters.' };
+    return {
+      isValid: false,
+      sanitized: trimmed.substring(0, 80),
+      error: 'City name cannot exceed 80 characters.',
+    };
   }
 
   const sanitized = trimmed.replace(/[<>'"`;/\\]/g, '').trim();
@@ -142,7 +154,11 @@ export function validateAqi(aqi: unknown): { isValid: boolean; aqi: number; erro
   }
 
   if (aqi > 1000) {
-    return { isValid: false, aqi: 1000, error: 'AQI value exceeds maximum plausible index (1000).' };
+    return {
+      isValid: false,
+      aqi: 1000,
+      error: 'AQI value exceeds maximum plausible index (1000).',
+    };
   }
 
   return { isValid: true, aqi: Math.round(aqi) };

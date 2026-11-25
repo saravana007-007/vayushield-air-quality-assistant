@@ -50,7 +50,8 @@ export const AQI_CATEGORIES: Record<AqiCategoryKey, AqiCategoryInfo> = {
     bgLightClass: 'bg-amber-50',
     borderClass: 'border-amber-200',
     textClass: 'text-amber-800',
-    actionSummary: 'Unsafe for toddlers, elderly, and people with cough or asthma. Keep windows closed.',
+    actionSummary:
+      'Unsafe for toddlers, elderly, and people with cough or asthma. Keep windows closed.',
     maskRecommendation: 'N95 respirator advised for outdoor activities for vulnerable members.',
   },
   unhealthy: {
@@ -98,7 +99,8 @@ export const AQI_CATEGORIES: Record<AqiCategoryKey, AqiCategoryInfo> = {
     bgLightClass: 'bg-purple-50',
     borderClass: 'border-purple-200',
     textClass: 'text-purple-950',
-    actionSummary: 'Severe toxic catastrophe. Air penetrates deep into lung alveoli. Strict indoor quarantine.',
+    actionSummary:
+      'Severe toxic catastrophe. Air penetrates deep into lung alveoli. Strict indoor quarantine.',
     maskRecommendation: 'Strict N95/FFP2 with unbroken seal. Avoid opening doors.',
   },
 };

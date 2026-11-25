@@ -78,10 +78,20 @@ const ActionPlanResponseSchema: Schema = {
     },
     communityImpactNote: { type: Type.STRING },
   },
-  required: ['oneThingToDo', 'urgentActions', 'swaps', 'timeline', 'roomShield', 'communityImpactNote'],
+  required: [
+    'oneThingToDo',
+    'urgentActions',
+    'swaps',
+    'timeline',
+    'roomShield',
+    'communityImpactNote',
+  ],
 };
 
-export default async function handler(req: ServerlessRequest, res: ServerlessResponse): Promise<void> {
+export default async function handler(
+  req: ServerlessRequest,
+  res: ServerlessResponse
+): Promise<void> {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method Not Allowed' });
     return;
@@ -126,7 +136,8 @@ export default async function handler(req: ServerlessRequest, res: ServerlessRes
     }
     const question = rawQuestion.trim().slice(0, MAX_QUESTION_LENGTH);
     const prompt = typeof payload.prompt === 'string' ? payload.prompt : question;
-    const systemInstruction = typeof payload.systemInstruction === 'string' ? payload.systemInstruction : undefined;
+    const systemInstruction =
+      typeof payload.systemInstruction === 'string' ? payload.systemInstruction : undefined;
 
     try {
       const response = await ai.models.generateContent({
@@ -154,12 +165,18 @@ export default async function handler(req: ServerlessRequest, res: ServerlessRes
     }
 
     // Sanitize custom condition if present
-    if (typeof payload.customCondition === 'string' && payload.customCondition.length > MAX_CONDITION_LENGTH) {
-      res.status(400).json({ error: `Custom condition exceeds ${MAX_CONDITION_LENGTH} characters.` });
+    if (
+      typeof payload.customCondition === 'string' &&
+      payload.customCondition.length > MAX_CONDITION_LENGTH
+    ) {
+      res
+        .status(400)
+        .json({ error: `Custom condition exceeds ${MAX_CONDITION_LENGTH} characters.` });
       return;
     }
 
-    const systemInstruction = typeof payload.systemInstruction === 'string' ? payload.systemInstruction : undefined;
+    const systemInstruction =
+      typeof payload.systemInstruction === 'string' ? payload.systemInstruction : undefined;
 
     try {
       const response = await ai.models.generateContent({

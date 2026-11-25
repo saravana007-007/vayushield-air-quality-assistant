@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -39,13 +36,13 @@ export default {
         slate: {
           850: '#15202B',
           900: '#0F172A',
-        }
+        },
       },
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
         display: ['Outfit', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
-      }
+      },
     },
   },
   plugins: [],
-}
+};

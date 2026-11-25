@@ -56,11 +56,10 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
             <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto">
               <ShieldAlert className="w-6 h-6" aria-hidden="true" />
             </div>
-            <h1 className="text-xl font-bold font-display text-slate-900">
-              Something went wrong
-            </h1>
+            <h1 className="text-xl font-bold font-display text-slate-900">Something went wrong</h1>
             <p className="text-sm text-slate-600 leading-relaxed">
-              VayuShield ran into an unexpected display issue. Your saved household preferences are safe.
+              VayuShield ran into an unexpected display issue. Your saved household preferences are
+              safe.
             </p>
             {this.state.errorMessage && (
               <p className="text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 break-words">

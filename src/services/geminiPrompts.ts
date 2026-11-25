@@ -38,17 +38,20 @@ Provide a unique, customized "customReason" for each chosen swap in ${targetLang
  * Build the prompt for generating a personalized household action plan.
  */
 export function buildActionPlanPrompt(airData: AirQualityData, profile: HouseholdProfile): string {
-  const customTagInfo = profile.tags.includes('other') && profile.customTagDetails
-    ? `Custom vulnerability: ${profile.customTagDetails}`
-    : '';
+  const customTagInfo =
+    profile.tags.includes('other') && profile.customTagDetails
+      ? `Custom vulnerability: ${profile.customTagDetails}`
+      : '';
 
-  const customStoveInfo = profile.setup.stoveType === 'other' && profile.setup.customStove
-    ? `Custom Stove: ${profile.setup.customStove}`
-    : `Stove: ${profile.setup.stoveType.toUpperCase()}`;
+  const customStoveInfo =
+    profile.setup.stoveType === 'other' && profile.setup.customStove
+      ? `Custom Stove: ${profile.setup.customStove}`
+      : `Stove: ${profile.setup.stoveType.toUpperCase()}`;
 
-  const customCommuteInfo = profile.setup.commuteMode === 'other' && profile.setup.customCommute
-    ? `Custom Commute: ${profile.setup.customCommute}`
-    : `Commute Mode: ${profile.setup.commuteMode.replace('_', ' ').toUpperCase()}`;
+  const customCommuteInfo =
+    profile.setup.commuteMode === 'other' && profile.setup.customCommute
+      ? `Custom Commute: ${profile.setup.customCommute}`
+      : `Commute Mode: ${profile.setup.commuteMode.replace('_', ' ').toUpperCase()}`;
 
   return `Generate a personalized Smog Protection Action Plan for this household:
 LOCATION: ${airData.cityName} (${airData.country || ''})

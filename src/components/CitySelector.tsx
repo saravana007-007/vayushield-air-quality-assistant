@@ -69,7 +69,9 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
       (err) => {
         setIsLocating(false);
         logger.warn('Geolocation error:', err);
-        alert('Could not access your location. Please check browser permissions or type your city.');
+        alert(
+          'Could not access your location. Please check browser permissions or type your city.'
+        );
       },
       { timeout: 10000 }
     );
@@ -158,12 +160,17 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
                   onClick={() => handleSelectHit(hit)}
                   onMouseEnter={() => setActiveIndex(idx)}
                   className={`px-4 py-2.5 cursor-pointer flex items-center justify-between text-sm transition-colors ${
-                    activeIndex === idx ? 'bg-sky-50 text-sky-900 font-semibold' : 'text-slate-800 hover:bg-slate-50'
+                    activeIndex === idx
+                      ? 'bg-sky-50 text-sky-900 font-semibold'
+                      : 'text-slate-800 hover:bg-slate-50'
                   }`}
                 >
                   <div className="flex items-center space-x-2.5">
                     <MapPin className="w-4 h-4 text-slate-400 shrink-0" aria-hidden="true" />
-                    <span>{hit.name}{hit.admin1 ? `, ${hit.admin1}` : ''}</span>
+                    <span>
+                      {hit.name}
+                      {hit.admin1 ? `, ${hit.admin1}` : ''}
+                    </span>
                   </div>
                   <span className="text-xs text-slate-400 font-normal">{hit.country}</span>
                 </li>

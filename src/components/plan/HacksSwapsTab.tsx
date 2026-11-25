@@ -27,7 +27,10 @@ export const HacksSwapsTab: React.FC<HacksSwapsTabProps> = ({
       <section aria-labelledby="hacks-heading" className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 id="hacks-heading" className="text-lg sm:text-xl font-bold font-display text-slate-900">
+            <h3
+              id="hacks-heading"
+              className="text-lg sm:text-xl font-bold font-display text-slate-900"
+            >
               {t.indoorHacksTitle}
             </h3>
             <p className="text-xs sm:text-sm text-slate-500">
@@ -54,14 +57,10 @@ export const HacksSwapsTab: React.FC<HacksSwapsTabProps> = ({
                     <span className="text-xs font-bold text-sky-700 bg-sky-50 px-2.5 py-0.5 rounded-lg border border-sky-200">
                       {hack.targetArea}
                     </span>
-                    <span className="text-xs text-slate-500 font-semibold">
-                      {hack.difficulty}
-                    </span>
+                    <span className="text-xs text-slate-500 font-semibold">{hack.difficulty}</span>
                   </div>
 
-                  <h4 className="text-base font-bold text-slate-900 mb-2">
-                    {hack.title}
-                  </h4>
+                  <h4 className="text-base font-bold text-slate-900 mb-2">{hack.title}</h4>
 
                   <ol className="list-decimal list-inside space-y-1.5 text-xs text-slate-600 mb-4">
                     {hack.steps.map((step) => (
@@ -87,7 +86,7 @@ export const HacksSwapsTab: React.FC<HacksSwapsTabProps> = ({
                         : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
                     }`}
                   >
-                    {isDone ? (t.doneText || 'Done ✓') : (t.markDone || 'Mark Done')}
+                    {isDone ? t.doneText || 'Done ✓' : t.markDone || 'Mark Done'}
                   </button>
                 </div>
               </article>
@@ -100,7 +99,10 @@ export const HacksSwapsTab: React.FC<HacksSwapsTabProps> = ({
       <section aria-labelledby="swaps-heading" className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 id="swaps-heading" className="text-lg sm:text-xl font-bold font-display text-slate-900">
+            <h3
+              id="swaps-heading"
+              className="text-lg sm:text-xl font-bold font-display text-slate-900"
+            >
               {t.swapsTitle}
             </h3>
             <p className="text-xs sm:text-sm text-slate-500">
@@ -160,7 +162,7 @@ export const HacksSwapsTab: React.FC<HacksSwapsTabProps> = ({
                         : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
                     }`}
                   >
-                    {isDone ? (t.adoptedText || 'Adopted ✓') : (t.adoptSwap || 'Adopt Swap')}
+                    {isDone ? t.adoptedText || 'Adopted ✓' : t.adoptSwap || 'Adopt Swap'}
                   </button>
                 </div>
               </article>

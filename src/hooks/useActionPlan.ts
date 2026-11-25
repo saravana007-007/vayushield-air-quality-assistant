@@ -13,14 +13,21 @@ export interface UseActionPlanResult {
   errorBanner: string | null;
   cachedNotice: string | null;
   dismissCachedNotice: () => void;
-  generatePlan: (airData: AirQualityData, profile: HouseholdProfile, lang: SupportedLanguage, t: UiTranslations) => Promise<void>;
+  generatePlan: (
+    airData: AirQualityData,
+    profile: HouseholdProfile,
+    lang: SupportedLanguage,
+    t: UiTranslations
+  ) => Promise<void>;
   setPlanDirectly: (plan: ActionPlan, isDemo: boolean) => void;
   syncPlanForLanguage: (aqi: number, cityName: string, lang: SupportedLanguage) => void;
   setErrorBanner: (error: string | null) => void;
 }
 
 export function useActionPlan(): UseActionPlanResult {
-  const [plan, setPlan] = useState<ActionPlan>(() => DEMO_PLANS['delhi-severe'] ?? Object.values(DEMO_PLANS)[0]!);
+  const [plan, setPlan] = useState<ActionPlan>(
+    () => DEMO_PLANS['delhi-severe'] ?? Object.values(DEMO_PLANS)[0]!
+  );
   const [isDemo, setIsDemo] = useState<boolean>(true);
   const [isLoadingPlan, setIsLoadingPlan] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<string>('');

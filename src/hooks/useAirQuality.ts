@@ -9,11 +9,18 @@ export interface UseAirQualityResult {
   isLoadingAir: boolean;
   airError: string | null;
   selectPreset: (presetKey: string) => AirQualityData | null;
-  selectLocation: (name: string, lat: number, lon: number, country?: string) => Promise<AirQualityData | null>;
+  selectLocation: (
+    name: string,
+    lat: number,
+    lon: number,
+    country?: string
+  ) => Promise<AirQualityData | null>;
 }
 
 export function useAirQuality(): UseAirQualityResult {
-  const [airData, setAirData] = useState<AirQualityData>(() => AIR_PRESETS['delhi-severe'] ?? Object.values(AIR_PRESETS)[0]!);
+  const [airData, setAirData] = useState<AirQualityData>(
+    () => AIR_PRESETS['delhi-severe'] ?? Object.values(AIR_PRESETS)[0]!
+  );
   const [activePresetId, setActivePresetId] = useState<string>('delhi-severe');
   const [isLoadingAir, setIsLoadingAir] = useState<boolean>(false);
   const [airError, setAirError] = useState<string | null>(null);
@@ -29,7 +36,12 @@ export function useAirQuality(): UseAirQualityResult {
   }, []);
 
   const selectLocation = useCallback(
-    async (name: string, lat: number, lon: number, country?: string): Promise<AirQualityData | null> => {
+    async (
+      name: string,
+      lat: number,
+      lon: number,
+      country?: string
+    ): Promise<AirQualityData | null> => {
       setIsLoadingAir(true);
       setAirError(null);
       setActivePresetId('');

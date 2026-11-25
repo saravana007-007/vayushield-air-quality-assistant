@@ -47,15 +47,18 @@ interface WindowWithSpeechRecognition extends Window {
 
 export function isSpeechSynthesisSupported(): boolean {
   if (typeof window === 'undefined') return false;
-  const synth = (window as unknown as { speechSynthesis?: { cancel?: () => void } }).speechSynthesis;
+  const synth = (window as unknown as { speechSynthesis?: { cancel?: () => void } })
+    .speechSynthesis;
   return Boolean(synth) && typeof synth?.cancel === 'function';
 }
 
 export function isSpeechRecognitionSupported(): boolean {
   return (
     typeof window !== 'undefined' &&
-    (('SpeechRecognition' in window && Boolean((window as unknown as WindowWithSpeechRecognition).SpeechRecognition)) ||
-      ('webkitSpeechRecognition' in window && Boolean((window as unknown as WindowWithSpeechRecognition).webkitSpeechRecognition)))
+    (('SpeechRecognition' in window &&
+      Boolean((window as unknown as WindowWithSpeechRecognition).SpeechRecognition)) ||
+      ('webkitSpeechRecognition' in window &&
+        Boolean((window as unknown as WindowWithSpeechRecognition).webkitSpeechRecognition)))
   );
 }
 

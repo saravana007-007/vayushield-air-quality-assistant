@@ -8,9 +8,15 @@ import { ActionTracker } from './components/ActionTracker';
 import { ActionPlanView } from './components/ActionPlanView';
 import { Calendar, Lightbulb, Users, ShieldAlert, ArrowRight } from 'lucide-react';
 
-const AskVayuDrawer = React.lazy(() => import('./components/AskVayuDrawer').then(m => ({ default: m.AskVayuDrawer })));
-const ShareCardModal = React.lazy(() => import('./components/ShareCardModal').then(m => ({ default: m.ShareCardModal })));
-const ScoreHelpModal = React.lazy(() => import('./components/ScoreHelpModal').then(m => ({ default: m.ScoreHelpModal })));
+const AskVayuDrawer = React.lazy(() =>
+  import('./components/AskVayuDrawer').then((m) => ({ default: m.AskVayuDrawer }))
+);
+const ShareCardModal = React.lazy(() =>
+  import('./components/ShareCardModal').then((m) => ({ default: m.ShareCardModal }))
+);
+const ScoreHelpModal = React.lazy(() =>
+  import('./components/ScoreHelpModal').then((m) => ({ default: m.ScoreHelpModal }))
+);
 
 import type { HouseholdProfile } from './types';
 import { DEMO_PLANS } from './data/demoPlans';
@@ -25,7 +31,8 @@ type ActiveTab = 'plan' | 'hacks' | 'setup' | 'safety';
 export const App: React.FC = () => {
   const { currentLang, t, setLanguage } = useLanguage();
   const { textSize, setTextSize, textSizeClass } = useTextSize();
-  const { airData, activePresetId, isLoadingAir, airError, selectPreset, selectLocation } = useAirQuality();
+  const { airData, activePresetId, isLoadingAir, airError, selectPreset, selectLocation } =
+    useAirQuality();
   const {
     plan,
     isDemo,
@@ -118,7 +125,9 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col bg-[#F8FAFC] text-slate-800 antialiased selection:bg-sky-500 selection:text-white ${textSizeClass}`}>
+    <div
+      className={`min-h-screen flex flex-col bg-[#F8FAFC] text-slate-800 antialiased selection:bg-sky-500 selection:text-white ${textSizeClass}`}
+    >
       <Header
         isDemo={isDemo}
         currentLang={currentLang}
@@ -135,11 +144,18 @@ export const App: React.FC = () => {
         {statusMessage || (isLoadingPlan ? t.loadingPlan : '')}
       </div>
 
-      <main id="main-content" className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 space-y-6">
+      <main
+        id="main-content"
+        className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 space-y-6"
+      >
         {cachedNotice && (
           <div className="px-4 py-2.5 rounded-2xl bg-slate-100 text-slate-600 border border-slate-200 text-xs font-semibold flex items-center justify-between">
             <span>{cachedNotice}</span>
-            <button onClick={dismissCachedNotice} className="text-slate-400 hover:text-slate-700 ml-2" aria-label="Dismiss notice">
+            <button
+              onClick={dismissCachedNotice}
+              className="text-slate-400 hover:text-slate-700 ml-2"
+              aria-label="Dismiss notice"
+            >
               ✕
             </button>
           </div>
@@ -182,7 +198,9 @@ export const App: React.FC = () => {
               tabIndex={activeTab === id ? 0 : -1}
               onClick={() => setActiveTab(id)}
               className={`flex-1 min-w-[120px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500 ${
-                activeTab === id ? 'bg-sky-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                activeTab === id
+                  ? 'bg-sky-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               <Icon className="w-4 h-4 shrink-0" />
@@ -212,7 +230,9 @@ export const App: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-sm text-slate-900">Customized for your family</h4>
-                  <p className="text-xs text-slate-500">Add toddlers, elderly parents, or specify stove & commute in Family Setup.</p>
+                  <p className="text-xs text-slate-500">
+                    Add toddlers, elderly parents, or specify stove & commute in Family Setup.
+                  </p>
                 </div>
               </div>
               <button
@@ -228,7 +248,12 @@ export const App: React.FC = () => {
         )}
 
         {activeTab === 'hacks' && (
-          <div id="panel-hacks" role="tabpanel" aria-labelledby="tab-hacks" className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
+          <div
+            id="panel-hacks"
+            role="tabpanel"
+            aria-labelledby="tab-hacks"
+            className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-start"
+          >
             <div className="lg:col-span-2 space-y-6">
               <ActionPlanView
                 plan={plan}
@@ -258,7 +283,9 @@ export const App: React.FC = () => {
               <div className="bg-gradient-to-r from-sky-600 to-teal-600 rounded-3xl p-5 sm:p-6 text-white shadow-sm flex items-center justify-between">
                 <div>
                   <h3 className="font-bold font-display text-sm sm:text-base">{t.shareCardBtn}</h3>
-                  <p className="text-xs text-sky-100 mt-0.5">Export plan as PDF or WhatsApp format.</p>
+                  <p className="text-xs text-sky-100 mt-0.5">
+                    Export plan as PDF or WhatsApp format.
+                  </p>
                 </div>
                 <button
                   type="button"
@@ -273,7 +300,12 @@ export const App: React.FC = () => {
         )}
 
         {activeTab === 'setup' && (
-          <div id="panel-setup" role="tabpanel" aria-labelledby="tab-setup" className="space-y-6 max-w-4xl mx-auto">
+          <div
+            id="panel-setup"
+            role="tabpanel"
+            aria-labelledby="tab-setup"
+            className="space-y-6 max-w-4xl mx-auto"
+          >
             <HouseholdProfileForm
               profile={profile}
               t={t}
@@ -289,7 +321,12 @@ export const App: React.FC = () => {
         )}
 
         {activeTab === 'safety' && (
-          <div id="panel-safety" role="tabpanel" aria-labelledby="tab-safety" className="space-y-6 max-w-4xl mx-auto">
+          <div
+            id="panel-safety"
+            role="tabpanel"
+            aria-labelledby="tab-safety"
+            className="space-y-6 max-w-4xl mx-auto"
+          >
             <ActionPlanView
               plan={plan}
               isLoading={isLoadingPlan}
@@ -312,13 +349,33 @@ export const App: React.FC = () => {
             <span className="font-bold text-slate-800">VayuShield</span>
             <span>— {t.tagline}</span>
           </div>
-          <p className="text-center sm:text-right text-[11px] text-slate-400 max-w-xl">{t.disclaimerText}</p>
+          <p className="text-center sm:text-right text-[11px] text-slate-400 max-w-xl">
+            {t.disclaimerText}
+          </p>
         </div>
       </footer>
 
       <Suspense fallback={null}>
-        <AskVayuDrawer key={`${currentLang}-${airData.cityName}`} isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} airData={airData} profile={profile} plan={plan} currentLang={currentLang} t={t} />
-        <ShareCardModal isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} airData={airData} profile={profile} plan={plan} completedHackIds={completedHackIds} completedSwapIds={completedSwapIds} t={t} />
+        <AskVayuDrawer
+          key={`${currentLang}-${airData.cityName}`}
+          isOpen={isChatOpen}
+          onClose={() => setIsChatOpen(false)}
+          airData={airData}
+          profile={profile}
+          plan={plan}
+          currentLang={currentLang}
+          t={t}
+        />
+        <ShareCardModal
+          isOpen={isShareOpen}
+          onClose={() => setIsShareOpen(false)}
+          airData={airData}
+          profile={profile}
+          plan={plan}
+          completedHackIds={completedHackIds}
+          completedSwapIds={completedSwapIds}
+          t={t}
+        />
         <ScoreHelpModal isOpen={isScoreHelpOpen} onClose={() => setIsScoreHelpOpen(false)} />
       </Suspense>
     </div>

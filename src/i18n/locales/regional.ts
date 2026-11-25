@@ -1,7 +1,10 @@
 import type { SupportedLanguage, UiTranslations } from '../types';
 import { EN_TRANSLATIONS } from './en';
 
-export function getLanguageTemplate(lang: SupportedLanguage, _nativeLabel?: string): UiTranslations {
+export function getLanguageTemplate(
+  lang: SupportedLanguage,
+  _nativeLabel?: string
+): UiTranslations {
   // Base template with rich native translated fallbacks
   const base = EN_TRANSLATIONS;
   if (lang === 'bn') {
@@ -27,7 +30,8 @@ export function getLanguageTemplate(lang: SupportedLanguage, _nativeLabel?: stri
       askVayuTitle: 'বায়ুকে প্রশ্ন করুন',
       shareCardBtn: 'ফ্যামিলি কার্ড শেयर করুন',
       downloadCardBtn: 'PDF কার্ড ডাউনলোড করুন',
-      bestTimeSentence: (start, end, worse) => `বাইরে বেরোনোর সেরা সময়: ${start} থেকে ${end} পর্যন্ত। ${worse} টার পর বাতাস আবার খারাপ হবে।`,
+      bestTimeSentence: (start, end, worse) =>
+        `বাইরে বেরোনোর সেরা সময়: ${start} থেকে ${end} পর্যন্ত। ${worse} টার পর বাতাস আবার খারাপ হবে।`,
     };
   }
   if (lang === 'mr') {
@@ -53,7 +57,8 @@ export function getLanguageTemplate(lang: SupportedLanguage, _nativeLabel?: stri
       askVayuTitle: 'विचारा वायू: झटपट मदत',
       shareCardBtn: 'कौटुंबिक कार्ड शेअर करा',
       downloadCardBtn: 'PDF कार्ड डाउनलोड करा',
-      bestTimeSentence: (start, end, worse) => `बाहेर पडण्याची सर्वात उत्तम वेळ: ${start} ते ${end} पर्यंत। ${worse} नंतर हवा पुन्हा बिघडेल।`,
+      bestTimeSentence: (start, end, worse) =>
+        `बाहेर पडण्याची सर्वात उत्तम वेळ: ${start} ते ${end} पर्यंत। ${worse} नंतर हवा पुन्हा बिघडेल।`,
     };
   }
   if (lang === 'ta') {
@@ -79,7 +84,8 @@ export function getLanguageTemplate(lang: SupportedLanguage, _nativeLabel?: stri
       askVayuTitle: 'கேளுங்கள் வாயு',
       shareCardBtn: 'குடும்ப கார்டை பகிர்க',
       downloadCardBtn: 'PDF கார்டை பதிவிறக்குக',
-      bestTimeSentence: (start, end, worse) => `வெளியே செல்ல சிறந்த நேரம்: ${start} முதல் ${end} வரை. ${worse} மணிக்கு பிறகு காற்று மோசமாகும்.`,
+      bestTimeSentence: (start, end, worse) =>
+        `வெளியே செல்ல சிறந்த நேரம்: ${start} முதல் ${end} வரை. ${worse} மணிக்கு பிறகு காற்று மோசமாகும்.`,
     };
   }
   // te
@@ -105,6 +111,7 @@ export function getLanguageTemplate(lang: SupportedLanguage, _nativeLabel?: stri
     askVayuTitle: 'వాయును ప్రశ్నించండి',
     shareCardBtn: 'ఫ్యామిలీ కార్డును షేర్ చేయండి',
     downloadCardBtn: 'PDF కార్డు డౌన్‌లోడ్ చేయండి',
-    bestTimeSentence: (start, end, worse) => `బయటకు వెళ్లడానికి ఉత్తమ సమయం: ${start} నుండి ${end} వరకు. ${worse} తర్వాత గాలి మళ్లీ క్షీణిస్తుంది.`,
+    bestTimeSentence: (start, end, worse) =>
+      `బయటకు వెళ్లడానికి ఉత్తమ సమయం: ${start} నుండి ${end} వరకు. ${worse} తర్వాత గాలి మళ్లీ క్షీణిస్తుంది.`,
   };
 }

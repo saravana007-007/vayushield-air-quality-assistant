@@ -13,7 +13,7 @@ export const EN_TRANSLATIONS: UiTranslations = {
   demoBadge: 'Demo Mode (Offline Plan)',
   liveBadge: 'Gemini Live AI',
   cachedNotice: 'Showing saved data from previous session',
-  
+
   dangerTitle: 'Current Air Quality Hazard Level',
   gaugeLabel: 'Hazard Gauge (0 - 500)',
   categoryLabelPrefix: 'Category',
@@ -27,21 +27,26 @@ export const EN_TRANSLATIONS: UiTranslations = {
     unhealthy_sensitive: 'Unhealthy for Sensitive Groups',
     unhealthy: 'Unhealthy',
     very_unhealthy: 'Very Unhealthy',
-    hazardous: 'Hazardous / Severe Smog'
+    hazardous: 'Hazardous / Severe Smog',
   },
   categorySummaries: {
     good: 'Air is clean. Ideal time to ventilate living spaces and enjoy outdoor activities.',
-    moderate: 'Acceptable quality. Very sensitive individuals may consider reducing prolonged outdoor heavy exertion.',
-    unhealthy_sensitive: 'Children, elders, and those with asthma or lung conditions should avoid prolonged outdoor exertion.',
-    unhealthy: 'Everyone may begin to experience health effects; vulnerable members may experience more serious effects. Avoid outdoor workouts.',
-    very_unhealthy: 'Health alert: The risk of health effects is increased for everyone. Close windows and run air filtration.',
-    hazardous: 'Emergency conditions: The entire population is likely to be severely affected. Keep home envelope sealed.'
+    moderate:
+      'Acceptable quality. Very sensitive individuals may consider reducing prolonged outdoor heavy exertion.',
+    unhealthy_sensitive:
+      'Children, elders, and those with asthma or lung conditions should avoid prolonged outdoor exertion.',
+    unhealthy:
+      'Everyone may begin to experience health effects; vulnerable members may experience more serious effects. Avoid outdoor workouts.',
+    very_unhealthy:
+      'Health alert: The risk of health effects is increased for everyone. Close windows and run air filtration.',
+    hazardous:
+      'Emergency conditions: The entire population is likely to be severely affected. Keep home envelope sealed.',
   },
   pm25Label: 'PM2.5 (Fine Combustion Particles)',
   pm10Label: 'PM10 (Dust & Road Debris)',
   maskStandardLabel: 'Protection Required',
   clothFailsShort: 'Cloth masks ineffective',
-  
+
   bestTimeTitle: 'When Will It Get Better?',
   bestTimeLabel: 'Best Window to Step Outside Today',
   worseAfter: 'Air worsens significantly after',
@@ -49,21 +54,23 @@ export const EN_TRANSLATIONS: UiTranslations = {
   countdownImproving: 'Window opens in',
   remindMe: 'Remind me before safe window 🔔',
   reminderSet: 'Reminder active! Browser will alert you.',
-  bestTimeSentence: (start, end, worse) => `Best time to step out today is ${start} to ${end}. Air worsens again after ${worse}.`,
+  bestTimeSentence: (start, end, worse) =>
+    `Best time to step out today is ${start} to ${end}. Air worsens again after ${worse}.`,
   happeningNow: 'Optimal window is active now!',
   nextSafeTomorrow: 'Next forecast window tomorrow',
-  
+
   oneThingTitle: '⭐ The #1 Most Critical Action Today',
-  
+
   searchCityPlaceholder: 'Search city or locality...',
   useMyLocation: 'Use My Location 📍',
   presetsTitle: 'Quick 1-Click Smog Scenarios:',
   presetDelhi: 'Delhi NCR: Severe Smog AQI 385',
   presetLahore: 'Lahore: Hazardous Inversion AQI 340',
   presetModerate: 'Moderate Haze AQI 145',
-  
+
   profileTitle: 'Who Lives in Your Home?',
-  profileSubtitle: 'Select vulnerable members to customize medical guidance and room isolation rules.',
+  profileSubtitle:
+    'Select vulnerable members to customize medical guidance and room isolation rules.',
   updatePlanBtn: 'Generate Updated Family Plan',
   loadingPlan: 'Crafting personalized safety protocol...',
   toddlersLabel: 'Toddlers / Infants 👶',
@@ -76,7 +83,7 @@ export const EN_TRANSLATIONS: UiTranslations = {
   tapToAdd: 'Tap to select',
   selectedText: 'Selected ✓',
   customConditionPrompt: 'Describe other vulnerable members or conditions:',
-  
+
   purifierLabel: 'Do you have an Air Purifier at home?',
   purifierYes: 'Yes, HEPA purifier active',
   purifierNo: 'No purifier (relying on low-cost hacks)',
@@ -92,7 +99,7 @@ export const EN_TRANSLATIONS: UiTranslations = {
   commuteWalk: 'Walking / Bicycle',
   commuteOther: 'Hybrid / Other',
   customSetupPlaceholder: 'Describe your kitchen ventilation or commute specifics...',
-  
+
   familyBriefingTitle: 'Immediate Family Risk Briefing',
   routineTitle: 'Today’s 4-Stage Protective Daily Routine',
   indoorHacksTitle: 'Frugal Zero-Cost Home Clean-Air Hacks',
@@ -107,22 +114,25 @@ export const EN_TRANSLATIONS: UiTranslations = {
   doneText: 'Completed ✓',
   adoptSwap: 'Commit to Swap',
   adoptedText: 'Adopted ✓',
-  
+
   maskGuideTitle: 'Mask Reality Guide: What Works & What Fails',
   n95Works: 'N95 / FFP2 / KN95: Filters >95% of toxic PM2.5. Mandatory when stepping outdoors.',
   n95Tip: '👉 Pinch the metal nose clip tightly. Facial hair breaks the seal and lets smog bypass.',
-  clothFails: 'Cloth Masks, Bandanas & Surgical Masks: 0% to 20% PM2.5 filtration. Provide false security.',
+  clothFails:
+    'Cloth Masks, Bandanas & Surgical Masks: 0% to 20% PM2.5 filtration. Provide false security.',
   clothTip: '👉 Toxic smog particles are 0.3 microns; cloth weave gaps are 100+ microns wide.',
   seeDoctorTitle: '🚨 Red Flag Warning: When to Seek Medical Attention Immediately',
-  doctorWarningSymptoms: 'If any family member shows these severe symptoms during high AQI, seek emergency care immediately:',
+  doctorWarningSymptoms:
+    'If any family member shows these severe symptoms during high AQI, seek emergency care immediately:',
   doctorSymptomsList: [
     '⚠️ Inability to complete a sentence in one breath (acute dyspnea)',
     '⚠️ Severe chest tightness, pressure, or sharp pain radiating to neck/arm',
     '⚠️ Bluish discoloration of lips, tongue, or nail beds (cyanosis)',
-    '⚠️ High-pitched wheezing unresponsive to standard prescribed rescue inhaler'
+    '⚠️ High-pitched wheezing unresponsive to standard prescribed rescue inhaler',
   ],
-  disclaimerText: 'VayuShield provides educational ambient air guidance. It is not medical diagnosis or prescription. Always follow your physician\'s advice.',
-  
+  disclaimerText:
+    "VayuShield provides educational ambient air guidance. It is not medical diagnosis or prescription. Always follow your physician's advice.",
+
   trackerTitle: 'Family Protection Tracker',
   trackerSubtitle: 'Live household mitigation index',
   protectionScore: 'Household Shield Score',
@@ -138,12 +148,12 @@ export const EN_TRANSLATIONS: UiTranslations = {
   swapsChecklistTitle: 'Daily Clean-Air Habit Swaps',
   realtimeUpdateNote: 'Updates dynamically as you complete actions',
   viewFormulaBtn: 'View Math & Methodology',
-  
+
   askVayuBtn: 'Ask Vayu Assistant',
   askVayuTitle: 'Ask Vayu: Instant Family Smog Guidance',
   askPlaceholder: 'Ask a direct question (e.g., Can toddlers play on balcony today?)...',
   askContextNotice: 'Answers are concise (max 3 sentences) and begin with YES, NO, or WAIT.',
-  
+
   shareCardBtn: 'Share Family Protection Card',
   copyTextBtn: 'Copy WhatsApp Summary',
   whatsAppBtn: 'Share to WhatsApp',

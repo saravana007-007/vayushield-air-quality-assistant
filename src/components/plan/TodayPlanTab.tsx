@@ -57,7 +57,10 @@ export const TodayPlanTab: React.FC<TodayPlanTabProps> = ({ plan, currentLang, t
             <div className="p-2 bg-sky-100 text-sky-800 rounded-xl" aria-hidden="true">
               <Shield className="w-5 h-5" />
             </div>
-            <h3 id="family-risk-heading" className="text-lg sm:text-xl font-bold font-display text-slate-900">
+            <h3
+              id="family-risk-heading"
+              className="text-lg sm:text-xl font-bold font-display text-slate-900"
+            >
               {t.familyBriefingTitle}
             </h3>
           </div>
@@ -109,7 +112,10 @@ export const TodayPlanTab: React.FC<TodayPlanTabProps> = ({ plan, currentLang, t
       <section aria-labelledby="routine-heading" className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 id="routine-heading" className="text-lg sm:text-xl font-bold font-display text-slate-900">
+            <h3
+              id="routine-heading"
+              className="text-lg sm:text-xl font-bold font-display text-slate-900"
+            >
               {t.routineTitle}
             </h3>
             <p className="text-xs sm:text-sm text-slate-500">
@@ -133,9 +139,7 @@ export const TodayPlanTab: React.FC<TodayPlanTabProps> = ({ plan, currentLang, t
                     <span className="text-xs font-mono font-bold text-slate-500 block">
                       {block.timeRange}
                     </span>
-                    <h4 className="text-base font-bold text-slate-900 mt-0.5">
-                      {block.title}
-                    </h4>
+                    <h4 className="text-base font-bold text-slate-900 mt-0.5">{block.title}</h4>
                   </div>
                   <span
                     className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border shrink-0 ${getBadgeStyle(
@@ -143,8 +147,12 @@ export const TodayPlanTab: React.FC<TodayPlanTabProps> = ({ plan, currentLang, t
                     )}`}
                   >
                     {block.badge === 'Stay Indoors' && <Home className="w-3.5 h-3.5 mr-1" />}
-                    {block.badge === 'Mask Required' && <AlertTriangle className="w-3.5 h-3.5 mr-1" />}
-                    {block.badge === 'Safe Ventilation Window' && <Wind className="w-3.5 h-3.5 mr-1" />}
+                    {block.badge === 'Mask Required' && (
+                      <AlertTriangle className="w-3.5 h-3.5 mr-1" />
+                    )}
+                    {block.badge === 'Safe Ventilation Window' && (
+                      <Wind className="w-3.5 h-3.5 mr-1" />
+                    )}
                     {block.badge}
                   </span>
                 </div>

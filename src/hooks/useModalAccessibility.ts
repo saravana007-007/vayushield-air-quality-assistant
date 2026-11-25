@@ -58,7 +58,10 @@ export function useModalAccessibility(
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       clearTimeout(focusTimer);
-      if (previousActiveElement.current && typeof previousActiveElement.current.focus === 'function') {
+      if (
+        previousActiveElement.current &&
+        typeof previousActiveElement.current.focus === 'function'
+      ) {
         previousActiveElement.current.focus();
       }
     };

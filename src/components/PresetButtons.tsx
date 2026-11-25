@@ -18,7 +18,11 @@ export const PresetButtons: React.FC<PresetButtonsProps> = ({
   t,
   onSelectPreset,
 }) => (
-  <div className="flex items-center flex-wrap gap-2" role="group" aria-label="Quick pollution presets">
+  <div
+    className="flex items-center flex-wrap gap-2"
+    role="group"
+    aria-label="Quick pollution presets"
+  >
     <span className="text-xs font-bold text-slate-500 flex items-center uppercase tracking-wider mr-1">
       <Zap className="w-3.5 h-3.5 mr-1 text-amber-500" aria-hidden="true" />
       Presets:
