@@ -82,7 +82,7 @@ export const HacksSwapsTab: React.FC<HacksSwapsTabProps> = ({
                     onClick={() => onToggleHack(hack.id)}
                     className={`text-xs font-bold px-3 py-1.5 rounded-xl border transition-colors ${
                       isDone
-                        ? 'bg-emerald-600 text-white border-emerald-600'
+                        ? 'bg-emerald-700 text-white border-emerald-600'
                         : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
                     }`}
                   >
@@ -158,7 +158,7 @@ export const HacksSwapsTab: React.FC<HacksSwapsTabProps> = ({
                     onClick={() => onToggleSwap(item.catalogId)}
                     className={`text-xs font-bold px-3 py-1.5 rounded-xl border transition-colors ${
                       isDone
-                        ? 'bg-emerald-600 text-white border-emerald-600'
+                        ? 'bg-emerald-700 text-white border-emerald-600'
                         : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
                     }`}
                   >

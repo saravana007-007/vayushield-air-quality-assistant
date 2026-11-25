@@ -54,7 +54,7 @@ export const Header: React.FC<HeaderProps> = ({
               <div>
                 <div className="flex items-center space-x-2">
                   <h1 className="text-xl font-bold font-display tracking-tight text-slate-900 inline-block">
-                    Vayu<span className="text-sky-600">Shield</span>
+                    Vayu<span className="text-sky-700">Shield</span>
                   </h1>
                   {isDemo && (
                     <span
@@ -129,7 +129,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={onOpenChat}
               className="hidden md:inline-flex items-center px-3 py-1.5 text-xs font-bold text-sky-700 bg-sky-50 hover:bg-sky-100 border border-sky-300 rounded-xl transition-colors shadow-2xs"
             >
-              <MessageSquare className="w-3.5 h-3.5 mr-1 text-sky-600" />
+              <MessageSquare className="w-3.5 h-3.5 mr-1 text-sky-700" />
               <span>Ask Vayu</span>
             </button>
           </div>

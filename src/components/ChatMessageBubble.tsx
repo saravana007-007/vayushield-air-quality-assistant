@@ -32,19 +32,19 @@ export const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({ message, c
         className={`max-w-[85%] p-4 rounded-3xl text-xs sm:text-sm leading-relaxed shadow-xs ${
           isBot
             ? 'bg-slate-50 border border-slate-200 text-slate-800 rounded-tl-sm'
-            : 'bg-sky-600 text-white rounded-tr-sm'
+            : 'bg-sky-700 text-white rounded-tr-sm'
         }`}
       >
         {message.content}
         <div className="flex items-center justify-between mt-2 pt-1 border-t border-slate-200/50">
-          <span className={`text-[10px] ${isBot ? 'text-slate-400' : 'text-sky-200'}`}>
+          <span className={`text-[10px] ${isBot ? 'text-slate-600' : 'text-sky-200'}`}>
             {message.timestamp}
           </span>
           {isBot && (
             <button
               type="button"
               onClick={() => speakText(message.content, currentLang)}
-              className="p-1 text-slate-400 hover:text-sky-600 rounded"
+              className="p-1 text-slate-600 hover:text-sky-700 rounded"
               title="Read this answer aloud"
               aria-label="Read this answer aloud"
             >

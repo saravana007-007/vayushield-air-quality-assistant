@@ -153,7 +153,7 @@ export const App: React.FC = () => {
             <span>{cachedNotice}</span>
             <button
               onClick={dismissCachedNotice}
-              className="text-slate-400 hover:text-slate-700 ml-2"
+              className="text-slate-600 hover:text-slate-700 ml-2"
               aria-label="Dismiss notice"
             >
               ✕
@@ -199,7 +199,7 @@ export const App: React.FC = () => {
               onClick={() => setActiveTab(id)}
               className={`flex-1 min-w-[120px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500 ${
                 activeTab === id
-                  ? 'bg-sky-600 text-white shadow-xs'
+                  ? 'bg-sky-700 text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
@@ -349,13 +349,19 @@ export const App: React.FC = () => {
             <span className="font-bold text-slate-800">VayuShield</span>
             <span>— {t.tagline}</span>
           </div>
-          <p className="text-center sm:text-right text-[11px] text-slate-400 max-w-xl">
+          <p className="text-center sm:text-right text-[11px] text-slate-600 max-w-xl">
             {t.disclaimerText}
           </p>
         </div>
       </footer>
 
-      <Suspense fallback={null}>
+      <Suspense
+        fallback={
+          <div role="status" aria-live="polite" aria-label="Loading dialogs" className="sr-only">
+            Loading dialogs…
+          </div>
+        }
+      >
         <AskVayuDrawer
           key={`${currentLang}-${airData.cityName}`}
           isOpen={isChatOpen}

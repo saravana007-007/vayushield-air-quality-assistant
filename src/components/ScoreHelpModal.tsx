@@ -24,7 +24,7 @@ export const ScoreHelpModal: React.FC<ScoreHelpModalProps> = ({ isOpen, onClose 
       <div className="relative bg-white rounded-2xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-slate-200">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors"
+          className="absolute top-4 right-4 p-2 text-slate-600 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors"
           aria-label="Close calculation explanation"
         >
           <X className="w-5 h-5" />

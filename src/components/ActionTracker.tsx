@@ -76,7 +76,7 @@ export const ActionTracker: React.FC<ActionTrackerProps> = ({
           <button
             type="button"
             onClick={onOpenScoreHelp}
-            className="p-1.5 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100"
+            className="p-1.5 text-slate-600 hover:text-slate-600 rounded-xl hover:bg-slate-100"
             title={t.howCalculated}
             aria-label={t.howCalculated}
           >
@@ -97,7 +97,7 @@ export const ActionTracker: React.FC<ActionTrackerProps> = ({
             <div className="w-full bg-emerald-200/60 h-2 rounded-full overflow-hidden mt-2">
               <div
                 style={{ width: `${scoreBreakdown.total}%` }}
-                className="bg-emerald-600 h-full rounded-full transition-all duration-500 ease-out"
+                className="bg-emerald-700 h-full rounded-full transition-all duration-500 ease-out"
                 role="progressbar"
                 aria-valuenow={scoreBreakdown.total}
                 aria-valuemin={0}
@@ -117,10 +117,10 @@ export const ActionTracker: React.FC<ActionTrackerProps> = ({
             </span>
             <div className="text-3xl sm:text-4xl font-black font-display text-sky-800 my-1 flex items-baseline justify-center">
               <span>{co2Saved}</span>
-              <span className="text-sm font-bold text-sky-600 ml-1">kg</span>
+              <span className="text-sm font-bold text-sky-700 ml-1">kg</span>
             </div>
             <p className="text-[10px] text-sky-700 font-medium mt-3 flex items-center justify-center">
-              <Leaf className="w-3 h-3 mr-1 text-emerald-600" aria-hidden="true" />
+              <Leaf className="w-3 h-3 mr-1 text-emerald-700" aria-hidden="true" />
               {t.co2CommunityImpact}
             </p>
           </div>
@@ -159,7 +159,7 @@ export const ActionTracker: React.FC<ActionTrackerProps> = ({
                     <div className="flex items-center space-x-2.5 pr-2">
                       {isDone ? (
                         <CheckCircle2
-                          className="w-4 h-4 text-emerald-600 shrink-0"
+                          className="w-4 h-4 text-emerald-700 shrink-0"
                           aria-hidden="true"
                         />
                       ) : (
@@ -169,7 +169,7 @@ export const ActionTracker: React.FC<ActionTrackerProps> = ({
                         {hack.title}
                       </span>
                     </div>
-                    <span className="text-[10px] font-bold text-slate-400 shrink-0">+7.5%</span>
+                    <span className="text-[10px] font-bold text-slate-600 shrink-0">+7.5%</span>
                   </button>
                 );
               })}
@@ -202,7 +202,7 @@ export const ActionTracker: React.FC<ActionTrackerProps> = ({
                     <div className="flex items-center space-x-2.5 pr-2">
                       {isDone ? (
                         <CheckCircle2
-                          className="w-4 h-4 text-emerald-600 shrink-0"
+                          className="w-4 h-4 text-emerald-700 shrink-0"
                           aria-hidden="true"
                         />
                       ) : (
@@ -228,7 +228,7 @@ export const ActionTracker: React.FC<ActionTrackerProps> = ({
         <button
           type="button"
           onClick={onOpenScoreHelp}
-          className="text-sky-600 hover:text-sky-800 font-semibold inline-flex items-center"
+          className="text-sky-700 hover:text-sky-800 font-semibold inline-flex items-center"
         >
           {t.viewFormulaBtn} <ArrowUpRight className="w-3 h-3 ml-0.5" />
         </button>

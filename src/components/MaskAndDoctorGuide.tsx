@@ -34,7 +34,7 @@ export const MaskAndDoctorGuide: React.FC<MaskAndDoctorGuideProps> = ({ t }) => 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* N95 Box */}
           <div className="bg-emerald-50/70 border-2 border-emerald-300 rounded-2xl p-4 flex items-start space-x-3.5">
-            <div className="p-2 bg-emerald-600 text-white rounded-xl shrink-0 mt-0.5">
+            <div className="p-2 bg-emerald-700 text-white rounded-xl shrink-0 mt-0.5">
               <Check className="w-5 h-5" />
             </div>
             <div className="space-y-1">

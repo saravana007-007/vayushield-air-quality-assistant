@@ -117,7 +117,7 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
       <div className="relative bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-slate-200">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 transition-colors"
+          className="absolute top-4 right-4 p-2 text-slate-600 hover:text-slate-600 rounded-xl hover:bg-slate-100 transition-colors"
           aria-label="Close"
         >
           <X className="w-5 h-5" />
@@ -152,9 +152,9 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
             >
               <div className="flex items-center justify-between w-full mb-1">
                 <FileText
-                  className={`w-4 h-4 ${selectedFormat === 'pdf' ? 'text-sky-600' : 'text-slate-400'}`}
+                  className={`w-4 h-4 ${selectedFormat === 'pdf' ? 'text-sky-700' : 'text-slate-600'}`}
                 />
-                {selectedFormat === 'pdf' && <span className="w-2 h-2 rounded-full bg-sky-600" />}
+                {selectedFormat === 'pdf' && <span className="w-2 h-2 rounded-full bg-sky-700" />}
               </div>
               <strong className="text-xs font-bold block">PDF File</strong>
               <span className="text-[10px] text-slate-500 leading-tight">Document</span>
@@ -171,10 +171,10 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
             >
               <div className="flex items-center justify-between w-full mb-1">
                 <MessageCircle
-                  className={`w-4 h-4 ${selectedFormat === 'whatsapp' ? 'text-emerald-600' : 'text-slate-400'}`}
+                  className={`w-4 h-4 ${selectedFormat === 'whatsapp' ? 'text-emerald-700' : 'text-slate-600'}`}
                 />
                 {selectedFormat === 'whatsapp' && (
-                  <span className="w-2 h-2 rounded-full bg-emerald-600" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-700" />
                 )}
               </div>
               <strong className="text-xs font-bold block">WhatsApp</strong>
@@ -192,7 +192,7 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
             >
               <div className="flex items-center justify-between w-full mb-1">
                 <Copy
-                  className={`w-4 h-4 ${selectedFormat === 'text' ? 'text-purple-600' : 'text-slate-400'}`}
+                  className={`w-4 h-4 ${selectedFormat === 'text' ? 'text-purple-600' : 'text-slate-600'}`}
                 />
                 {selectedFormat === 'text' && (
                   <span className="w-2 h-2 rounded-full bg-purple-600" />
@@ -213,7 +213,7 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
           {selectedFormat === 'pdf' && (
             <div className="p-4 rounded-2xl bg-sky-50/60 border border-sky-200 text-xs text-sky-950 space-y-2">
               <div className="flex items-center space-x-2">
-                <FileText className="w-4 h-4 text-sky-600 shrink-0" />
+                <FileText className="w-4 h-4 text-sky-700 shrink-0" />
                 <span className="font-bold">Official Formatted PDF Document</span>
               </div>
               <p className="text-[11px] text-slate-600 leading-relaxed">
@@ -228,7 +228,7 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
             <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-xs text-emerald-950 font-mono space-y-1.5 max-h-36 overflow-y-auto">
               <div className="flex items-center justify-between font-sans text-emerald-800 font-bold mb-1">
                 <span>WhatsApp Message Preview</span>
-                <span className="text-[10px] text-emerald-600">Emojis enabled</span>
+                <span className="text-[10px] text-emerald-700">Emojis enabled</span>
               </div>
               <p className="whitespace-pre-line text-[11px] leading-snug text-slate-700 font-sans">
                 {shareText}
@@ -261,7 +261,7 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
             </span>
           </div>
           <div className="text-right">
-            <span className="text-[11px] text-slate-400 block">{t.protectionScore}</span>
+            <span className="text-[11px] text-slate-300 block">{t.protectionScore}</span>
             <span className="text-xl font-black font-display text-emerald-400">{score}%</span>
           </div>
         </div>
@@ -274,7 +274,7 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
                 type="button"
                 onClick={handleDownloadPdf}
                 disabled={isGeneratingPdf}
-                className="w-full inline-flex items-center justify-center px-4 py-3 bg-sky-600 hover:bg-sky-700 disabled:bg-slate-400 text-white rounded-2xl text-xs font-bold transition-all shadow-md shadow-sky-200"
+                className="w-full inline-flex items-center justify-center px-4 py-3 bg-sky-700 hover:bg-sky-800 disabled:bg-slate-400 text-white rounded-2xl text-xs font-bold transition-all shadow-md shadow-sky-200"
               >
                 <Download className="w-4 h-4 mr-2" />
                 {isGeneratingPdf ? t.downloadingPdf : 'Download Clean PDF Document'}
@@ -291,7 +291,7 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
               <button
                 type="button"
                 onClick={handleWhatsApp}
-                className="inline-flex items-center justify-center px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-xs font-bold transition-all shadow-md shadow-emerald-200"
+                className="inline-flex items-center justify-center px-4 py-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-2xl text-xs font-bold transition-all shadow-md shadow-emerald-200"
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
                 Send via WhatsApp
@@ -303,7 +303,7 @@ _Created with VayuShield — GenAI Urban Air Quality Protection_`;
               >
                 {copied ? (
                   <>
-                    <Check className="w-4 h-4 mr-1.5 text-emerald-600" />
+                    <Check className="w-4 h-4 mr-1.5 text-emerald-700" />
                     Copied ✓
                   </>
                 ) : (

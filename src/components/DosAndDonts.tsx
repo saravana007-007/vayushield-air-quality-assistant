@@ -38,7 +38,7 @@ export const DosAndDonts: React.FC<DosAndDontsProps> = ({ dos, donts, t }) => {
             {dos.map((item) => (
               <li key={item} className="flex items-start space-x-2.5">
                 <CheckCircle2
-                  className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"
+                  className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5"
                   aria-hidden="true"
                 />
                 <span>{item}</span>

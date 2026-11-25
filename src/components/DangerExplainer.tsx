@@ -56,7 +56,7 @@ export const DangerExplainer: React.FC<DangerExplainerProps> = ({ airData, t }) 
               >
                 {cityName}
               </h2>
-              <span className="text-xs text-slate-400 font-medium">{lastUpdated}</span>
+              <span className="text-xs text-slate-600 font-medium">{lastUpdated}</span>
             </div>
 
             {/* Traffic-Light Status Pill (Icon + Text + Emoji) */}
@@ -139,7 +139,7 @@ export const DangerExplainer: React.FC<DangerExplainerProps> = ({ airData, t }) 
         </div>
 
         {/* Benchmark ticks */}
-        <div className="flex justify-between text-[10px] text-slate-400 font-mono mt-1.5 px-0.5">
+        <div className="flex justify-between text-[10px] text-slate-600 font-mono mt-1.5 px-0.5">
           <span>0 (Clean)</span>
           <span className="hidden xs:inline">50</span>
           <span>100</span>

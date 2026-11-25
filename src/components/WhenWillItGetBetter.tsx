@@ -70,7 +70,7 @@ export const WhenWillItGetBetter: React.FC<WhenWillItGetBetterProps> = ({ bestWi
             {bestWindow.stayIndoorsAllDay ? (
               <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0" aria-hidden="true" />
             ) : (
-              <Sun className="w-5 h-5 text-emerald-600 shrink-0" aria-hidden="true" />
+              <Sun className="w-5 h-5 text-emerald-700 shrink-0" aria-hidden="true" />
             )}
             <h3
               id="when-better-title"
@@ -108,7 +108,7 @@ export const WhenWillItGetBetter: React.FC<WhenWillItGetBetterProps> = ({ bestWi
               disabled={reminderSet}
               className={`inline-flex items-center px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all shadow-xs focus:ring-2 focus:ring-sky-500 ${
                 reminderSet
-                  ? 'bg-emerald-600 text-white cursor-default'
+                  ? 'bg-emerald-700 text-white cursor-default'
                   : 'bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-300'
               }`}
             >

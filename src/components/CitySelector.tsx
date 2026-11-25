@@ -83,9 +83,9 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
         {/* City Input + GPS Button */}
         <div ref={containerRef} className="relative flex-1 max-w-2xl flex items-center gap-2">
           <div className="relative flex-1">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-600">
               {isSearching || isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin text-sky-600" aria-hidden="true" />
+                <Loader2 className="w-5 h-5 animate-spin text-sky-700" aria-hidden="true" />
               ) : (
                 <Search className="w-5 h-5" aria-hidden="true" />
               )}
@@ -104,7 +104,7 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
                 if (results.length > 0) setIsOpen(true);
               }}
               placeholder={`${t.searchCityPlaceholder} (Now: ${currentCityName})`}
-              className="w-full pl-11 pr-10 py-3.5 bg-white border border-slate-300 rounded-2xl text-slate-900 placeholder:text-slate-400 text-sm sm:text-base font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 transition"
+              className="w-full pl-11 pr-10 py-3.5 bg-white border border-slate-300 rounded-2xl text-slate-900 placeholder:text-slate-500 text-sm sm:text-base font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 transition"
               autoComplete="off"
               spellCheck="false"
             />
@@ -112,7 +112,7 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
               <button
                 type="button"
                 onClick={() => resetSearch(true)}
-                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600"
+                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-600 hover:text-slate-600"
                 aria-label="Clear search"
               >
                 <X className="w-5 h-5" />
@@ -129,10 +129,10 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
             title={t.useMyLocation}
           >
             {isLocating ? (
-              <Loader2 className="w-5 h-5 animate-spin text-sky-600" />
+              <Loader2 className="w-5 h-5 animate-spin text-sky-700" />
             ) : (
               <>
-                <Navigation className="w-4 h-4 mr-1.5 text-sky-600" />
+                <Navigation className="w-4 h-4 mr-1.5 text-sky-700" />
                 <span className="hidden sm:inline">GPS</span>
               </>
             )}
@@ -166,13 +166,13 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
                   }`}
                 >
                   <div className="flex items-center space-x-2.5">
-                    <MapPin className="w-4 h-4 text-slate-400 shrink-0" aria-hidden="true" />
+                    <MapPin className="w-4 h-4 text-slate-600 shrink-0" aria-hidden="true" />
                     <span>
                       {hit.name}
                       {hit.admin1 ? `, ${hit.admin1}` : ''}
                     </span>
                   </div>
-                  <span className="text-xs text-slate-400 font-normal">{hit.country}</span>
+                  <span className="text-xs text-slate-600 font-normal">{hit.country}</span>
                 </li>
               ))}
             </ul>

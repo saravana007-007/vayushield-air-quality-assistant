@@ -14,7 +14,7 @@ export const OneThingToDo: React.FC<OneThingToDoProps> = ({ oneThing, t }) => {
     <div
       role="region"
       aria-labelledby="one-thing-heading"
-      className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-5 sm:p-6 text-white shadow-lg relative overflow-hidden"
+      className="bg-gradient-to-r from-amber-700 via-orange-700 to-amber-800 rounded-3xl p-5 sm:p-6 text-white shadow-lg relative overflow-hidden"
     >
       <div className="flex items-start space-x-3.5">
         <div
@@ -26,7 +26,7 @@ export const OneThingToDo: React.FC<OneThingToDoProps> = ({ oneThing, t }) => {
         <div className="space-y-1">
           <span
             id="one-thing-heading"
-            className="text-xs uppercase font-extrabold tracking-wider text-amber-100 block"
+            className="text-xs uppercase font-extrabold tracking-wider text-white block"
           >
             {t.oneThingTitle}
           </span>

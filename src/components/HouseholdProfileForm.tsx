@@ -138,7 +138,7 @@ export const HouseholdProfileForm: React.FC<HouseholdProfileFormProps> = ({
                 </span>
                 <span
                   className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    isSelected ? 'bg-sky-600 text-white' : 'bg-slate-200 text-slate-600'
+                    isSelected ? 'bg-sky-700 text-white' : 'bg-slate-200 text-slate-600'
                   }`}
                 >
                   {isSelected ? 'Selected' : 'Tap to Add'}
@@ -155,7 +155,7 @@ export const HouseholdProfileForm: React.FC<HouseholdProfileFormProps> = ({
               htmlFor="custom-condition-input"
               className="block text-xs font-bold text-sky-950 mb-1 flex items-center"
             >
-              <Edit3 className="w-3.5 h-3.5 mr-1.5 text-sky-600" />
+              <Edit3 className="w-3.5 h-3.5 mr-1.5 text-sky-700" />
               <span>Describe other member or health vulnerability:</span>
             </label>
             <input
@@ -196,7 +196,7 @@ export const HouseholdProfileForm: React.FC<HouseholdProfileFormProps> = ({
               aria-checked={profile.setup.airPurifier}
               onClick={() => updateSetup('airPurifier', !profile.setup.airPurifier)}
               className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 ${
-                profile.setup.airPurifier ? 'bg-emerald-600' : 'bg-slate-300'
+                profile.setup.airPurifier ? 'bg-emerald-700' : 'bg-slate-300'
               }`}
             >
               <span

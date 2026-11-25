@@ -52,13 +52,13 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = ({
         aria-label="Select language"
         className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 shadow-2xs transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500"
       >
-        <Globe className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+        <Globe className="w-3.5 h-3.5 text-sky-700 shrink-0" />
         <span className="font-semibold">{activeLangMeta.nativeName}</span>
-        <span className="text-[10px] text-slate-400 hidden xs:inline">
+        <span className="text-[10px] text-slate-600 hidden xs:inline">
           ({activeLangMeta.englishName})
         </span>
         <ChevronDown
-          className={`w-3.5 h-3.5 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-3.5 h-3.5 text-slate-600 transition-transform ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>
 
@@ -69,7 +69,7 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = ({
           aria-label="Available languages"
           className="absolute right-0 sm:left-0 z-50 mt-1.5 w-60 rounded-2xl bg-white shadow-xl border border-slate-200 py-1.5 focus:outline-none animate-fadeIn divide-y divide-slate-100"
         >
-          <div className="px-3 py-1.5 text-[10px] uppercase font-extrabold tracking-wider text-slate-400 bg-slate-50/80">
+          <div className="px-3 py-1.5 text-[10px] uppercase font-extrabold tracking-wider text-slate-600 bg-slate-50/80">
             Choose Language / भाषा चुनें
           </div>
           <div className="py-1">
@@ -90,12 +90,12 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = ({
                 >
                   <div className="flex flex-col">
                     <span className="text-sm font-bold font-display">{l.nativeName}</span>
-                    <span className="text-[11px] text-slate-400 font-normal">
+                    <span className="text-[11px] text-slate-600 font-normal">
                       {l.englishName} {l.dir === 'rtl' ? '(RTL Layout)' : ''}
                     </span>
                   </div>
                   {isSelected && (
-                    <div className="p-1 rounded-full bg-sky-600 text-white shadow-2xs">
+                    <div className="p-1 rounded-full bg-sky-700 text-white shadow-2xs">
                       <Check className="w-3.5 h-3.5" />
                     </div>
                   )}

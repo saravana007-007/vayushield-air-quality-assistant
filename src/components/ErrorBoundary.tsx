@@ -69,7 +69,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
             <button
               type="button"
               onClick={this.handleReset}
-              className="inline-flex items-center justify-center px-5 py-2.5 rounded-2xl bg-sky-600 hover:bg-sky-700 text-white text-sm font-bold shadow-xs transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="inline-flex items-center justify-center px-5 py-2.5 rounded-2xl bg-sky-700 hover:bg-sky-800 text-white text-sm font-bold shadow-xs transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500"
             >
               <RotateCcw className="w-4 h-4 mr-2" aria-hidden="true" />
               Try Again
