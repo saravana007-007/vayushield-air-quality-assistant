@@ -7,6 +7,9 @@ export interface UseChecklistResult {
   toggleSwap: (id: string) => void;
 }
 
+/**
+ * Manage completed indoor hack and protective swap IDs.
+ */
 export function useChecklist(
   initialHacks: string[] = ['hack-1', 'hack-3'],
   initialSwaps: string[] = ['simmer-pot-aromatics']

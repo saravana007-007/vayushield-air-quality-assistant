@@ -8,6 +8,9 @@ export interface UseLanguageResult {
   setLanguage: (lang: SupportedLanguage) => void;
 }
 
+/**
+ * Manage active UI language, document direction/lang attributes, and translations.
+ */
 export function useLanguage(): UseLanguageResult {
   const [currentLang, setCurrentLang] = useState<SupportedLanguage>(getSavedLanguage);
   const t = getTranslation(currentLang);

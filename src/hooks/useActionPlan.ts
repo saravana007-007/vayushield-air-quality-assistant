@@ -24,6 +24,9 @@ export interface UseActionPlanResult {
   setErrorBanner: (error: string | null) => void;
 }
 
+/**
+ * Manage action plan state, live/proxy generation, language sync, and offline caching.
+ */
 export function useActionPlan(): UseActionPlanResult {
   const [plan, setPlan] = useState<ActionPlan>(
     () => DEMO_PLANS['delhi-severe'] ?? Object.values(DEMO_PLANS)[0]!

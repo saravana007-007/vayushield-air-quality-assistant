@@ -4,6 +4,9 @@
 import { logger } from './logger';
 import { getErrorMessage } from './errors';
 
+/**
+ * Read and JSON-parse a value from LocalStorage, returning defaultValue on error or absence.
+ */
 export function getStorageItem<T>(key: string, defaultValue: T): T {
   try {
     if (typeof window === 'undefined' || !window.localStorage) {
@@ -20,6 +23,9 @@ export function getStorageItem<T>(key: string, defaultValue: T): T {
   }
 }
 
+/**
+ * Read a raw string value from LocalStorage, returning defaultValue on error or absence.
+ */
 export function getStorageString(key: string, defaultValue: string): string {
   try {
     if (typeof window === 'undefined' || !window.localStorage) {
@@ -33,6 +39,9 @@ export function getStorageString(key: string, defaultValue: string): string {
   }
 }
 
+/**
+ * Serialize and store a value in LocalStorage, returning whether the write succeeded.
+ */
 export function setStorageItem<T>(key: string, value: T): boolean {
   try {
     if (typeof window === 'undefined' || !window.localStorage) {
@@ -47,6 +56,9 @@ export function setStorageItem<T>(key: string, value: T): boolean {
   }
 }
 
+/**
+ * Remove a key from LocalStorage, returning whether the operation succeeded.
+ */
 export function removeStorageItem(key: string): boolean {
   try {
     if (typeof window === 'undefined' || !window.localStorage) {

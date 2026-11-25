@@ -15,6 +15,9 @@ export const DEMO_PLANS: Record<string, ActionPlan> = {
   ...REGIONAL_DEMO_PLANS,
 };
 
+/**
+ * Return a verified offline Demo ActionPlan for the given AQI, city name, and language.
+ */
 export function getDemoPlanForAqi(
   aqi: number,
   cityName?: string,

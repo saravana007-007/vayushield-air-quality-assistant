@@ -47,12 +47,18 @@ declare global {
   }
 }
 
+/**
+ * Check whether browser SpeechSynthesis (read aloud) is supported.
+ */
 export function isSpeechSynthesisSupported(): boolean {
   if (typeof window === 'undefined') return false;
   const synth = window.speechSynthesis;
   return Boolean(synth) && typeof synth.cancel === 'function';
 }
 
+/**
+ * Check whether browser SpeechRecognition (voice input) is supported.
+ */
 export function isSpeechRecognitionSupported(): boolean {
   return (
     typeof window !== 'undefined' &&
@@ -108,6 +114,9 @@ export function speakText(
   };
 }
 
+/**
+ * Cancel any active SpeechSynthesis playback.
+ */
 export function stopSpeech(): void {
   if (isSpeechSynthesisSupported()) {
     window.speechSynthesis.cancel();

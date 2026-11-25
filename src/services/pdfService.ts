@@ -36,6 +36,9 @@ export function sanitizeForPdf(text: string): string {
   });
 }
 
+/**
+ * Generate and download a printable PDF summary of the current ActionPlan and AQI data.
+ */
 export async function generateActionPlanPdf(
   airData: AirQualityData,
   plan: ActionPlan,

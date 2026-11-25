@@ -94,6 +94,9 @@ export const SWAP_CATALOG: SwapCatalogItem[] = [
   },
 ];
 
+/**
+ * Look up a protective swap item by its catalog ID.
+ */
 export function getSwapById(id: string): SwapCatalogItem | undefined {
   return SWAP_CATALOG.find((item) => item.id === id);
 }

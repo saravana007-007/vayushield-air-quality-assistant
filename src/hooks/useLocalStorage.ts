@@ -1,6 +1,9 @@
 import { useState, useCallback } from 'react';
 import { getStorageItem, setStorageItem } from '../utils/storage';
 
+/**
+ * Persist and synchronize React state with LocalStorage.
+ */
 export function useLocalStorage<T>(
   key: string,
   initialValue: T

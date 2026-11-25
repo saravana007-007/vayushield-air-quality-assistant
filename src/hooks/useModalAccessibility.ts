@@ -1,5 +1,8 @@
 import { useEffect, useRef } from 'react';
 
+/**
+ * Trap Tab focus inside an open modal, close on Escape, and restore focus to the trigger on close.
+ */
 export function useModalAccessibility(
   isOpen: boolean,
   onClose: () => void,

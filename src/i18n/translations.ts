@@ -19,6 +19,9 @@ export const TRANSLATIONS: Record<SupportedLanguage, UiTranslations> = {
   mr: getLanguageTemplate('mr', 'मराठी (Marathi)'),
 };
 
+/**
+ * Return the UiTranslations bundle for the requested language, falling back to English.
+ */
 export function getTranslation(lang: SupportedLanguage): UiTranslations {
   return TRANSLATIONS[lang] || TRANSLATIONS.en;
 }

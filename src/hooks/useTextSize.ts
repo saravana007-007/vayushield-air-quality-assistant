@@ -10,6 +10,9 @@ export interface UseTextSizeResult {
   textSizeClass: string;
 }
 
+/**
+ * Manage accessible UI text scale preference persisted in LocalStorage.
+ */
 export function useTextSize(): UseTextSizeResult {
   const [textSize, setTextSizeState] = useState<TextSize>(() => {
     const saved = getStorageString(STORAGE_KEYS.textSize, 'medium');

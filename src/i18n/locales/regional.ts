@@ -1,6 +1,9 @@
 import type { SupportedLanguage, UiTranslations } from '../types';
 import { EN_TRANSLATIONS } from './en';
 
+/**
+ * Build localized UI translations for Bengali, Tamil, Telugu, and Marathi.
+ */
 export function getLanguageTemplate(
   lang: SupportedLanguage,
   _nativeLabel?: string

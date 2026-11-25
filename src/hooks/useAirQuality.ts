@@ -17,6 +17,9 @@ export interface UseAirQualityResult {
   ) => Promise<AirQualityData | null>;
 }
 
+/**
+ * Manage current air quality data, preset selection, and live Open-Meteo location fetching.
+ */
 export function useAirQuality(): UseAirQualityResult {
   const [airData, setAirData] = useState<AirQualityData>(
     () => AIR_PRESETS['delhi-severe'] ?? Object.values(AIR_PRESETS)[0]!
