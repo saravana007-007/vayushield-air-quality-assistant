@@ -10,16 +10,6 @@ export const TIMEOUTS = {
   drawerFocusDelayMs: 150,
 } as const;
 
-export const AQI_THRESHOLDS = {
-  good: 50,
-  moderate: 100,
-  unhealthySensitive: 150,
-  unhealthy: 200,
-  veryUnhealthy: 300,
-  hazardous: 400,
-  severeEmergency: 500,
-} as const;
-
 export const STORAGE_KEYS = {
   cachedPlan: 'vayushield_cached_plan',
   language: 'vayushield_lang',

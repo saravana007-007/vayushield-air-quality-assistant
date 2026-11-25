@@ -97,7 +97,3 @@ export const SWAP_CATALOG: SwapCatalogItem[] = [
 export function getSwapById(id: string): SwapCatalogItem | undefined {
   return SWAP_CATALOG.find((item) => item.id === id);
 }
-
-export function getAllSwapCatalogIds(): string[] {
-  return SWAP_CATALOG.map((s) => s.id);
-}

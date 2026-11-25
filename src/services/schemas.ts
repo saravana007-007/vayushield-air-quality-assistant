@@ -3,7 +3,7 @@ import type { Schema } from '@google/genai';
 import { Type } from '@google/genai';
 
 // Routine Block Zod Schema
-export const RoutineBlockSchema = z.object({
+const RoutineBlockSchema = z.object({
   id: z.enum(['morning', 'midday', 'evening', 'night']),
   title: z.string().min(1),
   timeRange: z.string().min(1),
@@ -13,7 +13,7 @@ export const RoutineBlockSchema = z.object({
 });
 
 // Indoor Hack Zod Schema
-export const IndoorHackSchema = z.object({
+const IndoorHackSchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1),
   targetArea: z.string().min(1),
@@ -23,7 +23,7 @@ export const IndoorHackSchema = z.object({
 });
 
 // Swap Plan Item Zod Schema
-export const SwapPlanItemSchema = z.object({
+const SwapPlanItemSchema = z.object({
   catalogId: z.string().min(1),
   customReason: z.string().min(1),
 });
@@ -38,8 +38,6 @@ export const ActionPlanSchema = z.object({
   dos: z.array(z.string()).default([]),
   donts: z.array(z.string()).default([]),
 });
-
-export type ValidatedActionPlan = z.infer<typeof ActionPlanSchema>;
 
 // Strict JSON Schema object for Gemini SDK responseSchema
 export const GEMINI_RESPONSE_SCHEMA: Schema = {

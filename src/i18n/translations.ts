@@ -8,9 +8,6 @@ import { UR_TRANSLATIONS } from './locales/ur';
 import { getLanguageTemplate } from './locales/regional';
 
 export * from './types';
-export { EN_TRANSLATIONS } from './locales/en';
-export { HI_TRANSLATIONS } from './locales/hi';
-export { UR_TRANSLATIONS } from './locales/ur';
 
 export const TRANSLATIONS: Record<SupportedLanguage, UiTranslations> = {
   en: EN_TRANSLATIONS,
