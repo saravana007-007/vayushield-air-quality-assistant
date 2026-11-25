@@ -15,9 +15,10 @@ A strict Content Security Policy is enforced in `vercel.json`:
 
 - `default-src 'self'`
 - `connect-src` restricted to trusted endpoints:
+  - `https://api.open-meteo.com` (Open-Meteo Core API)
   - `https://air-quality-api.open-meteo.com` (Open-Meteo Air Quality)
   - `https://geocoding-api.open-meteo.com` (Open-Meteo Geocoding)
-  - `https://generativelanguage.googleapis.com` (Google Gemini API)
+  - `https://generativelanguage.googleapis.com` (Google Gemini API, used by the serverless proxy)
 - `X-Frame-Options: DENY` (prevents clickjacking)
 - `X-Content-Type-Options: nosniff` (prevents MIME sniffing)
 - `Referrer-Policy: strict-origin-when-cross-origin`
